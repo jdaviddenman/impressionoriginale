@@ -2,7 +2,9 @@
 
 ## Summary
 
-The site loads `gtag/js?id=UA-85910237-1` — a **Universal Analytics** property. Google retired UA on **2023-07-01**; it processes no data. No GA4 measurement ID (`G-XXXXXXX`) is present in the page source. A Google Tag Manager container (`GTM-MT7G7Z3C`) is also present.
+The site loads `gtag/js?id=UA-85910237-1` — a **Universal Analytics** property. Google retired UA on **2023-07-01**; it processes no data.
+
+A **GA4 property already exists** — Measurement ID **`G-Y88VQHFDBV`** (property "Impression Originale - GA4"), with Google Tag **`GT-5TPLSSZ`**. But neither appears in the site's front-end tags: the site still loads **only** the dead UA tag, so GA4 receives nothing from page-level tags. A Google Tag Manager container (`GTM-MT7G7Z3C`) is also present. The task is therefore **not** to create GA4 — it's to **route the site to `G-Y88VQHFDBV` and remove UA**.
 
 ## Why it's a problem
 
@@ -12,9 +14,10 @@ The site loads `gtag/js?id=UA-85910237-1` — a **Universal Analytics** property
 ## Evidence
 
 ```
-https://www.googletagmanager.com/gtag/js?id=UA-85910237-1   ← Universal Analytics (dead since 2023-07-01)
-GTM-MT7G7Z3C                                                 ← Tag Manager container
-(no G-XXXXXXX measurement ID found in HTML)
+loaded gtag:  https://www.googletagmanager.com/gtag/js?id=UA-85910237-1   ← Universal Analytics (dead since 2023-07-01)
+GTM-MT7G7Z3C  ← Tag Manager container present
+G-Y88VQHFDBV  → 0 occurrences in front-end HTML   (GA4 property exists, but site doesn't send to it)
+GT-5TPLSSZ    → 0 occurrences in front-end HTML   (Google Tag not installed on site)
 ```
 
 The `g-*` strings elsewhere on the page are CSS classes / designer names — **not** GA4 IDs.
@@ -34,17 +37,17 @@ Analytics can be injected from any of **four** places on this site. Fixing one w
 
 ## Proposed path (admin — needs GA account + wp-admin)
 
-1. **GA4 property:** in Google Analytics, run the **GA4 Setup Assistant** to create/confirm the GA4 property for the site, and copy its **`G-` measurement ID**. (If one already exists inside `GTM-MT7G7Z3C`, use that ID.)
+1. **GA4 property already exists — use `G-Y88VQHFDBV`.** No setup-assistant/create step needed. (First confirm the property is receiving data in GA4 → Admin → Data Streams.)
 2. **Find every `UA-85910237-1` reference** across the four sources above.
-3. **Pick ONE canonical GA4 path** — recommended: GA4 via the GTM container **or** the *Google Analytics for WooCommerce* plugin, not both. Enter the `G-` ID there; enable GA4 ecommerce events.
-4. **Remove/disable the UA tag everywhere else.**
+3. **Pick ONE canonical GA4 path** and put the ID there — recommended: the *Google Analytics for WooCommerce* plugin (enter `G-Y88VQHFDBV`; it handles GA4 ecommerce events) **or** a GA4 config tag inside the GTM container `GTM-MT7G7Z3C`, not both. (Alternatively, load the unified Google Tag `GT-5TPLSSZ`, which routes to `G-Y88VQHFDBV`.)
+4. **Remove/disable the UA tag `UA-85910237-1` everywhere else** — GTM4WP, PixelYourSite, GTM container, and any other injector — to prevent both UA persistence and GA4 double-counting.
 5. **Verify** (see acceptance).
 
 ## Acceptance (done-when)
 
-- [ ] Page source loads `gtag/js?id=G-XXXXXXX` (GA4), and **no** `UA-` tag remains.
-- [ ] Google Tag Assistant shows exactly **one** GA4 tag firing — no UA, no duplicate GA4.
-- [ ] GA4 **Realtime** registers a test visit **and** an add-to-cart / purchase event.
+- [ ] Page source loads `gtag/js?id=G-Y88VQHFDBV` (or `GT-5TPLSSZ`), and **no** `UA-85910237-1` tag remains.
+- [ ] Google Tag Assistant shows exactly **one** GA4 tag firing (`G-Y88VQHFDBV`) — no UA, no duplicate GA4.
+- [ ] GA4 **Realtime** for `G-Y88VQHFDBV` registers a test visit **and** an add-to-cart / purchase event.
 
 ## Notes
 
