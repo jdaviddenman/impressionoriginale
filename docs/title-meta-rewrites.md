@@ -35,8 +35,9 @@ Run this loop per product category. Each step is grounded in ≥2 SEO best pract
 | `/wrap/` | ✅ | ✅ 48w, 2 links | ✅ 2026-07-04 | **done** |
 | `/ribbons/` | ✅ | ✅ 45w, 2 links | ✅ 2026-07-04 | **done** |
 | `/bows/` | ✅ | ✅ 43w, 2 links | ✅ 2026-07-04 | **done** |
-| `/gift-bags/` | — | — | — | next |
-| `/gift-tags/` · `/bags-boxes/gift-boxes/` · Christmas · Wedding · Birthday · Furoshiki | — | — | — | queued |
+| `/gift-bags/` | ✅ | ✅ 39w, 2 links | ✅ 2026-07-04 | **done** |
+| `/gift-tags/` | ✅ | ✅ 33w, 2 links | ✅ 2026-07-04 | **done** |
+| `/bags-boxes/gift-boxes/` · Christmas · Wedding · Birthday · Furoshiki | — | — | — | queued |
 | Home + `/collection/` (WPBakery — fields only) | — | — | — | queued |
 | All FR pages | — | — | — | queued |
 
@@ -107,7 +108,7 @@ Hand-finished luxury gift bags and pouches for effortless, beautiful gifting. De
 designer gift tags
 ```
 ```text
-Designer Gift Tags, Illustrated & Made in France | Impression Originale
+Designer Gift Tags, Hand Made in France | Impression Originale
 ```
 ```text
 Illustrated designer gift tags to personalise every present. Made in France on recycled card. Shop the collection at Impression Originale.
