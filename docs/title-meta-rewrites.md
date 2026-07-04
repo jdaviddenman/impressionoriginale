@@ -39,12 +39,12 @@ Run this loop per product category. Each step is grounded in ≥2 SEO best pract
 | `/gift-tags/` | ✅ | ✅ 33w, 2 links | ✅ 2026-07-04 | **done** |
 | `/bags-boxes/` (parent, term-617) | ✅ | ✅ 35w, 2 links | ✅ 2026-07-04 | **done** — kp `luxury gift boxes` |
 | `/bags-boxes/gift-boxes/` (child, term-861) | ✅ | ✅ 60w, 3 links (→parent) | ✅ 2026-07-04 | **done** — kp `easy to build gift boxes` |
-| `/occasions-to-gift/christmas/` | — | — | — | **ready** (block below) |
-| `/gift-fabric-furoshiki/` | — | — | — | **ready** (block below) |
-| `/occasions-to-gift/wedding-celebration/` | — | — | — | **ready** (block below) |
-| `/occasions-to-gift/birthday-party/` | — | — | — | **ready** (block below) |
-| `/occasions-to-gift/baby-shower-kid/` | — | — | — | **ready** (block below) |
-| `/occasions-to-gift/valentine/` | — | — | — | **ready** (block below) |
+| `/occasions-to-gift/christmas/` | ✅ | ✅ 38w, 2 links | ✅ 2026-07-04 | **done** |
+| `/gift-fabric-furoshiki/` | ✅ | ✅ 54w, 2 links | ✅ 2026-07-04 | **done** |
+| `/occasions-to-gift/wedding-celebration/` | ✅ | ✅ 39w, 2 links | ✅ 2026-07-04 | **done** |
+| `/occasions-to-gift/birthday-party/` | ✅ | ✅ 37w, 2 links | ✅ 2026-07-04 | **done** |
+| `/occasions-to-gift/baby-shower-kid/` | ✅ | ✅ 41w, 2 links | ✅ 2026-07-04 | **done** (title 69 — optional trim) |
+| `/occasions-to-gift/valentine/` | — | — | — | **ready** (block below) — NEXT |
 | `/scissors/` | — | — | — | **ready** (block below) |
 | `/table-name-cards/` | — | — | — | **ready** (block below) |
 | `/occasions-to-gift/luxury/` | — | — | — | **ready** — differentiate, kp `metallic gift wrap` (block below) |
