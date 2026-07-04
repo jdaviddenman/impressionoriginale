@@ -14,8 +14,8 @@ Cadence: re-run after each batch; save `scorecard-YYYY-MM-DD.md`; track the aggr
 
 | Date | Aggregate | Change since last |
 |------|-----------|-------------------|
-| 2026-07-04 | 35/65 (54%) | baseline; Gift Wrap category optimized |
-| 2026-07-04 | ~44/65 (~68%) | og:image site-wide default set → 9 pages flip N→Y (verified live on home EN/FR, Gift Wrap, Ribbons, Christmas); Ribbons category optimized |
+| 2026-07-04 | 27/65 (42%) | baseline (recomputed under a consistent rubric; supersedes the initial 35/65 hand-score — see `scorecard-2026-07-04b.md`) |
+| 2026-07-04b | **43/65 (66%)** | **+16 checks.** 7 EN categories optimized (wrap/ribbons/bows/gift-bags/gift-tags/boxes parent+child) + og:image site-wide flip (10 pages N→Y) + meta-length + description-depth fixes. hreflang still 0 (biggest remaining lever). |
 
 ## Tier 2 — Search performance (the truth of "getting found"; Google Search Console)
 
