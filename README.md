@@ -14,7 +14,9 @@
 
 ## Verdict
 
-The site is technically well-built (Yoast, caching, product schema, rich product copy) but has several discovery-limiting issues. The headline defect is **hreflang tags missing site-wide on a bilingual EN/FR store** — see **[Issue #1](../../issues/1)**. None of the fixes require a rebuild.
+The site is technically well-built (Yoast, caching, product schema, rich product copy, valid multilingual hreflang). The biggest wins are **keyword-first titles/meta** and **content depth on category pages** — largely completed. None of the fixes require a rebuild.
+
+> **Correction (2026-07-04):** an earlier version of this audit called out "hreflang missing site-wide" as the headline 🔴 defect ([Issue #1](../../issues/1)). That was **wrong** — it checked only the page `<head>`. hreflang is present and valid in the **XML sitemaps** (`xhtml:link rel="alternate"`, en/fr/x-default, 153 page + 2429 product + 169 category entries), which is the **intended behaviour of WPML SEO 2.2.2+** (it moved hreflang from the head into the sitemap for performance) and is fully supported by Google. No fix was needed; Issue #1 is closed as not-a-defect. See [docs/hreflang-fix.md](docs/hreflang-fix.md).
 
 ## What's already working
 
@@ -28,9 +30,9 @@ The site is technically well-built (Yoast, caching, product schema, rich product
 
 | # | Finding | Impact | Fix | Tracking |
 |---|---------|--------|-----|----------|
-| 1 | **hreflang missing site-wide** on bilingual EN/FR site (0 tags, both languages) | 🔴 High | Restore WPML hreflang output | [Issue #1](../../issues/1) |
+| 1 | ~~hreflang missing site-wide~~ — **NOT a defect.** hreflang is valid in the XML sitemaps (WPML SEO 2.2.2+ design). | ✅ Resolved | None — closed as not-a-defect | [Issue #1](../../issues/1) |
 | 2 | Brand-first titles & H1 (waste the strongest keyword real estate) | 🔴 High | Keyword-first rewrites | [docs/title-meta-rewrites.md](docs/title-meta-rewrites.md) |
-| 3 | Language architecture — products authored FR-first, EN as translation, unlinked by hreflang | 🔴 High | Pairs with Issue #1 | [Issue #1](../../issues/1) |
+| 3 | ~~Language architecture unlinked by hreflang~~ — moot; EN/FR are linked via sitemap hreflang (see #1). Products are authored FR-first with EN as translation — a structural note, not a defect. | ✅ Resolved | None | — |
 | 4 | No product review / rating schema (no SERP stars) | 🟠 Med | Enable reviews + WooCommerce SEO schema | _pending_ |
 | 5 | Stale content (newest blog post 2025-08) | 🟠 Med | Content cadence around search demand | _pending_ |
 | 6 | Heavy front-end (page builder + slider) → Core Web Vitals risk | 🟠 Med | Run PageSpeed Insights; defer/optimise | _pending_ |
@@ -66,7 +68,8 @@ The full wp-admin **plugin/version inventory and update plan** are kept in a **s
 
 ## Status log
 
-- **2026-07-04** — External audit complete. hreflang defect confirmed: **0** tags site-wide, both languages, while Yoast's own head tags render fine. Root cause narrowed to the WPML ↔ Yoast integration (config, translation-linking, publish status, and cache all ruled out). Clone provisioned; environment being matched to live. Baseline fingerprint + before/after diff pending clone data load.
+- **2026-07-04** — External audit complete. Initially flagged hreflang as **0** site-wide (checking the page `<head>` only). **Later corrected — see below.**
+- **2026-07-04** — **CORRECTION: hreflang is NOT a defect.** Pre-live-update footgun research surfaced WPML's own docs: WPML SEO 2.2.2+ intentionally **moves hreflang from the head into the XML sitemap**. Verified live — the sitemaps carry valid reciprocal `xhtml:link rel="alternate"` hreflang (en/fr/x-default): 153 page + 2429 product + 169 category entries. Google fully supports sitemap hreflang. The original "head=0" finding measured the wrong location. Issue #1 closed as not-a-defect; the planned live WPML/Yoast update (for hreflang) was **cancelled before running** — no unnecessary production change made. The clone exercise confirmed Yoast + WooCommerce ML update cleanly but WPML premium can't update on an unregistered clone domain (moot now).
 - **2026-07-04** — Analytics workstream opened ([Issue #3](../../issues/3)). Confirmed the site still loads Universal Analytics `UA-85910237-1` (retired 2023-07-01); no GA4 measurement ID in page source. GTM container `GTM-MT7G7Z3C` present — check whether GA4 already fires inside it before assuming a full data gap.
 - **2026-07-04** — Agentic/AI-search workstream opened ([Issue #15](../../issues/15)). Verified live: `robots.txt` already allows the answer/agent bots (`ChatGPT-User`, `OAI-SearchBot`) and blocks only the training bot (`GPTBot`) — a coherent policy. Product schema already emits `Offer`/price/availability but lacks `aggregateRating`/`sku`. Evidence (2026): `llms.txt` is not consumed by major AI providers and carries no SEO value — shipping a minimal one anyway (low cost), but the real levers are crawl access + review/identifier schema. Deployable `llms.txt` added at repo root.
 - **2026-07-04** — GA4 property found to already exist (`G-Y88VQHFDBV`, Google Tag `GT-5TPLSSZ`); both IDs = 0 occurrences in **static** front-end HTML.

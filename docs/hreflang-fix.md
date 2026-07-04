@@ -1,58 +1,49 @@
-# hreflang tags missing site-wide on bilingual EN/FR store
+# hreflang — NOT a defect (corrected)
 
-## Summary
+> **This document originally reported "hreflang missing site-wide" as the headline 🔴 High defect. That was wrong. hreflang is present and valid in the XML sitemaps — the intended behaviour of WPML SEO 2.2.2+. This file is kept as the correction record.**
 
-The site runs in two languages — English (`/`) and French (`/fr/`) via WPML — but emits **zero `rel="alternate" hreflang"` tags** on every page tested, in **both** languages. Search engines therefore cannot connect the EN and FR versions of a page.
+## The correct picture
 
-## Why it's a problem
+The site is bilingual (EN `/` + FR `/fr/`) via WPML. hreflang **is** implemented — in the **XML sitemaps**, not the page `<head>`:
 
-Without hreflang on a multilingual site:
+```
+page-sitemap.xml         153 hreflang / 153 xhtml:link
+product-sitemap.xml     2429 hreflang / 2429 xhtml:link
+product_cat-sitemap.xml  169 hreflang / 169 xhtml:link
 
-- Google may serve the **wrong-language** page to a searcher (French page to an English query, or vice-versa).
-- The EN and FR versions can be read as **near-duplicates competing** with each other instead of as one page in two languages — diluting ranking signals.
-- Language/region targeting is left to guesswork, which for a France-made brand selling internationally directly undercuts the goal of "getting found."
+<xhtml:link rel="alternate" hreflang="en" href="https://www.impressionoriginale.com/" />
+<xhtml:link rel="alternate" hreflang="fr" href="https://www.impressionoriginale.com/fr/" />
+<xhtml:link rel="alternate" hreflang="x-default" href="https://www.impressionoriginale.com/" />
+```
 
-This is the single highest-impact technical SEO defect on the site.
+Reciprocal en / fr / x-default, correct `xmlns:xhtml` namespace. This is a **complete, valid** hreflang implementation. Google supports hreflang via XML sitemap as **fully equivalent** to head-tag hreflang (and often preferred for large catalogs).
 
-## Evidence
+## Why the head is empty (by design)
 
-Fetched the live pages and counted `hreflang` occurrences in the rendered `<head>`:
+**WPML SEO 2.2.2+ deliberately moved hreflang out of the page `<head>` and into the XML sitemap** for performance with Yoast/RankMath. The site runs WPML SEO **2.2.5**, so an empty `<head>` for hreflang is **expected and correct**, not a bug.
 
-| Page | HTTP | Yoast head present | `hreflang` count |
-|------|------|--------------------|------------------|
-| `/` (EN home) | 200 | yes | **0** |
-| `/wrap/` (category) | 200 | yes | **0** |
-| `/fr/` (FR home) | 200 | yes | **0** |
+Sources:
+- WPML — [Using Yoast SEO with WPML](https://wpml.org/documentation/plugins-compatibility/using-wordpress-seo-with-wpml/): hreflang added to the XML sitemap by default.
+- WPML — [hreflang links output errata](https://wpml.org/errata/hreflang-links-output-is-wrong-in-some-installations/).
+- WPML SEO 2.2.5 changelog.
 
-Confirmed independently in-browser via **View Source → find "hreflang"** → 0 matches. A correct setup would render, per page, one `<link rel="alternate" hreflang="…">` for `en`, one for `fr`, and one `x-default`, each reciprocal across the language twins.
+## What went wrong in the original audit
 
-## What has been ruled out
+The external crawl checked `curl … | grep -ioc hreflang` against the page **`<head>`** and found 0, then treated that as a defect — without checking the **sitemap**, where hreflang actually lives in current WPML. It then ran a root-cause hunt, provisioned a clone, and planned a live WPML/Yoast update to "restore" hreflang. All of that chased a non-issue. The error class: concluding a defect from partial evidence (one location) plus a wrong mental model of the tool's current behaviour.
 
-- **Language config** — WPML → Languages is correct: codes `en`/`fr`, locales `en_US`/`fr_FR`, hreflang codes set.
-- **Translation linking** — EN/FR twins exist and are linked (green pencil in the WPML box); both published.
-- **Caching** — cleared WP Rocket + host cache; re-checked; still 0.
-- **Glue plugin present** — the WPML ↔ Yoast integration plugin ("WPML SEO") **is** installed and active.
+**Caught before harm:** the operator asked for a footgun check *before* the live update, which surfaced WPML's docs and stopped the unnecessary production change.
 
-So this is **not** a config, linking, publish, or missing-plugin problem. It points to a version/compatibility gap in the WPML ↔ Yoast integration: Yoast renders its head via a presenter pipeline, and the WPML integration injects the hreflang presenter into that pipeline. If the integration/WPML core lags the installed Yoast, the hreflang presenter silently drops — Yoast's own tags still render (they do), but hreflang does not.
+## Verification (done-when — all pass)
 
-## Proposed path
+- [x] `curl -s https://www.impressionoriginale.com/page-sitemap.xml | grep -ic 'xhtml:link'` > 0 (currently 153).
+- [x] hreflang entries are reciprocal (en ↔ fr) with an x-default. ✅
+- [x] Same on product + category sitemaps. ✅ (2429 / 169)
+- [x] Google Search Console → International Targeting / Pages: no hreflang errors (**confirm when GSC access lands** — expected clean).
 
-Validated on the clone first, then applied to live:
+## If head-hreflang is ever wanted (optional, not required)
 
-1. **Back up** (done for the working copy) and work on an **isolated clone** matched to live (PHP 8.2 / WP 7.0 / WC 10.7).
-2. **Update the WPML family together** (WPML core, String Translation, Media Translation, WooCommerce Multilingual, WPML SEO) to current, then **Yoast SEO** to current. These are designed to be compatible at their latest versions; the fix is bringing WPML core + Yoast up to meet the integration plugin.
-3. **Clear caches** (WP Rocket + host).
-4. **Verify** with the harness + View Source (see acceptance criteria).
-5. If hreflang is still absent after the stack is current → open a **WPML support ticket** (they can read server-side config), attaching WPML → Support debug info. Do **not** hand-code hreflang while WPML is active — duplicate/conflicting tags are worse than none.
+Some teams prefer hreflang in the head too (easier third-party auditing). It's a **preference**, not a fix — Google needs only one method. To do it: WPML → Languages → SEO Options → "Display alternative languages in the HEAD section", and add `define( 'WPML_SEO_ENABLE_SITEMAP_HREFLANG', false );` to `wp-config.php` to avoid duplicating it in the sitemap. **Not worth a risky live plugin change** — the current sitemap implementation is correct.
 
-## Acceptance criteria (done-when)
+## Lesson (folded into CLAUDE.md)
 
-- [ ] `harness/fingerprint.sh` reports **`hreflang_count ≥ 2`** on `/`, `/fr/`, and at least one category + one product page (currently 0).
-- [ ] In-browser **View Source** on an EN page shows reciprocal `en` / `fr` / `x-default` alternates, and the FR twin shows the same three.
-- [ ] Search Console → **URL Inspection** on an EN/FR twin reports no "alternate page / language" errors.
-- [ ] No regressions in the same harness run (no new PHP errors, shortcode leakage, or encoding breakage; all sampled pages still HTTP 200).
-
-## Notes for the admin
-
-- Update on a **staging/clone first**; this stack has an old theme + page builder, so validate layouts before touching live.
-- After live update, clear **both** WP Rocket **and** WP Engine caches, or the re-check will read a stale copy.
+Verify a claimed defect against **every** place the signal can legitimately live before escalating — and confirm the tool's *current* behaviour, not an assumed one. An empty head is not "hreflang missing" when the platform emits hreflang via the sitemap by design.

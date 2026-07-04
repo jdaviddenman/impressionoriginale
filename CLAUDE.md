@@ -27,7 +27,7 @@ Being the admin does not remove the risk. Do not shortcut the clone step because
 - Open the issue when the workstream starts, not after.
 - Body must be self-contained: problem, why it matters, **evidence**, ruled-out causes, proposed path, acceptance criteria.
 - Corrections are first-class: when new evidence changes the conclusion, update the issue (title/body) and add a dated correction comment — don't leave a wrong finding standing. (Precedent: Issue #3 flipped from "GA4 migration required" to "GA4 already live, remove obsolete UA" once Reports data appeared.)
-- Current: **#1** hreflang · **#3** obsolete UA cleanup.
+- Current: **#1** hreflang — **CLOSED, not-a-defect** (hreflang is valid in the XML sitemap; WPML SEO 2.2.2+ design — see `docs/hreflang-fix.md`) · **#3** obsolete UA cleanup.
 
 ## RULE 3 — BACK UP BEFORE YOU CHANGE; ROLLBACK BEATS DIAGNOSIS
 
@@ -45,7 +45,7 @@ Accepted evidence per change class:
 
 | Change class | Deterministic evidence |
 |---|---|
-| hreflang | `curl -s <url> \| grep -ioc hreflang` before/after (0 → ≥2) + View Source on the EN/FR twin |
+| hreflang | Check the **XML sitemap**, not the head: `curl -s <site>/page-sitemap.xml \| grep -ic 'xhtml:link'` (WPML SEO 2.2.2+ emits hreflang in the sitemap, not the head — an empty head is expected, NOT a defect). |
 | Title / meta | fetch the live page, confirm the exact `<title>` / `meta description` rendered |
 | Analytics tag | fetch homepage for `gtag/js?id=…` (UA gone, `G-Y88VQHFDBV` present) + GA4 Realtime hit (accept the cookie banner first) |
 | Plugin/core update | `wp plugin get <slug> --field=version` (or the Plugins screen) shows the new version, **and** the site still 200s |
@@ -107,8 +107,8 @@ Everything below is the **target site's** stack, not this repo's.
 ./harness/fingerprint.sh https://<clone>.updraftclone.com  clone-baseline
 diff baseline/SUMMARY.txt clone-baseline/SUMMARY.txt
 
-# hreflang check (Issue #1)
-curl -s https://www.impressionoriginale.com/ | grep -ioc hreflang        # expect >=2 once fixed
+# hreflang check — look in the SITEMAP, not the head (WPML SEO 2.2.2+ design)
+curl -s https://www.impressionoriginale.com/page-sitemap.xml | grep -ic 'xhtml:link'   # present & valid (was mis-checked in the head)
 
 # Analytics tag check (Issue #3)
 curl -sL https://www.impressionoriginale.com/ | grep -oiE 'gtag/js\?id=[A-Z0-9-]+'   # UA gone, G-… present
@@ -129,7 +129,7 @@ gh pr create   --base main --head <branch> --title "…" --body "…"
 ## Repo Layout
 
 - `README.md` — audit overview, ranked findings, remediation workflow, status log.
-- `docs/hreflang-fix.md` — Issue #1 (headline defect).
+- `docs/hreflang-fix.md` — Issue #1, **corrected to not-a-defect** (hreflang is valid via sitemap).
 - `docs/analytics-ga4-migration.md` — Issue #3 (obsolete UA cleanup; GA4 already live).
 - `docs/title-meta-rewrites.md` — keyword-first EN + FR titles/meta, copy-paste ready.
 - `harness/fingerprint.sh` — before/after regression harness (server HTML; no JS).
@@ -140,4 +140,5 @@ gh pr create   --base main --head <branch> --title "…" --body "…"
 - **Cloudflare** fronts live and bot-challenges scripted fetches on deeper pages (403 / challenge). Homepage + category pages usually pass; product pages may not. The clone (UpdraftClone infra) is not behind Cloudflare — fetch it freely.
 - **JS-injected tags are invisible to `curl`.** The GA4 tag fires inside the GTM container at runtime, so an external HTML fetch shows only the static UA tag. Confirm runtime tags in the GTM/GA4 UI, not just the page source. (This is why Issue #3 first looked like "no GA4" — it was hiding in GTM.)
 - **WP Engine + WP Rocket = two caches.** Clear both after a change or the re-check reads a stale copy.
-- **WPML premium updates are domain-locked.** `wp plugin update` for WPML plugins may fail to fetch on a clone (different domain / registration); Yoast (wordpress.org) updates cleanly regardless.
+- **WPML premium updates are domain-locked.** `wp plugin update` for WPML plugins may fail to fetch on a clone (different domain / registration); Yoast (wordpress.org) updates cleanly regardless. (Confirmed on the clone: WPML core/String/Media downloads returned error pages; Yoast + WooCommerce ML updated fine.)
+- **hreflang lives in the SITEMAP here, not the head.** WPML SEO 2.2.2+ moved hreflang from `<head>` into the XML sitemap by design. An empty head is expected and correct — Google supports sitemap hreflang equally. A prior audit wrongly flagged "hreflang missing" from a head-only check and nearly ran an unnecessary live update. **Lesson (general): before escalating a claimed defect, verify the signal against EVERY location it can legitimately live, and confirm the tool's current behaviour — not an assumed one.** A footgun check before the risky live change is what caught it.

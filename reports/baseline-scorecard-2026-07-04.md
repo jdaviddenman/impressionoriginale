@@ -40,9 +40,11 @@ Each page scored on the checks that apply to it: `HTTP 200`, `Title ≤60`, `Met
 
 **Baseline aggregate: 35 / 65 applicable checks pass (54%).**
 
+> **Correction (2026-07-04):** item 1 below ("hreflang = 0") was a **measurement error** — it checked the page `<head>`, but WPML SEO 2.2.2+ emits hreflang in the **XML sitemap** (valid, present). hreflang is **not** a gap. See `docs/hreflang-fix.md` and the corrected aggregates in `scorecard-2026-07-04b.md`. Item 1 struck through below.
+
 ## The dominant defects (site-wide, systemic)
 
-1. **hreflang = 0 on every page** (both languages) — the single biggest gap. Fixing Issue #1 flips 10/10 pages on this check at once. Highest-leverage measured item.
+1. ~~**hreflang = 0 on every page**~~ — **struck: measurement error, not a defect** (hreflang is in the sitemap; see correction above).
 2. **og:image missing on every page but the product** — quick Yoast default-image fix; flips 9/10.
 3. **Thin category descriptions** — 5 of 6 unoptimized categories under 30 words (Bows 17, Gift Tags 25, Christmas 25, Ribbons 26, Gift Bags 29). The per-category work already applied to Gift Wrap (47) fixes these one at a time.
 4. **Over-long metas** (>156, truncated in SERP): FR home 177, Ribbons 192, Bows 173, Gift Tags 177, Product 191.
