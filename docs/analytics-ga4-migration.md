@@ -50,3 +50,4 @@ The UA property is deleted, so there's nothing in Google to find. `UA-85910237-1
 
 - IDs (`G-Y88VQHFDBV`, `GT-5TPLSSZ`, account `85910237`, property `375621420`) are public identifiers, not secrets.
 - Independent of the hreflang / plugin-update workstream.
+- **Do NOT re-run the GA4 Setup Assistant** ([support.google.com/analytics/answer/9744165](https://support.google.com/analytics/answer/9744165)) to "create" GA4 — the property already exists and collects data. Re-running risks a **duplicate** property or enabling the deprecated **"connected site tags"** mode. The UA property is deleted, so there are no UA settings left to migrate either.
