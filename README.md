@@ -37,7 +37,7 @@ The site is technically well-built (Yoast, caching, product schema, rich product
 | 7 | `og:image` missing on home (poor link/social previews) | 🟡 Low | Set default social image in Yoast | _pending_ |
 | 8 | Breadcrumbs not rendering on product pages | 🟡 Low | Enable Yoast breadcrumbs in template | _pending_ |
 | 9 | **Obsolete Universal Analytics tag still firing** (`UA-85910237-1`); GA4 (`G-Y88VQHFDBV`) **already live** via GTM | 🟡 Low | Remove the dead UA tag | [Issue #3](../../issues/3) |
-| 10 | **Agentic / AI-search readiness** — no `llms.txt`; Product schema lacks reviews/identifiers | 🟠 Med | `llms.txt` + confirm AI-crawler policy + reviews/identifiers schema | [Issue #15](../../issues/15) |
+| 10 | **Agentic / AI-search readiness** — Yoast auto-generates a **low-quality** `/llms.txt` (over-escaped, HTML-dumped); Product schema lacks reviews/identifiers | 🟠 Med | Fix/replace `llms.txt` + confirm AI-crawler policy + reviews/identifiers schema | [Issue #15](../../issues/15) |
 
 ## Remediation workflow (how we de-risk)
 
