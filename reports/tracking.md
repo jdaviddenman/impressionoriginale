@@ -15,6 +15,7 @@ Cadence: re-run after each batch; save `scorecard-YYYY-MM-DD.md`; track the aggr
 | Date | Aggregate | Change since last |
 |------|-----------|-------------------|
 | 2026-07-04 | 35/65 (54%) | baseline; Gift Wrap category optimized |
+| 2026-07-04 | ~44/65 (~68%) | og:image site-wide default set → 9 pages flip N→Y (verified live on home EN/FR, Gift Wrap, Ribbons, Christmas); Ribbons category optimized |
 
 ## Tier 2 — Search performance (the truth of "getting found"; Google Search Console)
 
@@ -50,6 +51,8 @@ Cadence: monthly; use **year-over-year** (this store is seasonal — see caveats
 | Date | Change | Pages affected |
 |------|--------|----------------|
 | 2026-07-04 | Category SEO: title/meta/keyphrase + 47-word description + internal links | `/wrap/` (Gift Wrap) |
+| 2026-07-04 | Category SEO: title/meta/keyphrase + 45-word description + internal links | `/ribbons/` (Ribbons) |
+| 2026-07-04 | og:image site-wide default set in Yoast (`Gift_ceremony.jpg`) — 9/10 pages flip N→Y | site-wide |
 | 2026-07-04 | Analytics: GA4 consolidated to single GTM path; duplicate `GT-5TPLSSZ` tags removed | site-wide (tags) |
 
 Also add a **GA4 annotation** on each change date so the graphs carry the marker.
