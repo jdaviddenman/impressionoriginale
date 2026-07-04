@@ -1,6 +1,6 @@
-# Title & Meta Rewrites (keyword-first)
+# Title & Meta Rewrites + Category Optimization Pattern (keyword-first)
 
-The current titles/H1 lead with the brand name — which nobody searches yet — wasting the strongest SERP real estate. These rewrites lead with **demand keywords**, append the brand after a real `|`, keep titles ≤ ~60 chars and meta ≤ ~155, and weave in the "made in France" USP.
+The current titles/H1 lead with the brand name — which nobody searches yet — wasting the strongest SERP real estate. These rewrites lead with **demand keywords**, append the brand after a real `|`, keep titles ≤ ~60 chars and meta ≤ ~156, and weave in the "made in France" USP.
 
 **Where to enter:** Yoast fields per page. WooCommerce categories → Products → Categories → edit → *Yoast SEO* box. Static pages → edit page → Yoast box. Home → Yoast → Settings.
 
@@ -8,21 +8,94 @@ The current titles/H1 lead with the brand name — which nobody searches yet —
 
 ---
 
+## The locked per-category pattern (proven on `/wrap/` + `/ribbons/`)
+
+Run this loop per product category. Each step is grounded in ≥2 SEO best practices and verified against the live rendered HTML, not just Yoast's saved state.
+
+1. **Focus keyphrase** — set the exact phrase from the table below (≤4 words). This one field drives most of Yoast's checks; an over-long keyphrase (the site's old default was an 11-word string) turns six checks red at once.
+2. **SEO title** — paste from the table. Front-loads the keyphrase (Google title-link weighting) + exact match at the start. Delete any trailing `%%sep%% %%sitename%%` variable, or the brand doubles.
+3. **Meta description** — paste from the table. Must contain the **exact keyphrase** and stay ≤156 chars (CTR + SERP width).
+4. **Category Description field** — expand to ~40–50 words, entered as **raw HTML** (see snippets below), with:
+   - the **exact keyphrase once, in the first sentence** (satisfies density + "keyphrase in introduction, in one sentence");
+   - **1–2 internal links** to sibling categories (authority distribution + crawl paths), reciprocated where possible.
+5. **Save → verify live** — O re-fetches the URL and confirms rendered title/meta, real `<a href>` links, exact-keyphrase count, and clean markup.
+
+### Gotchas learned live
+- **Exact contiguous phrase.** Yoast counts the keyphrase only as an exact adjacent match. "Couture gift ribbon" scores **0** for keyphrase `luxury gift ribbon` — the word "luxury" must be adjacent. English plurals are fine ("ribbons" counts for "ribbon").
+- **Enter descriptions as raw HTML**, not pasted from Notes/Word — rich-editor paste injects `<span class="s1">` / `Apple-converted-space` cruft, and markdown `[text](/url)` renders as literal text, not a link. Use the Text/code view.
+- **Do NOT change the slug.** Yoast's "keyphrase in slug" suggestion is declined on purpose — renaming a live category URL forces 301s and risks lost ranking/links. URL stability wins.
+- **One exact keyphrase use is enough** — do not repeat to raise density; Google penalizes stuffing and Yoast's minimum here is 1.
+- **WPBakery/Slider pages (Home, `/collection/`) mislead Yoast.** Its content analysis reads the raw shortcode, not the rendered page, so "no images / <300 words / no links" are false there. Only the title/meta/keyphrase **fields** are reliable on builder pages — don't pad them to satisfy the meter.
+- **Category description may be theme-hidden.** Confirm it renders on the live page (it does on this theme — verified). If hidden, content-depth work isn't visible to users.
+
+### Progress
+
+| Category | Title/meta | Description + links | Verified live | Status |
+|----------|-----------|---------------------|---------------|--------|
+| `/wrap/` | ✅ | ✅ 48w, 2 links | ✅ 2026-07-04 | **done** |
+| `/ribbons/` | ✅ | ✅ 45w, 2 links | ✅ 2026-07-04 | **done** |
+| `/bows/` | — | — | — | next |
+| `/gift-bags/` · `/gift-tags/` · `/bags-boxes/gift-boxes/` · Christmas · Wedding · Birthday · Furoshiki | — | — | — | queued |
+| Home + `/collection/` (WPBakery — fields only) | — | — | — | queued |
+| All FR pages | — | — | — | queued |
+
+---
+
+## Raw-HTML category descriptions (copy-paste into the Description field, code view)
+
+Each has the exact keyphrase in the first sentence + reciprocal internal links.
+
+**`/wrap/`** — keyphrase `luxury gift wrapping paper`:
+```html
+<p>Discover our collection of luxury gift wrapping paper — hand-drawn by independent artists and printed in France on recycled stock. Each sheet turns an ordinary present into something memorable. Pair it with our <a href="https://www.impressionoriginale.com/ribbons/">satin and velvet ribbons</a> or a ready-tied <a href="https://www.impressionoriginale.com/bows/">handmade bow</a> to finish the wrap beautifully.</p>
+```
+
+**`/ribbons/`** — keyphrase `luxury gift ribbon`:
+```html
+<p>Discover our luxury gift ribbon in satin, velvet, organza, grosgrain and taffeta — woven to finish a gift beautifully and made in France. Choose by colour, texture and width to match your <a href="https://www.impressionoriginale.com/wrap/">luxury gift wrapping paper</a> or top it with a ready-tied <a href="https://www.impressionoriginale.com/bows/">handmade bow</a>.</p>
+```
+
+**`/bows/`** — keyphrase `handmade gift bows`:
+```html
+<p>Add the finishing touch with our handmade gift bows, ready-tied in sizes S, M and L and made in France. Drop one onto any present in seconds for a couture finish. Pair with our <a href="https://www.impressionoriginale.com/wrap/">luxury gift wrapping paper</a> and coordinating <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a>.</p>
+```
+
+**`/gift-bags/`** — keyphrase `luxury gift bags`:
+```html
+<p>Our luxury gift bags and pouches are hand-finished in France for effortless, beautiful gifting — no wrapping required. Choose the size and design to suit the occasion, then finish with a <a href="https://www.impressionoriginale.com/ribbons/">gift ribbon</a> or a ready-tied <a href="https://www.impressionoriginale.com/bows/">handmade bow</a>.</p>
+```
+
+**`/gift-tags/`** — keyphrase `designer gift tags`:
+```html
+<p>Personalise every present with our designer gift tags, illustrated by independent artists and printed in France on recycled card. The perfect finishing detail for your <a href="https://www.impressionoriginale.com/wrap/">luxury gift wrapping paper</a> and <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a>.</p>
+```
+
+**`/occasions-to-gift/christmas/`** — keyphrase `christmas gift wrap`:
+```html
+<p>Wrap the holidays in our luxury christmas gift wrap — designer paper, ribbons and bows made in France. Everything you need for eco-conscious festive gifting in one capsule collection. Explore the matching <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a> and <a href="https://www.impressionoriginale.com/bows/">handmade bows</a>.</p>
+```
+
+*(Draft the remaining categories — boxes, wedding, birthday, furoshiki, and all FR pages — from the same template: exact keyphrase in the first sentence, 1–2 reciprocal internal links, raw HTML.)*
+
+---
+
 ## English — home + top categories
 
-| Page | URL | New title | New meta description |
-|------|-----|-----------|----------------------|
-| Home | `/` | Luxury Gift Wrap & Ribbons Made in France \| Impression Originale | Hand-drawn luxury gift wrap, ribbons, boxes & bows — designed by artists and made in France. Shop eco-conscious wrapping for extraordinary gifts. |
-| Gift wrap | `/wrap/` | Luxury Gift Wrapping Paper, Made in France \| Impression Originale | Shop hand-drawn luxury gift wrapping paper by independent artists — printed in France on recycled stock. Sheets & sets for every occasion. |
-| Ribbons | `/ribbons/` | Luxury Gift Ribbon: Satin, Velvet & Organza \| Impression Originale | Couture gift ribbon in satin, velvet, organza, grosgrain & taffeta. Made in France to finish every wrap beautifully. Shop by color & size. |
-| Bows | `/bows/` | Handmade Gift Bows — Ready-Tied Luxury \| Impression Originale | Ready-tied handmade bows in S, M & L. Add a couture finishing touch to any gift in seconds. Made in France by Impression Originale. |
-| Gift boxes | `/bags-boxes/gift-boxes/` | Luxury Gift Boxes, Made in France \| Impression Originale | Elegant designer gift boxes in a range of sizes, artist-designed and made in France. The refined alternative to wrapping. Shop the collection. |
-| Gift bags | `/gift-bags/` | Luxury Gift Bags & Pouches, Made in France \| Impression Originale | Hand-finished luxury gift bags and pouches for effortless, beautiful gifting. Designed by artists, made in France. Shop sizes & designs. |
-| Gift tags | `/gift-tags/` | Designer Illustrated Gift Tags \| Impression Originale | Illustrated designer gift tags to personalize every present. Made in France on recycled card. Shop the collection at Impression Originale. |
-| Furoshiki | `/gift-fabric-furoshiki/` | Furoshiki Fabric Gift Wrap, Reusable \| Impression Originale | Reusable furoshiki fabric wrap — the sustainable, zero-waste way to wrap gifts. Printed in France by Impression Originale. Shop designs & sizes. |
-| Christmas | `/occasions-to-gift/christmas/` | Luxury Christmas Gift Wrap & Ribbons \| Impression Originale | Designer Christmas gift wrap, ribbons & bows, made in France. Wrap the holidays in eco-conscious luxury. Shop the Christmas capsule collection. |
-| Wedding | `/occasions-to-gift/wedding-celebration/` | Wedding Gift Wrap, Ribbons & Favors \| Impression Originale | Elegant wedding gift wrap, ribbons and place cards, designed by artists and made in France. Dress every celebration gift beautifully. Shop now. |
-| Birthday | `/occasions-to-gift/birthday-party/` | Birthday Gift Wrap & Ribbons \| Impression Originale | Colorful, artist-designed birthday gift wrap, ribbons & bows. Made in France, eco-conscious, made to delight. Shop birthday wrapping. |
+The **Focus keyphrase** column is the exact phrase to set in Yoast; the meta must contain it verbatim.
+
+| Page | URL | Focus keyphrase | New title | New meta description |
+|------|-----|-----------------|-----------|----------------------|
+| Home | `/` | luxury gift wrap | Luxury Gift Wrap & Ribbons Made in France \| Impression Originale | Hand-drawn luxury gift wrap, ribbons, boxes & bows — designed by artists and made in France. Shop eco-conscious wrapping for extraordinary gifts. |
+| Gift wrap | `/wrap/` | luxury gift wrapping paper | Luxury Gift Wrapping Paper, Made in France \| Impression Originale | Shop hand-drawn luxury gift wrapping paper by independent artists — printed in France on recycled stock. Sheets & sets for every occasion. |
+| Ribbons | `/ribbons/` | luxury gift ribbon | Luxury Gift Ribbon: Satin, Velvet & Organza \| Impression Originale | Luxury gift ribbon in satin, velvet, organza, grosgrain & taffeta. Made in France to finish every wrap beautifully. Shop by colour & size. |
+| Bows | `/bows/` | handmade gift bows | Handmade Gift Bows — Ready-Tied Luxury \| Impression Originale | Ready-tied handmade gift bows in S, M & L. Add a couture finishing touch to any gift in seconds. Made in France by Impression Originale. |
+| Gift boxes | `/bags-boxes/gift-boxes/` | luxury gift boxes | Luxury Gift Boxes, Made in France \| Impression Originale | Elegant luxury gift boxes in a range of sizes, artist-designed and made in France. The refined alternative to wrapping. Shop the collection. |
+| Gift bags | `/gift-bags/` | luxury gift bags | Luxury Gift Bags & Pouches, Made in France \| Impression Originale | Hand-finished luxury gift bags and pouches for effortless, beautiful gifting. Designed by artists, made in France. Shop sizes & designs. |
+| Gift tags | `/gift-tags/` | designer gift tags | Designer Gift Tags, Illustrated & Made in France \| Impression Originale | Illustrated designer gift tags to personalise every present. Made in France on recycled card. Shop the collection at Impression Originale. |
+| Furoshiki | `/gift-fabric-furoshiki/` | furoshiki fabric gift wrap | Furoshiki Fabric Gift Wrap, Reusable \| Impression Originale | Reusable furoshiki fabric gift wrap — the sustainable, zero-waste way to wrap gifts. Printed in France by Impression Originale. Shop designs & sizes. |
+| Christmas | `/occasions-to-gift/christmas/` | christmas gift wrap | Luxury Christmas Gift Wrap & Ribbons \| Impression Originale | Designer christmas gift wrap, ribbons & bows, made in France. Wrap the holidays in eco-conscious luxury. Shop the Christmas capsule collection. |
+| Wedding | `/occasions-to-gift/wedding-celebration/` | wedding gift wrap | Wedding Gift Wrap, Ribbons & Favors \| Impression Originale | Elegant wedding gift wrap, ribbons and place cards, designed by artists and made in France. Dress every celebration gift beautifully. Shop now. |
+| Birthday | `/occasions-to-gift/birthday-party/` | birthday gift wrap | Birthday Gift Wrap & Ribbons \| Impression Originale | Colourful, artist-designed birthday gift wrap, ribbons & bows. Made in France, eco-conscious, made to delight. Shop birthday wrapping. |
 
 ## French — home + top categories (`fabriqué en France` USP)
 
