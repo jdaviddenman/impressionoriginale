@@ -34,48 +34,117 @@ Run this loop per product category. Each step is grounded in ≥2 SEO best pract
 |----------|-----------|---------------------|---------------|--------|
 | `/wrap/` | ✅ | ✅ 48w, 2 links | ✅ 2026-07-04 | **done** |
 | `/ribbons/` | ✅ | ✅ 45w, 2 links | ✅ 2026-07-04 | **done** |
-| `/bows/` | — | — | — | next |
-| `/gift-bags/` · `/gift-tags/` · `/bags-boxes/gift-boxes/` · Christmas · Wedding · Birthday · Furoshiki | — | — | — | queued |
+| `/bows/` | ✅ | ✅ 43w, 2 links | ✅ 2026-07-04 | **done** |
+| `/gift-bags/` | — | — | — | next |
+| `/gift-tags/` · `/bags-boxes/gift-boxes/` · Christmas · Wedding · Birthday · Furoshiki | — | — | — | queued |
 | Home + `/collection/` (WPBakery — fields only) | — | — | — | queued |
 | All FR pages | — | — | — | queued |
 
 ---
 
-## Raw-HTML category descriptions (copy-paste into the Description field, code view)
+## Per-category copy-paste blocks (EN)
 
-Each has the exact keyphrase in the first sentence + reciprocal internal links.
+Each category has four fenced blocks — **keyphrase**, **SEO title**, **meta description**, **description HTML** — to paste field-by-field into the Yoast box + Description field (code view). ✅ = shipped + verified live.
 
-**`/wrap/`** — keyphrase `luxury gift wrapping paper`:
+### `/wrap/` — Gift Wrap ✅
+```text
+luxury gift wrapping paper
+```
+```text
+Luxury Gift Wrapping Paper, Made in France | Impression Originale
+```
+```text
+Shop hand-drawn luxury gift wrapping paper by independent artists — printed in France on recycled stock. Sheets & sets for every occasion.
+```
 ```html
 <p>Discover our collection of luxury gift wrapping paper — hand-drawn by independent artists and printed in France on recycled stock. Each sheet turns an ordinary present into something memorable. Pair it with our <a href="https://www.impressionoriginale.com/ribbons/">satin and velvet ribbons</a> or a ready-tied <a href="https://www.impressionoriginale.com/bows/">handmade bow</a> to finish the wrap beautifully.</p>
 ```
 
-**`/ribbons/`** — keyphrase `luxury gift ribbon`:
+### `/ribbons/` — Ribbons ✅
+```text
+luxury gift ribbon
+```
+```text
+Luxury Gift Ribbon: Satin, Velvet & Organza | Impression Originale
+```
+```text
+Luxury gift ribbon in satin, velvet, organza, grosgrain & taffeta. Made in France to finish every wrap beautifully. Shop by colour & size.
+```
 ```html
 <p>Discover our luxury gift ribbon in satin, velvet, organza, grosgrain and taffeta — woven to finish a gift beautifully and made in France. Choose by colour, texture and width to match your <a href="https://www.impressionoriginale.com/wrap/">luxury gift wrapping paper</a> or top it with a ready-tied <a href="https://www.impressionoriginale.com/bows/">handmade bow</a>.</p>
 ```
 
-**`/bows/`** — keyphrase `handmade gift bows`:
+### `/bows/` — Bows ✅
+```text
+handmade gift bows
+```
+```text
+Handmade Gift Bows — Ready-Tied Luxury | Impression Originale
+```
+```text
+Ready-tied handmade gift bows in S, M & L. Add a couture finishing touch to any gift in seconds. Made in France by Impression Originale.
+```
 ```html
 <p>Add the finishing touch with our handmade gift bows, ready-tied in sizes S, M and L and made in France. Drop one onto any present in seconds for a couture finish. Pair with our <a href="https://www.impressionoriginale.com/wrap/">luxury gift wrapping paper</a> and coordinating <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a>.</p>
 ```
 
-**`/gift-bags/`** — keyphrase `luxury gift bags`:
+### `/gift-bags/` — Gift Bags
+```text
+luxury gift bags
+```
+```text
+Luxury Gift Bags & Pouches, Made in France | Impression Originale
+```
+```text
+Hand-finished luxury gift bags and pouches for effortless, beautiful gifting. Designed by artists, made in France. Shop sizes & designs.
+```
 ```html
 <p>Our luxury gift bags and pouches are hand-finished in France for effortless, beautiful gifting — no wrapping required. Choose the size and design to suit the occasion, then finish with a <a href="https://www.impressionoriginale.com/ribbons/">gift ribbon</a> or a ready-tied <a href="https://www.impressionoriginale.com/bows/">handmade bow</a>.</p>
 ```
 
-**`/gift-tags/`** — keyphrase `designer gift tags`:
+### `/gift-tags/` — Gift Tags
+```text
+designer gift tags
+```
+```text
+Designer Gift Tags, Illustrated & Made in France | Impression Originale
+```
+```text
+Illustrated designer gift tags to personalise every present. Made in France on recycled card. Shop the collection at Impression Originale.
+```
 ```html
 <p>Personalise every present with our designer gift tags, illustrated by independent artists and printed in France on recycled card. The perfect finishing detail for your <a href="https://www.impressionoriginale.com/wrap/">luxury gift wrapping paper</a> and <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a>.</p>
 ```
 
-**`/occasions-to-gift/christmas/`** — keyphrase `christmas gift wrap`:
+### `/bags-boxes/gift-boxes/` — Gift Boxes
+```text
+luxury gift boxes
+```
+```text
+Luxury Gift Boxes, Made in France | Impression Originale
+```
+```text
+Elegant luxury gift boxes in a range of sizes, artist-designed and made in France. The refined alternative to wrapping. Shop the collection.
+```
+```html
+<p>Discover our luxury gift boxes, artist-designed and made in France in a range of sizes — the refined, reusable alternative to wrapping. Dress them up with a <a href="https://www.impressionoriginale.com/ribbons/">gift ribbon</a> or a ready-tied <a href="https://www.impressionoriginale.com/bows/">handmade bow</a>.</p>
+```
+
+### `/occasions-to-gift/christmas/` — Christmas
+```text
+christmas gift wrap
+```
+```text
+Luxury Christmas Gift Wrap & Ribbons | Impression Originale
+```
+```text
+Designer christmas gift wrap, ribbons & bows, made in France. Wrap the holidays in eco-conscious luxury. Shop the Christmas capsule collection.
+```
 ```html
 <p>Wrap the holidays in our luxury christmas gift wrap — designer paper, ribbons and bows made in France. Everything you need for eco-conscious festive gifting in one capsule collection. Explore the matching <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a> and <a href="https://www.impressionoriginale.com/bows/">handmade bows</a>.</p>
 ```
 
-*(Draft the remaining categories — boxes, wedding, birthday, furoshiki, and all FR pages — from the same template: exact keyphrase in the first sentence, 1–2 reciprocal internal links, raw HTML.)*
+*(Wedding, Birthday, and Furoshiki follow the same block template — draft when reached: exact keyphrase in the first sentence, 1–2 reciprocal internal links, raw HTML. All FR pages: same structure, French keyphrases.)*
 
 ---
 
