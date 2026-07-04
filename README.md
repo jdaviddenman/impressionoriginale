@@ -37,6 +37,7 @@ The site is technically well-built (Yoast, caching, product schema, rich product
 | 7 | `og:image` missing on home (poor link/social previews) | 🟡 Low | Set default social image in Yoast | _pending_ |
 | 8 | Breadcrumbs not rendering on product pages | 🟡 Low | Enable Yoast breadcrumbs in template | _pending_ |
 | 9 | **Obsolete Universal Analytics tag still firing** (`UA-85910237-1`); GA4 (`G-Y88VQHFDBV`) **already live** via GTM | 🟡 Low | Remove the dead UA tag | [Issue #3](../../issues/3) |
+| 10 | **Agentic / AI-search readiness** — no `llms.txt`; Product schema lacks reviews/identifiers | 🟠 Med | `llms.txt` + confirm AI-crawler policy + reviews/identifiers schema | [Issue #4](../../issues/4) |
 
 ## Remediation workflow (how we de-risk)
 
@@ -57,6 +58,7 @@ The site is technically well-built (Yoast, caching, product schema, rich product
 - **[hreflang issue & fix](docs/hreflang-fix.md)** — the headline defect (mirrored in [Issue #1](../../issues/1))
 - **[Title & meta rewrites (EN + FR)](docs/title-meta-rewrites.md)** — copy-paste ready
 - **[Universal Analytics → GA4 migration](docs/analytics-ga4-migration.md)** — dead UA tag (mirrored in [Issue #3](../../issues/3))
+- **[Agentic / AI-search readiness](docs/agentic-search.md)** — `llms.txt` + AI-crawler policy + schema (mirrored in [Issue #4](../../issues/4)); the repo-root [`llms.txt`](llms.txt) is the deployable file
 
 ## Security note
 
@@ -66,5 +68,6 @@ The full wp-admin **plugin/version inventory and update plan** are kept in a **s
 
 - **2026-07-04** — External audit complete. hreflang defect confirmed: **0** tags site-wide, both languages, while Yoast's own head tags render fine. Root cause narrowed to the WPML ↔ Yoast integration (config, translation-linking, publish status, and cache all ruled out). Clone provisioned; environment being matched to live. Baseline fingerprint + before/after diff pending clone data load.
 - **2026-07-04** — Analytics workstream opened ([Issue #3](../../issues/3)). Confirmed the site still loads Universal Analytics `UA-85910237-1` (retired 2023-07-01); no GA4 measurement ID in page source. GTM container `GTM-MT7G7Z3C` present — check whether GA4 already fires inside it before assuming a full data gap.
+- **2026-07-04** — Agentic/AI-search workstream opened ([Issue #4](../../issues/4)). Verified live: `robots.txt` already allows the answer/agent bots (`ChatGPT-User`, `OAI-SearchBot`) and blocks only the training bot (`GPTBot`) — a coherent policy. Product schema already emits `Offer`/price/availability but lacks `aggregateRating`/`sku`. Evidence (2026): `llms.txt` is not consumed by major AI providers and carries no SEO value — shipping a minimal one anyway (low cost), but the real levers are crawl access + review/identifier schema. Deployable `llms.txt` added at repo root.
 - **2026-07-04** — GA4 property found to already exist (`G-Y88VQHFDBV`, Google Tag `GT-5TPLSSZ`); both IDs = 0 occurrences in **static** front-end HTML.
 - **2026-07-04** — **Correction:** GA4 **is** collecting. GA4 Reports (property `375621420`) show ~1.9K users + €432.96 revenue in June. The GA4 tag fires **inside** GTM container `GTM-MT7G7Z3C` (JS-injected — invisible to an external HTML fetch; the flagged caveat, now confirmed). The earlier Realtime "0" was the Termly consent gate + the static check, not a data gap. Revised task: **remove the obsolete UA tag** (`UA-85910237-1`) — GA4 needs no migration. Severity downgraded High → Low.
