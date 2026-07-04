@@ -36,10 +36,11 @@ The site is technically well-built (Yoast, caching, product schema, rich product
 | 4 | No product review / rating schema (no SERP stars) | 🟠 Med | Enable reviews + WooCommerce SEO schema | _pending_ |
 | 5 | Stale content (newest blog post 2025-08) | 🟠 Med | Content cadence around search demand | _pending_ |
 | 6 | Heavy front-end (page builder + slider) → Core Web Vitals risk | 🟠 Med | Run PageSpeed Insights; defer/optimise | _pending_ |
-| 7 | `og:image` missing on home (poor link/social previews) | 🟡 Low | Set default social image in Yoast | _pending_ |
+| 7 | ~~`og:image` missing~~ — **done:** site-wide Yoast default image set, verified live on 10 pages | ✅ Resolved | — | — |
 | 8 | Breadcrumbs not rendering on product pages | 🟡 Low | Enable Yoast breadcrumbs in template | _pending_ |
 | 9 | **Obsolete Universal Analytics tag still firing** (`UA-85910237-1`); GA4 (`G-Y88VQHFDBV`) **already live** via GTM | 🟡 Low | Remove the dead UA tag | [Issue #3](../../issues/3) |
 | 10 | **Agentic / AI-search readiness** — Yoast auto-generates a **low-quality** `/llms.txt` (over-escaped, HTML-dumped); Product schema lacks reviews/identifiers | 🟠 Med | Fix/replace `llms.txt` + confirm AI-crawler policy + reviews/identifiers schema | [Issue #15](../../issues/15) |
+| 11 | **Plugin maintenance** — ~30 plugins behind (incl. WooCommerce 10.7→10.9.3); fossilization = security risk | 🟠 Med | Tiered, staging-first update program | [Issue #22](../../issues/22) · [docs](docs/plugin-maintenance.md) |
 
 ## Remediation workflow (how we de-risk)
 
@@ -61,6 +62,7 @@ The site is technically well-built (Yoast, caching, product schema, rich product
 - **[Title & meta rewrites (EN + FR)](docs/title-meta-rewrites.md)** — copy-paste ready
 - **[Universal Analytics → GA4 migration](docs/analytics-ga4-migration.md)** — dead UA tag (mirrored in [Issue #3](../../issues/3))
 - **[Agentic / AI-search readiness](docs/agentic-search.md)** — `llms.txt` + AI-crawler policy + schema (mirrored in [Issue #15](../../issues/15)); the repo-root [`llms.txt`](llms.txt) is the deployable file
+- **[Plugin maintenance program](docs/plugin-maintenance.md)** — tiered, staging-first update cadence (mirrored in [Issue #22](../../issues/22))
 
 ## Security note
 
