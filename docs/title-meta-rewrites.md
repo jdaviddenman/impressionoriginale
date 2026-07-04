@@ -44,10 +44,12 @@ Run this loop per product category. Each step is grounded in ≥2 SEO best pract
 | `/occasions-to-gift/wedding-celebration/` | ✅ | ✅ 39w, 2 links | ✅ 2026-07-04 | **done** |
 | `/occasions-to-gift/birthday-party/` | ✅ | ✅ 37w, 2 links | ✅ 2026-07-04 | **done** |
 | `/occasions-to-gift/baby-shower-kid/` | ✅ | ✅ 41w, 2 links | ✅ 2026-07-04 | **done** (title 69 — optional trim) |
-| `/occasions-to-gift/valentine/` | — | — | — | **ready** (block below) — NEXT |
-| `/scissors/` | — | — | — | **ready** (block below) |
-| `/table-name-cards/` | — | — | — | **ready** (block below) |
-| `/occasions-to-gift/luxury/` | — | — | — | **ready** — differentiate, kp `metallic gift wrap` (block below) |
+| `/occasions-to-gift/valentine/` | ✅ | ✅ 30w, 2 links | ✅ 2026-07-04 | **done** |
+| `/scissors/` | ✅ | ✅ 33w, 2 links | ✅ 2026-07-04 | **done** |
+| `/table-name-cards/` | ✅ | ✅ 36w, 2 links | ✅ 2026-07-04 | **done** |
+| `/occasions-to-gift/luxury/` | ✅ | ✅ 38w, 2 links (→/wrap/) | ✅ 2026-07-04 | **done** — differentiated, kp `metallic gift wrap` |
+
+> **✅ EN product-category sweep COMPLETE — all 16 categories optimized + verified live.** Remaining EN work: the 6 size/tuxedo archives (noindex, decided) and the WPBakery pages (Home, Collection — field-only). FR pages are a separate workstream.
 | `/size-l/m/s-ribbons/` · `/size-xl/` · `/size-xs/` · `/ribbons/tuxedo/` | n/a | n/a | n/a | **noindex** (decided) — Yoast Advanced → not in search results |
 | `/masterclass/` | — | — | — | out of scope (service page, not a product category) |
 
