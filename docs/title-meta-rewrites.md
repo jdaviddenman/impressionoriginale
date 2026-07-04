@@ -47,8 +47,8 @@ Run this loop per product category. Each step is grounded in ≥2 SEO best pract
 | `/occasions-to-gift/valentine/` | — | — | — | **ready** (block below) |
 | `/scissors/` | — | — | — | **ready** (block below) |
 | `/table-name-cards/` | — | — | — | **ready** (block below) |
-| `/occasions-to-gift/luxury/` | — | — | — | ⚠️ decision needed (cannibalizes `/wrap/` + Home) |
-| `/size-l/m/s-ribbons/` · `/size-xl/` · `/size-xs/` · `/ribbons/tuxedo/` | — | — | — | ⚠️ noindex-or-consolidate decision (thin/duplicate) |
+| `/occasions-to-gift/luxury/` | — | — | — | **ready** — differentiate, kp `metallic gift wrap` (block below) |
+| `/size-l/m/s-ribbons/` · `/size-xl/` · `/size-xs/` · `/ribbons/tuxedo/` | n/a | n/a | n/a | **noindex** (decided) — Yoast Advanced → not in search results |
 | `/masterclass/` | — | — | — | out of scope (service page, not a product category) |
 
 > **Two box categories exist.** Parent `/bags-boxes/` (term-617, "Gift Bags & Boxes") owns the head term *luxury gift boxes* and is done. Child `/bags-boxes/gift-boxes/` (term-861, "Gift Boxes") must use a **distinct** keyphrase (*easy to build gift boxes* — the site's own phrase) and link up to the parent, or the two pages cannibalize each other. Edit the child at Products → Categories → the *Gift Boxes* row nested under *Gift Bags & Boxes*.
@@ -282,10 +282,8 @@ Table name cards to finish a beautifully set table for weddings, dinners and cel
 <p>Our table name cards add the finishing touch to a beautifully set table — ideal for weddings, dinners and celebrations, designed and made in France. Coordinate them with our <a href="https://www.impressionoriginale.com/occasions-to-gift/wedding-celebration/">wedding gift wrap</a> and <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a>.</p>
 ```
 
-### `/occasions-to-gift/luxury/` — ⚠️ DECISION NEEDED, do not blindly apply
-This category ("sparkles… luxurious feel" gift wraps) **collides** with `/wrap/` (keyphrase *luxury gift wrapping paper*) and Home (*luxury gift wrap*) — three pages competing for the same head term. Decide first:
-- **Consolidate/redirect** into `/wrap/` (simplest — removes the overlap), **or**
-- **Differentiate** with a distinct attribute keyphrase grounded in its "sparkles" copy — e.g. `metallic gift wrap` — and link up to `/wrap/`. Draft block below uses the differentiated route; only apply if you keep the page separate.
+### `/occasions-to-gift/luxury/` — Luxury (DECIDED: differentiate)
+**Decision (2026-07-04): differentiate**, not consolidate. Keep the page but move it off the head term ("luxury gift wrap," owned by Home + `/wrap/`) onto a distinct attribute keyphrase — `metallic gift wrap` — grounded in its "sparkles / luxurious feel" copy, and link up to `/wrap/`. Apply the block below.
 ```text
 metallic gift wrap
 ```
@@ -299,8 +297,17 @@ Metallic gift wrap with a sparkling, luxurious finish, made in France. The glamo
 <p>Our metallic gift wrap brings a sparkling, luxurious finish to any statement gift — designed by artists and made in France. Explore the full range of <a href="https://www.impressionoriginale.com/wrap/">luxury gift wrapping paper</a> or finish yours with a <a href="https://www.impressionoriginale.com/bows/">handmade bow</a>.</p>
 ```
 
-### Not scoped for per-page optimization — decide separately
-- **Size/attribute archives** (`/size-l-ribbons/`, `/size-m-ribbons/`, `/size-s-ribbons/`, `/size-xl/`, `/size-xs/`) and **`/ribbons/tuxedo/`**: these slice the same ribbons by size/type and risk **thin/duplicate content** diluting `/ribbons/`. Recommend **noindex** (or consolidate under `/ribbons/`) rather than optimize, unless a size term has real search demand ("wide gift ribbon"). All currently **indexed** — a deliberate choice is needed.
+### Size / attribute archives — DECIDED: noindex
+**Decision (2026-07-04): noindex** these thin/duplicate archives so they stop diluting `/ribbons/` (they slice the same ribbons by size/type):
+`/size-l-ribbons/` · `/size-m-ribbons/` · `/size-s-ribbons/` · `/size-xl/` · `/size-xs/` · `/ribbons/tuxedo/`
+
+**How (per category, in Yoast):** Products → Categories → edit the category → **Yoast SEO** box → **Advanced** tab → **"Allow search engines to show this category in search results?" → No**. Yoast then emits `robots: noindex` and drops the category from the XML sitemap automatically. Repeat for all six.
+
+**Verify:** `curl -s https://www.impressionoriginale.com/size-xl/ | grep -i 'name="robots"'` shows `noindex`; and the URLs disappear from `product_cat-sitemap.xml`. Products themselves stay indexed and reachable via `/ribbons/` — only these filter archives are hidden.
+
+*(Note: these are still linked in on-page size filters/nav — that's fine; noindex removes them from search without breaking navigation.)*
+
+### Out of scope
 - **`/masterclass/`**: a service/class listing, not a product category — optimize as a page if kept, separate from this category sweep.
 
 *(All FR pages: same block structure, French keyphrases — separate workstream.)*
