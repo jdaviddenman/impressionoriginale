@@ -38,10 +38,12 @@ Run this loop per product category. Each step is grounded in ≥2 SEO best pract
 | `/gift-bags/` | ✅ | ✅ 39w, 2 links | ✅ 2026-07-04 | **done** |
 | `/gift-tags/` | ✅ | ✅ 33w, 2 links | ✅ 2026-07-04 | **done** |
 | `/bags-boxes/` (parent, term-617) | ✅ | ✅ 35w, 2 links | ✅ 2026-07-04 | **done** — kp `luxury gift boxes` |
-| `/bags-boxes/gift-boxes/` (child, term-861) | — | — | — | pending — kp `foldable gift boxes` (anti-cannibalization) |
+| `/bags-boxes/gift-boxes/` (child, term-861) | — | — | — | pending — kp `easy to build gift boxes` (anti-cannibalization) |
 | Christmas · Wedding · Birthday · Furoshiki | — | — | — | queued |
 
-> **Two box categories exist.** Parent `/bags-boxes/` (term-617, "Gift Bags & Boxes") owns the head term *luxury gift boxes* and is done. Child `/bags-boxes/gift-boxes/` (term-861, "Gift Boxes") must use a **distinct** keyphrase (*foldable gift boxes*) and link up to the parent, or the two pages cannibalize each other. Edit the child at Products → Categories → the *Gift Boxes* row nested under *Gift Bags & Boxes*.
+> **Two box categories exist.** Parent `/bags-boxes/` (term-617, "Gift Bags & Boxes") owns the head term *luxury gift boxes* and is done. Child `/bags-boxes/gift-boxes/` (term-861, "Gift Boxes") must use a **distinct** keyphrase (*easy to build gift boxes* — the site's own phrase) and link up to the parent, or the two pages cannibalize each other. Edit the child at Products → Categories → the *Gift Boxes* row nested under *Gift Bags & Boxes*.
+>
+> **Claim accuracy:** every product attribute in the copy must trace to the page. These are **drawer boxes with a sheath** that **ship flat** and **assemble in 3 steps** into a **rigid (350g)** box, in 3 sizes — verified from the live category copy. (An earlier draft said "foldable"; that was an unverified inference and was removed.)
 | Home + `/collection/` (WPBakery — fields only) | — | — | — | queued |
 | All FR pages | — | — | — | queued |
 
@@ -137,18 +139,18 @@ Elegant luxury gift boxes in a range of sizes, artist-designed and made in Franc
 ```
 
 ### `/bags-boxes/gift-boxes/` — Gift Boxes (child, term-861)
-**Anti-cannibalization:** deliberately targets a *different* keyphrase from the parent (build-your-own / foldable angle, matching this term's "easy to build yourself, 3 sizes" copy) so the two box pages don't compete for the same query. The description links **up to the parent** `/bags-boxes/` to signal the parent is the primary hub.
+**Anti-cannibalization:** deliberately targets a *different* keyphrase from the parent, using the term's own copy ("easy to build," drawer box, ships flat, 3 sizes) so the two box pages don't compete for the same query. The description links **up to the parent** `/bags-boxes/` to signal the parent is the primary hub. All attributes traceable to the live page (no invented claims).
 ```text
-foldable gift boxes
+easy to build gift boxes
 ```
 ```text
-Foldable Gift Boxes, Easy to Build | Impression Originale
+Easy to Build Gift Boxes in 3 Sizes | Impression Originale
 ```
 ```text
-Foldable gift boxes in three sizes, easy to build yourself and made in France. A treat for the eyes and the refined way to present any gift.
+Easy to build gift boxes in three sizes — shipped flat, assembled in 3 steps into a rigid drawer box. Designed and made in France.
 ```
 ```html
-<p>Our foldable gift boxes are easy to build yourself, available in three sizes and made in France — a treat for the eyes and a refined way to present any gift. Explore the full <a href="https://www.impressionoriginale.com/bags-boxes/">gift boxes collection</a>, or finish yours with a <a href="https://www.impressionoriginale.com/ribbons/">gift ribbon</a> or a ready-tied <a href="https://www.impressionoriginale.com/bows/">handmade bow</a>.</p>
+<p>Our easy to build gift boxes are designed as drawer boxes with a sheath — they ship flat to simplify mailing, then assemble in three simple steps into a rigid, high-grammage box. Available in three sizes and made in France. Explore the full <a href="https://www.impressionoriginale.com/bags-boxes/">gift boxes collection</a>, or finish yours with a <a href="https://www.impressionoriginale.com/ribbons/">gift ribbon</a> or a ready-tied <a href="https://www.impressionoriginale.com/bows/">handmade bow</a>.</p>
 ```
 
 ### `/occasions-to-gift/christmas/` — Christmas
@@ -180,7 +182,7 @@ The **Focus keyphrase** column is the exact phrase to set in Yoast; the meta mus
 | Ribbons | `/ribbons/` | luxury gift ribbon | Luxury Gift Ribbon: Satin, Velvet & Organza \| Impression Originale | Luxury gift ribbon in satin, velvet, organza, grosgrain & taffeta. Made in France to finish every wrap beautifully. Shop by colour & size. |
 | Bows | `/bows/` | handmade gift bows | Handmade Gift Bows — Ready-Tied Luxury \| Impression Originale | Ready-tied handmade gift bows in S, M & L. Add a couture finishing touch to any gift in seconds. Made in France by Impression Originale. |
 | Gift boxes (parent) | `/bags-boxes/` | luxury gift boxes | Luxury Gift Boxes, Made in France \| Impression Originale | Elegant luxury gift boxes in a range of sizes, artist-designed and made in France. The refined alternative to wrapping. Shop the collection. |
-| Gift boxes (child) | `/bags-boxes/gift-boxes/` | foldable gift boxes | Foldable Gift Boxes, Easy to Build \| Impression Originale | Foldable gift boxes in three sizes, easy to build yourself and made in France. A treat for the eyes and the refined way to present any gift. |
+| Gift boxes (child) | `/bags-boxes/gift-boxes/` | easy to build gift boxes | Easy to Build Gift Boxes in 3 Sizes \| Impression Originale | Easy to build gift boxes in three sizes — shipped flat, assembled in 3 steps into a rigid drawer box. Designed and made in France. |
 | Gift bags | `/gift-bags/` | luxury gift bags | Luxury Gift Bags & Pouches, Made in France \| Impression Originale | Hand-finished luxury gift bags and pouches for effortless, beautiful gifting. Designed by artists, made in France. Shop sizes & designs. |
 | Gift tags | `/gift-tags/` | designer gift tags | Designer Gift Tags, Illustrated & Made in France \| Impression Originale | Illustrated designer gift tags to personalise every present. Made in France on recycled card. Shop the collection at Impression Originale. |
 | Furoshiki | `/gift-fabric-furoshiki/` | furoshiki fabric gift wrap | Furoshiki Fabric Gift Wrap, Reusable \| Impression Originale | Reusable furoshiki fabric gift wrap — the sustainable, zero-waste way to wrap gifts. Printed in France by Impression Originale. Shop designs & sizes. |
