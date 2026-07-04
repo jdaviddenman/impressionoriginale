@@ -39,7 +39,17 @@ Run this loop per product category. Each step is grounded in ≥2 SEO best pract
 | `/gift-tags/` | ✅ | ✅ 33w, 2 links | ✅ 2026-07-04 | **done** |
 | `/bags-boxes/` (parent, term-617) | ✅ | ✅ 35w, 2 links | ✅ 2026-07-04 | **done** — kp `luxury gift boxes` |
 | `/bags-boxes/gift-boxes/` (child, term-861) | ✅ | ✅ 60w, 3 links (→parent) | ✅ 2026-07-04 | **done** — kp `easy to build gift boxes` |
-| Christmas · Wedding · Birthday · Furoshiki | — | — | — | queued |
+| `/occasions-to-gift/christmas/` | — | — | — | **ready** (block below) |
+| `/gift-fabric-furoshiki/` | — | — | — | **ready** (block below) |
+| `/occasions-to-gift/wedding-celebration/` | — | — | — | **ready** (block below) |
+| `/occasions-to-gift/birthday-party/` | — | — | — | **ready** (block below) |
+| `/occasions-to-gift/baby-shower-kid/` | — | — | — | **ready** (block below) |
+| `/occasions-to-gift/valentine/` | — | — | — | **ready** (block below) |
+| `/scissors/` | — | — | — | **ready** (block below) |
+| `/table-name-cards/` | — | — | — | **ready** (block below) |
+| `/occasions-to-gift/luxury/` | — | — | — | ⚠️ decision needed (cannibalizes `/wrap/` + Home) |
+| `/size-l/m/s-ribbons/` · `/size-xl/` · `/size-xs/` · `/ribbons/tuxedo/` | — | — | — | ⚠️ noindex-or-consolidate decision (thin/duplicate) |
+| `/masterclass/` | — | — | — | out of scope (service page, not a product category) |
 
 > **Two box categories exist.** Parent `/bags-boxes/` (term-617, "Gift Bags & Boxes") owns the head term *luxury gift boxes* and is done. Child `/bags-boxes/gift-boxes/` (term-861, "Gift Boxes") must use a **distinct** keyphrase (*easy to build gift boxes* — the site's own phrase) and link up to the parent, or the two pages cannibalize each other. Edit the child at Products → Categories → the *Gift Boxes* row nested under *Gift Bags & Boxes*.
 >
@@ -167,7 +177,133 @@ Designer christmas gift wrap, ribbons & bows, made in France. Wrap the holidays 
 <p>Wrap the holidays in our luxury christmas gift wrap — designer paper, ribbons and bows made in France. Everything you need for eco-conscious festive gifting in one capsule collection. Explore the matching <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a> and <a href="https://www.impressionoriginale.com/bows/">handmade bows</a>.</p>
 ```
 
-*(Wedding, Birthday, and Furoshiki follow the same block template — draft when reached: exact keyphrase in the first sentence, 1–2 reciprocal internal links, raw HTML. All FR pages: same structure, French keyphrases.)*
+### `/gift-fabric-furoshiki/` — Furoshiki
+Grounded in live copy: reusable fabric wrap, M (48×48 cm) / L (75×75 cm).
+```text
+furoshiki gift wrap
+```
+```text
+Furoshiki Gift Wrap, Reusable Fabric | Impression Originale
+```
+```text
+Reusable furoshiki gift wrap in fabric, printed in France — medium (48×48cm) and large (75×75cm). The zero-waste way to wrap. Shop the collection.
+```
+```html
+<p>Our furoshiki gift wrap is a reusable fabric alternative to paper, printed in France in two sizes — medium (48×48 cm) for a book or perfume, and large (75×75 cm) for bigger gifts. A beautiful, zero-waste way to wrap. Pair it with our <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a>, or explore our <a href="https://www.impressionoriginale.com/wrap/">luxury gift wrapping paper</a>.</p>
+```
+
+### `/occasions-to-gift/wedding-celebration/` — Wedding
+Grounded: delicate pastel selection for bride, groom, guests.
+```text
+wedding gift wrap
+```
+```text
+Wedding Gift Wrap, Made in France | Impression Originale
+```
+```text
+Wedding gift wrap in a delicate pastel selection, made in France — for the bride, groom and every guest's gift. Shop the collection.
+```
+```html
+<p>Our wedding gift wrap is a delicate, pastel selection made in France for the bride, the groom and every guest's gift. Dress each celebration present beautifully, then finish it with our <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a> or a ready-tied <a href="https://www.impressionoriginale.com/bows/">handmade bow</a>.</p>
+```
+
+### `/occasions-to-gift/birthday-party/` — Birthday
+Grounded: "party time," gift wraps to celebrate.
+```text
+birthday gift wrap
+```
+```text
+Birthday Gift Wrap, Colourful & Fun | Impression Originale
+```
+```text
+Birthday gift wrap in colourful, artist-designed prints, made in France. Bring celebration to every present. Shop the birthday collection.
+```
+```html
+<p>It's party time — our birthday gift wrap brings colour and celebration to every present, hand-designed by artists and made in France. Pair it with matching <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a> and a ready-tied <a href="https://www.impressionoriginale.com/bows/">handmade bow</a> to finish the look.</p>
+```
+
+### `/occasions-to-gift/baby-shower-kid/` — Baby Shower & Kid
+Grounded: gift wraps for baby showers, babies and kids.
+```text
+baby shower gift wrap
+```
+```text
+Baby Shower Gift Wrap & Kids' Designs | Impression Originale
+```
+```text
+Baby shower gift wrap and playful kids' designs, made in France by independent artists. The tender way to wrap for new arrivals. Shop now.
+```
+```html
+<p>Our baby shower gift wrap is a tender selection for the friend who's expecting, plus playful designs for babies and kids — made in France by independent artists. Complete the gift with our <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a> or a ready-tied <a href="https://www.impressionoriginale.com/bows/">handmade bow</a>.</p>
+```
+
+### `/occasions-to-gift/valentine/` — Valentine
+Grounded: gift wrap for Valentine, express love, generous bow, hearts.
+```text
+valentine gift wrap
+```
+```text
+Valentine Gift Wrap, Hearts & Love | Impression Originale
+```
+```text
+Valentine gift wrap in heart-warming designs, made in France. Express your love and finish with a generous bow. Shop the Valentine collection.
+```
+```html
+<p>Find the perfect valentine gift wrap to express your love — heart-warming designs made in France, ready to be finished with a generous <a href="https://www.impressionoriginale.com/bows/">handmade bow</a> and coordinating <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a>.</p>
+```
+
+### `/scissors/` — Scissors
+Grounded: scissors selected to cut gift wrap and ribbon effortlessly.
+```text
+gift wrapping scissors
+```
+```text
+Gift Wrapping Scissors, Sharp & Precise | Impression Originale
+```
+```text
+Gift wrapping scissors selected to cut paper and ribbon effortlessly — the right tool for a flawless wrap. Shop scissors at Impression Originale.
+```
+```html
+<p>Our gift wrapping scissors are chosen to cut paper and ribbon effortlessly — the right tool to finish a beautiful wrap. Pair them with our <a href="https://www.impressionoriginale.com/wrap/">luxury gift wrapping paper</a> and <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a>.</p>
+```
+
+### `/table-name-cards/` — Table Name Cards
+No existing description on the live page. Grounded: place/table name cards for events.
+```text
+table name cards
+```
+```text
+Table Name Cards for Events & Weddings | Impression Originale
+```
+```text
+Table name cards to finish a beautifully set table for weddings, dinners and celebrations. Designed and made in France. Shop the collection.
+```
+```html
+<p>Our table name cards add the finishing touch to a beautifully set table — ideal for weddings, dinners and celebrations, designed and made in France. Coordinate them with our <a href="https://www.impressionoriginale.com/occasions-to-gift/wedding-celebration/">wedding gift wrap</a> and <a href="https://www.impressionoriginale.com/ribbons/">gift ribbons</a>.</p>
+```
+
+### `/occasions-to-gift/luxury/` — ⚠️ DECISION NEEDED, do not blindly apply
+This category ("sparkles… luxurious feel" gift wraps) **collides** with `/wrap/` (keyphrase *luxury gift wrapping paper*) and Home (*luxury gift wrap*) — three pages competing for the same head term. Decide first:
+- **Consolidate/redirect** into `/wrap/` (simplest — removes the overlap), **or**
+- **Differentiate** with a distinct attribute keyphrase grounded in its "sparkles" copy — e.g. `metallic gift wrap` — and link up to `/wrap/`. Draft block below uses the differentiated route; only apply if you keep the page separate.
+```text
+metallic gift wrap
+```
+```text
+Metallic & Glamorous Gift Wrap | Impression Originale
+```
+```text
+Metallic gift wrap with a sparkling, luxurious finish, made in France. The glamorous way to wrap a statement gift. Shop the collection.
+```
+```html
+<p>Our metallic gift wrap brings a sparkling, luxurious finish to any statement gift — designed by artists and made in France. Explore the full range of <a href="https://www.impressionoriginale.com/wrap/">luxury gift wrapping paper</a> or finish yours with a <a href="https://www.impressionoriginale.com/bows/">handmade bow</a>.</p>
+```
+
+### Not scoped for per-page optimization — decide separately
+- **Size/attribute archives** (`/size-l-ribbons/`, `/size-m-ribbons/`, `/size-s-ribbons/`, `/size-xl/`, `/size-xs/`) and **`/ribbons/tuxedo/`**: these slice the same ribbons by size/type and risk **thin/duplicate content** diluting `/ribbons/`. Recommend **noindex** (or consolidate under `/ribbons/`) rather than optimize, unless a size term has real search demand ("wide gift ribbon"). All currently **indexed** — a deliberate choice is needed.
+- **`/masterclass/`**: a service/class listing, not a product category — optimize as a page if kept, separate from this category sweep.
+
+*(All FR pages: same block structure, French keyphrases — separate workstream.)*
 
 ---
 
