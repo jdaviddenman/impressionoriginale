@@ -38,7 +38,7 @@ Run this loop per product category. Each step is grounded in ≥2 SEO best pract
 | `/gift-bags/` | ✅ | ✅ 39w, 2 links | ✅ 2026-07-04 | **done** |
 | `/gift-tags/` | ✅ | ✅ 33w, 2 links | ✅ 2026-07-04 | **done** |
 | `/bags-boxes/` (parent, term-617) | ✅ | ✅ 35w, 2 links | ✅ 2026-07-04 | **done** — kp `luxury gift boxes` |
-| `/bags-boxes/gift-boxes/` (child, term-861) | — | — | — | pending — kp `easy to build gift boxes` (anti-cannibalization) |
+| `/bags-boxes/gift-boxes/` (child, term-861) | ✅ | ✅ 60w, 3 links (→parent) | ✅ 2026-07-04 | **done** — kp `easy to build gift boxes` |
 | Christmas · Wedding · Birthday · Furoshiki | — | — | — | queued |
 
 > **Two box categories exist.** Parent `/bags-boxes/` (term-617, "Gift Bags & Boxes") owns the head term *luxury gift boxes* and is done. Child `/bags-boxes/gift-boxes/` (term-861, "Gift Boxes") must use a **distinct** keyphrase (*easy to build gift boxes* — the site's own phrase) and link up to the parent, or the two pages cannibalize each other. Edit the child at Products → Categories → the *Gift Boxes* row nested under *Gift Bags & Boxes*.
