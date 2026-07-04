@@ -36,7 +36,7 @@ The site is technically well-built (Yoast, caching, product schema, rich product
 | 6 | Heavy front-end (page builder + slider) → Core Web Vitals risk | 🟠 Med | Run PageSpeed Insights; defer/optimise | _pending_ |
 | 7 | `og:image` missing on home (poor link/social previews) | 🟡 Low | Set default social image in Yoast | _pending_ |
 | 8 | Breadcrumbs not rendering on product pages | 🟡 Low | Enable Yoast breadcrumbs in template | _pending_ |
-| 9 | **Universal Analytics still active** (`UA-85910237-1`, retired 2023) — no GA4 | 🔴 High | Migrate to GA4 | [Issue #3](../../issues/3) |
+| 9 | **Obsolete Universal Analytics tag still firing** (`UA-85910237-1`); GA4 (`G-Y88VQHFDBV`) **already live** via GTM | 🟡 Low | Remove the dead UA tag | [Issue #3](../../issues/3) |
 
 ## Remediation workflow (how we de-risk)
 
@@ -66,4 +66,5 @@ The full wp-admin **plugin/version inventory and update plan** are kept in a **s
 
 - **2026-07-04** — External audit complete. hreflang defect confirmed: **0** tags site-wide, both languages, while Yoast's own head tags render fine. Root cause narrowed to the WPML ↔ Yoast integration (config, translation-linking, publish status, and cache all ruled out). Clone provisioned; environment being matched to live. Baseline fingerprint + before/after diff pending clone data load.
 - **2026-07-04** — Analytics workstream opened ([Issue #3](../../issues/3)). Confirmed the site still loads Universal Analytics `UA-85910237-1` (retired 2023-07-01); no GA4 measurement ID in page source. GTM container `GTM-MT7G7Z3C` present — check whether GA4 already fires inside it before assuming a full data gap.
-- **2026-07-04** — GA4 property found to already exist (`G-Y88VQHFDBV`, Google Tag `GT-5TPLSSZ`) but the site sends it nothing (both IDs = 0 occurrences on front end; only UA loads). Fix narrowed to routing the site to `G-Y88VQHFDBV` and removing UA — no property creation needed. IDs baked into [Issue #3](../../issues/3).
+- **2026-07-04** — GA4 property found to already exist (`G-Y88VQHFDBV`, Google Tag `GT-5TPLSSZ`); both IDs = 0 occurrences in **static** front-end HTML.
+- **2026-07-04** — **Correction:** GA4 **is** collecting. GA4 Reports (property `375621420`) show ~1.9K users + €432.96 revenue in June. The GA4 tag fires **inside** GTM container `GTM-MT7G7Z3C` (JS-injected — invisible to an external HTML fetch; the flagged caveat, now confirmed). The earlier Realtime "0" was the Termly consent gate + the static check, not a data gap. Revised task: **remove the obsolete UA tag** (`UA-85910237-1`) — GA4 needs no migration. Severity downgraded High → Low.
