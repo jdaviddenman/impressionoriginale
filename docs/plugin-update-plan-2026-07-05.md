@@ -13,7 +13,7 @@
 
 | # | Plugin | Installed → target | Vuln (verified) | Severity | Blast radius |
 |---|---|---|---|---|---|
-| 1 | **Gravity Forms** | 2.10.0 → **2.10.5** | **CVE-2026-48866** unauth path-traversal / arbitrary file deletion, ≤2.10.0.1, fixed 2.10.1 (**NVD-confirmed**) + 5× stored XSS CVE-2026-5109/10/11/12/13 (7.2) | **CVSS 9.6 CRITICAL, unauthenticated** | form pages; file-deletion + admin-session XSS. **TOP RISK.** If unused → remove instead |
+| 1 | **Gravity Forms** | 2.10.0 → **2.10.5** | **CVE-2026-48866** unauth path-traversal / arbitrary file deletion, ≤2.10.0.1, fixed 2.10.1 (**NVD-confirmed**) + 5× stored XSS CVE-2026-5109/10/11/12/13 (7.2) | **CVSS 9.6 CRITICAL, unauthenticated** | **CONFIRMED USED + anonymously reachable** — 7 public forms (§12). Single most urgent action → **DO FIRST**. Same-minor update; backup + submit-test one form after |
 | 2 | **WooCommerce Stripe Gateway** | 10.6.1 → **10.8.3** | CVE-2026-2381 missing-auth order-status manipulation, ≤10.7.0, fixed 10.8.0 (Wordfence/GHSA-xpf8-p6c2-qcp9) | 6.5 medium | **checkout** — sequence with WC→10.9.3 |
 | 3 | **Enable Media Replace** | 4.1.9 → **4.2.2** | stored XSS ≤4.2.1, fixed 4.2.2 (Patchstack VDP; no CVE yet) | med, authenticated | admin-only; 4.2.x = UI redesign, test the replace screen |
 | 4 | **Advanced Order Export** | 4.0.7 → **4.1.0** | CVE-2026-11360 SQLi via `sort_direction`, authenticated shop-manager+, fixed 4.1.0 | 4.9 medium (authenticated) | admin-only → **safe direct-to-live** |
@@ -49,7 +49,7 @@ Yoast 27.9 · WP Rocket 3.22.0.3 · WebP Express 0.25.15 *(nginx: confirm WebP s
 **Removal tiers:**
 - **DO NOT remove:** Redirection (SEO 301s), WP Maps (live map), YITH Social Login (live), WooCommerce, Stripe, WPML suite, Product Bundles, Back-In-Stock, WP Rocket, Yoast. **Envato Market** — do NOT deactivate: it's the **update channel** for Envato/ThemeForest items ("The Core" theme + Slider Revolution). **WPCode** — keep, but audit active snippets (may hold live GA4/GTM/Search-Console tags).
 - **Deactivate-when-idle** (admin utilities, no front-end/SEO impact; confirm not mid-use): Better Search Replace, Duplicate Page, Simple Page Ordering.
-- **Check-then-decide:** Classic Editor (content-team workflow?); **Gravity Forms** (no front-end fingerprint on crawled pages — if unused, remove → eliminates the §1 #1 critical; CF7 already covers contact forms).
+- **Check-then-decide:** Classic Editor (content-team workflow?). *(**Gravity Forms** — resolved: **confirmed used** on 7 public forms (§12); remove-option retracted, update-only.)*
 
 **Crawl honesty:** the crawl positively confirms front-end use; it cannot prove an admin-only plugin is unused. Every deactivate/remove above needs a wp-admin Plugins-screen + content/shortcode check.
 
@@ -76,7 +76,7 @@ Yoast 27.9 · WP Rocket 3.22.0.3 · WebP Express 0.25.15 *(nginx: confirm WebP s
 
 ## 10. Open items (not yet resolved)
 - **Slider Revolution 6.6.16 + WPBakery 8.7.3** — checked, see §11 (Slider Revolution is materially exposed / HIGH).
-- Is **Gravity Forms** actually used? (decides update-vs-remove for the §1 #1 critical.)
+- ~~Is Gravity Forms actually used?~~ **RESOLVED 2026-07-05: yes — 7 public forms (§12). Update, do not remove.**
 - Tag Assistant audit of the tracking stack (before any tracker removal).
 - WPML ×4 risk-accept decision (no clone).
 
@@ -96,3 +96,17 @@ Versions read from live `?ver=` asset strings (not the plugin-update screen — 
 - **Urgency:** HIGH — a stack of unauth / missing-auth issues (file read, access control, plugin deactivation) on a component dozens of releases behind (current is 7.x). Not a single 9.6 like Gravity Forms, but the worst-maintained item in the whole stack.
 - **Blast radius / gotcha:** renders front-end sliders → **layout break-zone**. A 6.6→6.7→7.x jump is a large upgrade with real layout-break risk. Slider Revolution is almost certainly **bundled with the "The Core" (EngineThemes) Envato theme** → the update likely comes via the theme bundle / Envato Market license, not a standalone plugin update (this is why it's absent from your 32-item update list, and ties to §6 — do NOT deactivate Envato Market). Confirm the update channel first.
 - **Recommendation:** clearest **clone-first** case (RULE 1) — high layout blast radius + big version jump. No clone (ADR 0001) → either stand up an on-demand clone (ADR 0002) to prove the 6.6→7.x jump, or defer + explicit risk-accept with a fresh backup (RULE 3) and heavy post-update layout verification (homepage + every slider). Do NOT bulk-jump blind on live.
+
+## 12. Gravity Forms — confirmed used (crawl, 2026-07-05)
+
+Full EN+FR page crawl (51 pages) found live Gravity Forms front-end on **7 publicly-reachable (HTTP 200) forms** — all unauthenticated and submittable, i.e. the exact attack surface for CVE-2026-48866 (unauth 9.6 file deletion) + the 5 unauth stored XSS:
+
+- `/become_a_dealer/` — dealer / distributor signup
+- `/corporate-gifts/` — corporate gifts
+- `/corporate-gifts-order-form-online/` — B2B order form
+- `/submit-an-inquiry/` — inquiry
+- `/fr/cadeaux-daffaires/` — corporate gifts (FR)
+- `/fr/devenez-distributeur/` — become distributor (FR)
+- `/fr/soumettre-une-requete/` — submit request (FR)
+
+Contact Form 7 is enqueued site-wide, but the actual forms on these pages are Gravity Forms. These are business-critical lead-gen / B2B-order forms → **update, do not remove**. Confirms §1 #1 is anonymously reachable now → highest-priority action; after updating to 2.10.5, submit one real form to confirm forms still work (fail-closed risk).
