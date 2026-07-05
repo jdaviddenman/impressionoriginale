@@ -5,13 +5,17 @@
 #            or   https://<clone>.updraftclone.com
 #   OUTDIR   e.g. baseline   (or round1-wpml, round2-yoast, ...)
 #
-# Produces OUTDIR/SUMMARY.txt (diffable) + OUTDIR/raw/*.html.
+# Produces OUTDIR/SUMMARY.txt (diffable) + OUTDIR/raw/*.html
+#          + OUTDIR/detail/*.{images,assets,versions}.txt (per-page, for drill-down on a hash change).
+# NOTE: server HTML only. Catches: broken pages, PHP errors, shortcode leakage, encoding,
+#       dropped/added images & CSS/JS assets, plugin/theme version drift. Does NOT catch rendered
+#       visual/layout regressions (no JS render, no screenshots) — pair with an eyeball on key pages.
 # Compare rounds with: diff baseline/SUMMARY.txt round1-wpml/SUMMARY.txt
 # When comparing live vs clone, normalise the host first (the domains differ by design).
 set -u
 BASE="${1:?need BASE_URL}"; OUT="${2:?need OUTDIR}"
 UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
-mkdir -p "$OUT/raw"
+mkdir -p "$OUT/raw" "$OUT/detail"
 
 PATHS=(
   "/" "/fr/"
@@ -19,8 +23,8 @@ PATHS=(
   "/occasions-to-gift/christmas/"
   "/shop/" "/our-products/"
   "/fr/produit/ensemble-minimals/"
-  "/bespoke/" "/masterclass/"
-  "/meet-founders-impression-originale/" "/where-to-find-us/"
+  "/bespoke-services/" "/masterclass/"
+  "/our-philosophy/" "/where-to-find-us/"
 )
 
 SUM="$OUT/SUMMARY.txt"; : > "$SUM"
@@ -42,6 +46,22 @@ for p in "${PATHS[@]}"; do
   ogimg=$(grep -ioc 'og:image' "$html")
   scripts=$(grep -oiE '<script[^>]*src=' "$html" | wc -l | tr -d ' ')
   styles=$(grep -oiE '<link[^>]*rel="stylesheet"' "$html" | wc -l | tr -d ' ')
+  # images incl. lazy-loaded (data-src/data-lazy-src), query stripped -> count + hash + detail file
+  imglist=$(grep -oiE '(src|data-src|data-lazy-src)="[^"]+"' "$html" \
+            | sed -E 's/^[a-zA-Z_-]+="//; s/"$//' \
+            | grep -oiE '^https?://[^ ]+\.(jpe?g|png|gif|webp|svg|avif)' | sort -u)
+  imgn=$(printf '%s\n' "$imglist" | grep -c .)
+  imghash=$(printf '%s' "$imglist" | md5sum | cut -c1-12)
+  printf '%s\n' "$imglist" > "$OUT/detail/$slug.images.txt"
+  # enqueued plugin/theme CSS+JS manifest, query stripped (stable across cache clears)
+  assetlist=$(grep -oiE '(href|src)="[^"]*wp-content/(plugins|themes)/[^"]+\.(css|js)[^"]*"' "$html" \
+            | grep -oiE 'wp-content/(plugins|themes)/[^"?]+\.(css|js)' | sort -u)
+  assn=$(printf '%s\n' "$assetlist" | grep -c .)
+  assethash=$(printf '%s' "$assetlist" | md5sum | cut -c1-12)
+  printf '%s\n' "$assetlist" > "$OUT/detail/$slug.assets.txt"
+  # plugin/theme versions from ?ver= (semver only; skips pure-int cache-bust timestamps)
+  grep -oiE 'wp-content/(plugins|themes)/[a-zA-Z0-9._-]+/[^" ]*ver=[0-9]+\.[0-9][0-9.]*' "$html" \
+    | sed -E 's#.*wp-content/(plugins|themes)/([a-zA-Z0-9._-]+)/.*ver=#\2=#' | sort -u > "$OUT/detail/$slug.versions.txt"
   # regression markers
   errs=$(grep -icE 'fatal error|there has been a critical error|parse error' "$html")
   warns=$(grep -icE 'warning:|notice:|deprecated:' "$html")
@@ -57,7 +77,8 @@ for p in "${PATHS[@]}"; do
     echo "lang : $lang   hreflang_count=$hrefl   og:image=$ogimg"
     echo "h1(#$h1n): $h1txt"
     echo "jsonld: $jsonld"
-    echo "assets: scripts=$scripts styles=$styles"
+    echo "assets: scripts=$scripts styles=$styles  files=$assn assethash=$assethash"
+    echo "images: count=$imgn imghash=$imghash"
     echo "FLAGS: errors=$errs warns=$warns shortcode_leak=$shortc mojibake=$moji"
     echo
   } >> "$SUM"

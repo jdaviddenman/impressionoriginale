@@ -1,0 +1,144 @@
+=== /
+http=200  final=https://www.impressionoriginale.com/  bytes=232079
+title: Luxury Gift Wrap &amp; Ribbons Made in France | Impression Originale
+desc : Hand-drawn luxury gift wrap, ribbons, boxes &amp; bows — designed by artists and made in France. Shop eco-conscious wrapping for extraordinary gifts.
+canon: https://www.impressionoriginale.com/
+lang : lang="en-US"   hreflang_count=0   og:image=4
+h1(#1): 
+jsonld: BreadcrumbList,EntryPoint,ImageObject,ListItem,Organization,PropertyValueSpecification,ReadAction,SearchAction,WebPage,WebSite
+assets: scripts=50 styles=2  files=34 assethash=233abda7cbd0
+images: count=16 imghash=4ad39d8c9fae
+FLAGS: errors=0 warns=0 shortcode_leak=0 mojibake=0
+
+=== /fr/
+http=200  final=https://www.impressionoriginale.com/fr/  bytes=237424
+title: Impression Originale I Eshop I Papiers cadeaux et rubans de fabrication française
+desc : Impression Originale eshop pour de beaux cadeaux. Découvrez notre collection de papiers cadeaux luxe, rubans, boîtes cadeaux, pochettes cadeaux et noeuds. Fabrication française.
+canon: https://www.impressionoriginale.com/fr/
+lang : lang="fr-FR"   hreflang_count=0   og:image=4
+h1(#1): 
+jsonld: BreadcrumbList,EntryPoint,ImageObject,ListItem,Organization,PropertyValueSpecification,ReadAction,SearchAction,WebPage,WebSite
+assets: scripts=51 styles=2  files=35 assethash=8d43bc8884de
+images: count=16 imghash=676790137cfb
+FLAGS: errors=0 warns=0 shortcode_leak=0 mojibake=0
+
+=== /wrap/
+http=200  final=https://www.impressionoriginale.com/wrap/  bytes=387967
+title: Luxury Gift Wrapping Paper, Made in France | Impression Originale
+desc : Shop hand-drawn luxury gift wrapping paper by independent artists — printed in France on recycled stock. Sheets &amp; sets for every occasion.
+canon: https://www.impressionoriginale.com/./wrap/
+lang : lang="en-US"   hreflang_count=0   og:image=4
+h1(#2): Wraps
+jsonld: BreadcrumbList,CollectionPage,EntryPoint,ImageObject,ListItem,Organization,PropertyValueSpecification,SearchAction,WebSite
+assets: scripts=49 styles=0  files=33 assethash=e3a591e4f5cf
+images: count=70 imghash=e6e0bf3e1081
+FLAGS: errors=0 warns=0 shortcode_leak=0 mojibake=0
+
+=== /ribbons/
+http=200  final=https://www.impressionoriginale.com/ribbons/  bytes=320864
+title: Luxury Gift Ribbon: Satin, Velvet &amp; Organza | Impression Originale
+desc : Luxury gift ribbon in satin, velvet, organza, grosgrain &amp; taffeta. Made in France to finish every wrap beautifully. Shop by colour &amp; size.
+canon: https://www.impressionoriginale.com/./ribbons/
+lang : lang="en-US"   hreflang_count=0   og:image=4
+h1(#2): Ribbons
+jsonld: BreadcrumbList,CollectionPage,EntryPoint,ImageObject,ListItem,Organization,PropertyValueSpecification,SearchAction,WebSite
+assets: scripts=50 styles=0  files=34 assethash=3fa08f697641
+images: count=47 imghash=6fdf334d00c1
+FLAGS: errors=0 warns=0 shortcode_leak=0 mojibake=0
+
+=== /occasions-to-gift/christmas/
+http=200  final=https://www.impressionoriginale.com/occasions-to-gift/christmas/  bytes=258990
+title: Luxury Christmas Gift Wrap &amp; Ribbons | Impression Originale
+desc : Designer christmas gift wrap, ribbons &amp; bows, made in France. Wrap the holidays in eco-conscious luxury. Shop the Christmas capsule collection.
+canon: https://www.impressionoriginale.com/./occasions-to-gift/christmas/
+lang : lang="en-US"   hreflang_count=0   og:image=4
+h1(#1): Wraps - Christmas
+jsonld: BreadcrumbList,CollectionPage,EntryPoint,ImageObject,ListItem,Organization,PropertyValueSpecification,SearchAction,WebSite
+assets: scripts=50 styles=0  files=34 assethash=3fa08f697641
+images: count=33 imghash=b570103e835b
+FLAGS: errors=0 warns=0 shortcode_leak=0 mojibake=0
+
+=== /shop/
+http=200  final=https://www.impressionoriginale.com/shop/  bytes=457611
+title: Shop - Impression Originale
+desc : 
+canon: 
+lang : lang="en-US"   hreflang_count=0   og:image=4
+h1(#1): Shop
+jsonld: BreadcrumbList,EntryPoint,ImageObject,ListItem,Organization,PropertyValueSpecification,ReadAction,SearchAction,WebPage,WebSite
+assets: scripts=51 styles=2  files=34 assethash=3fa08f697641
+images: count=100 imghash=7fb77805119d
+FLAGS: errors=0 warns=0 shortcode_leak=0 mojibake=0
+
+=== /our-products/
+http=200  final=https://www.impressionoriginale.com/our-products/  bytes=171369
+title: OUR PRODUCTS - Impression Originale
+desc : Impression Originale is a company with strong values. Our products are unique, signed by the artists, 100% recycled. We share the profit of our sales.
+canon: https://www.impressionoriginale.com/our-products/
+lang : lang="en-US"   hreflang_count=0   og:image=4
+h1(#3): 
+jsonld: BreadcrumbList,EntryPoint,ImageObject,ListItem,Organization,PropertyValueSpecification,ReadAction,SearchAction,WebPage,WebSite
+assets: scripts=54 styles=2  files=38 assethash=69eaabdfbb38
+images: count=3 imghash=49f2a683bc4f
+FLAGS: errors=0 warns=0 shortcode_leak=0 mojibake=0
+
+=== /fr/produit/ensemble-minimals/
+http=200  final=https://www.impressionoriginale.com/fr/produit/ensemble-minimals/  bytes=322536
+title: Ensemble Minimals - Impression Originale
+desc : Le papier cadeau &quot;Minimals&quot; dessiné par Daniel Bennett pour Impression Originale se marie à la perfection avec les 3 coloris de cordes que nous recommandons, made in Angers, France.
+canon: https://www.impressionoriginale.com/fr/produit/ensemble-minimals/
+lang : lang="fr-FR"   hreflang_count=0   og:image=5
+h1(#1): Ensemble Minimals
+jsonld: BreadcrumbList,EntryPoint,ImageObject,ListItem,Offer,Organization,Product,PropertyValueSpecification,ReadAction,SearchAction,UnitPriceSpecification,WebPage,WebSite
+assets: scripts=83 styles=2  files=43 assethash=ae7c80f0856c
+images: count=19 imghash=2fb28f9806ad
+FLAGS: errors=0 warns=0 shortcode_leak=0 mojibake=0
+
+=== /bespoke-services/
+http=200  final=https://www.impressionoriginale.com/bespoke-services/  bytes=180347
+title: BESPOKE SERVICES - Impression Originale
+desc : 
+canon: https://www.impressionoriginale.com/bespoke-services/
+lang : lang="en-US"   hreflang_count=0   og:image=4
+h1(#1): 
+jsonld: BreadcrumbList,EntryPoint,ImageObject,ListItem,Organization,PropertyValueSpecification,ReadAction,SearchAction,WebPage,WebSite
+assets: scripts=50 styles=2  files=35 assethash=8d43bc8884de
+images: count=12 imghash=4518c0936bcd
+FLAGS: errors=0 warns=0 shortcode_leak=0 mojibake=0
+
+=== /masterclass/
+http=200  final=https://www.impressionoriginale.com/masterclass/  bytes=162948
+title: Masterclass - Impression Originale
+desc : Elevate your gifting game with our exclusive Masterclasses orchastrated by expert training with Impression Originale with gift wrapping and bows classes
+canon: https://www.impressionoriginale.com/./masterclass/
+lang : lang="en-US"   hreflang_count=0   og:image=4
+h1(#1): Masterclass
+jsonld: BreadcrumbList,CollectionPage,EntryPoint,ImageObject,ListItem,Organization,PropertyValueSpecification,SearchAction,WebSite
+assets: scripts=49 styles=0  files=33 assethash=6a17934096c2
+images: count=4 imghash=b67eaa529eb7
+FLAGS: errors=0 warns=0 shortcode_leak=0 mojibake=0
+
+=== /our-philosophy/
+http=200  final=https://www.impressionoriginale.com/our-philosophy/  bytes=173752
+title: OUR PHILOSOPHY - Impression Originale
+desc : Impression Originale minimizes its environmental impact with using 100% recycled paper and optimazing our logistics. The company also is socially committed.
+canon: https://www.impressionoriginale.com/our-philosophy/
+lang : lang="en-US"   hreflang_count=0   og:image=4
+h1(#1): 
+jsonld: BreadcrumbList,EntryPoint,ImageObject,ListItem,Organization,PropertyValueSpecification,ReadAction,SearchAction,WebPage,WebSite
+assets: scripts=50 styles=2  files=35 assethash=8d43bc8884de
+images: count=3 imghash=49f2a683bc4f
+FLAGS: errors=0 warns=0 shortcode_leak=0 mojibake=0
+
+=== /where-to-find-us/
+http=200  final=https://www.impressionoriginale.com/where-to-find-us/  bytes=179789
+title: WHERE TO FIND US - Impression Originale
+desc : We are growing and very proud to be distributed in pretty boutiques in France our home and also in several countries. Check-out our lists of distributors.
+canon: https://www.impressionoriginale.com/where-to-find-us/
+lang : lang="en-US"   hreflang_count=0   og:image=4
+h1(#1): 
+jsonld: BreadcrumbList,EntryPoint,ImageObject,ListItem,Organization,PropertyValueSpecification,ReadAction,SearchAction,WebPage,WebSite
+assets: scripts=50 styles=2  files=35 assethash=8d43bc8884de
+images: count=3 imghash=49f2a683bc4f
+FLAGS: errors=0 warns=0 shortcode_leak=0 mojibake=0
+
