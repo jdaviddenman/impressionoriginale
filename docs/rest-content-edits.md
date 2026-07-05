@@ -1,5 +1,9 @@
 # Runbook — Fix text/spelling in live posts & pages via WP REST API (Tier 1)
 
+> **⛔ SUPERSEDED FOR THIS HOST — REST Basic auth does not work on impressionoriginale.com.**
+> A live dry run (2026-07-05) proved the `Authorization` header is stripped at the WP Engine / Cloudflare edge before it reaches PHP: a correct app password, a bogus password, and an explicit `Authorization: Basic` header all returned identical `401 rest_not_logged_in`, while `/wp-json/` advertises Application Passwords as enabled. WordPress never sees the credential, so **no** Application Password can authenticate over HTTP here — and this also kills HTTP-transport MCP, which authenticates over the same header. The operator has wp-admin but **no WP Engine/SSH access**, and WP Engine controls the Cloudflare in front, so the edge is not operator-fixable.
+> **Working method instead: [`spelling-fix-runbook.md`](spelling-fix-runbook.md)** (Search Regex inside the wp-admin session — cookie auth, which the edge forwards). This document is retained as the record of the investigation and stays valid for any host that *does* forward `Authorization`.
+
 **Issue #37.** Task class: **spelling / small copy corrections in existing content.** Not a new feature, not a layout change.
 
 Chosen path: **plain WordPress REST API, no MCP server.** Rationale is in the research thread — a spelling sweep is a handful of targeted, reversible edits; a full MCP admin bridge is an always-on admin surface this task doesn't need (RULE 8, simplicity). If content editing becomes a recurring workflow, escalate to Tier 2 (official `WordPress/mcp-adapter` + `wordpress-mcp` plugin, HTTP transport, Editor-scoped token). This runbook is Tier 1 only.
