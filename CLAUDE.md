@@ -71,6 +71,47 @@ A green plugin message, a passing dry-run, or "it should work" are not evidence.
 - **Simplicity first.** The minimum change that solves the problem — nothing speculative. No new abstraction/config nobody asked for.
 - **Surgical changes.** Touch only what the request needs. Don't "improve" adjacent content while you're in there. Every changed line traces to the request; mention unrelated dead cruft, don't delete it.
 
+## RULE 11 — KARPATHY PRE-FLIGHT (mandatory before every change proposal)
+
+**Before proposing or starting any implementation, output these three lines:**
+
+```
+Simplest path: [one-line minimum fix]
+Blast radius: [pages/systems touched; can it break checkout/cart?]
+Safer alternative: [lower-risk option, or "none — this is the minimum"]
+```
+
+Hard gate, not advice. No pre-flight → no action. If the simplest path isn't the proposed path, explain why. If the blast radius includes homepage, checkout, or cart, flag it explicitly. If the safer alternative is just as good and lower risk, default to it — don't propose the riskier path without justifying why the safer one is insufficient.
+
+This is the mandatory output-format twin of RULE 8. RULE 8 says what to do; RULE 11 makes it machine-checkable — if the pre-flight block is absent, the proposal is incomplete.
+
+## RULE 12 — NEVER ASSUME A FLAT DOM
+
+**HTML elements are rarely flat — never write an extraction regex that assumes `<tag>text</tag>` without first inspecting the actual structure.** A pattern like `grep -oP '<h1[^>]*>\K[^<]+'` silently returns empty when the real DOM is `<h1><span>text</span></h1>` — the `[^<]+` hits the nested `<` and matches nothing. grep reports its own failure identically to "the thing isn't there."
+
+Before scaling an extraction pattern to a batch:
+1. Fetch ONE sample page and dump the raw HTML for the target element (`grep -oP '<h1[^>]*>.*?</h1>'` — no text extraction, just the full element).
+2. Read the structure. Is it flat? Nested? Attributes on child elements?
+3. Write the extraction pattern to match the actual structure.
+4. Validate against the single sample before looping over 22 URLs.
+
+A finding derived from an unvalidated extraction pattern is not a finding — it's an unverified claim. No different from RULE 10 (ground state) and RULE 5 (evidence): the tool is not ground truth. Prove the tool works before trusting its output.
+
+## RULE 13 — DUAL-PATTERN VERIFICATION FOR ALL GREP/SEARCH
+
+**Every grep or search that produces a claim must be performed two independent ways — and the results must agree.** A single pattern is a single point of failure: nested tags, HTML entities, whitespace variation, encoding quirks, or regex errors can all produce silent false-negatives. Two patterns that should return the same result but don't → investigate the discrepancy before claiming anything.
+
+Example (correct — dual-pattern H1 check):
+```bash
+# Pattern 1: match full element with nested children
+grep -oP '<h1[^>]*>.*?</h1>' | head -1
+# Pattern 2: strip all tags, grab first heading-level text
+grep -oP '<h1[^>]*>' | head -1
+```
+If pattern 1 returns content and pattern 2 returns the tag → H1 exists, text is nested (not flat). If both return empty → H1 is genuinely absent. If they disagree → investigate.
+
+Applies to: any grep/find/search where the output is used as evidence for a claim. Not required for informational exploration ("show me all H2s on this page" — single pattern fine, you're exploring not claiming). Required when the output becomes a finding ("22/22 posts have no H1").
+
 ## RULE 9 — TERSE COMMUNICATION; NO HR-STYLE FILLER
 
 **Operator-facing prose is terse and high-signal.** Drop pleasantries, hedging, filler, question-restatement, self-congratulation. Keep all technical substance: exact IDs, URLs, commands, quoted output, and the evidence RULE 5 demands. Fragments are fine. Exception — plain, full sentences for security warnings, irreversible-action confirmations, and multi-step sequences where terseness risks a misread. (Packaged as the `caveman` skill; always on unless told "stop caveman".)
