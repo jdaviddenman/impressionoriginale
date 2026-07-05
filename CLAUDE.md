@@ -9,12 +9,14 @@ This repo is a **shared SEO audit & remediation workspace** for the WordPress/Wo
 ## Goals
 
 1. **Improve organic discoverability without breaking the live store.** Every change should leave the site in a better state than before. Never ship a change that breaks a running page, the cart, or checkout. Verify health after every mutation.
-2. **Prove risky changes on an isolated clone before production.** If a risky change wasn't validated on the clone, it doesn't touch live. The clone is the test bench; live is only ever touched with a change that's already been proven or is trivially reversible.
+2. **Prove risky changes on an isolated clone before production.** If a risky change wasn't validated on a clone, it doesn't touch live. The clone is the intended test bench — **but none is currently provisioned (see `docs/adr/0001-no-clone-test-bench.md`)**, so until one is stood up, live is only touched with a change that's already been proven or is trivially reversible; genuinely risky changes are deferred or explicitly risk-accepted by the operator.
 3. **Evidence over assertion.** Every "fixed / done / working" is a claim until an external check proves it. Verify from outside the site (fetch the live HTML, GA4 Realtime, Search Console), not by trusting a plugin's success message.
 
 ## RULE 1 — RISKY CHANGES GO THROUGH THE CLONE, NOT PROD
 
 **Plugin/core/theme updates and anything with layout or checkout blast radius MUST be trialled on the isolated clone first, validated, then repeated on live.** The clone (UpdraftPlus/UpdraftClone) is matched to live — **PHP 8.2, WordPress 7.0, WooCommerce 10.7** — so "it worked on the clone" transfers. Never bulk-update blind on production.
+
+> **Status (ADR 0001): no clone is currently provisioned.** The clone-first gate therefore cannot be satisfied right now — high-blast-radius changes are **deferred until a clone is stood up, or explicitly risk-accepted by the operator per change**, never done silently. Where this section assumes a present clone, `docs/adr/0001-no-clone-test-bench.md` is the source of truth.
 
 Reversible, externally-verifiable, low-blast-radius changes MAY go direct to live: title/meta edits, an analytics tag ID, a Yoast setting. The test: is it instantly reversible and can O confirm it from an external fetch? If yes → live is fine. If it can break a layout or the checkout → clone first.
 
@@ -31,7 +33,7 @@ Being the admin does not remove the risk. Do not shortcut the clone step because
 
 ## RULE 3 — BACK UP BEFORE YOU CHANGE; ROLLBACK BEATS DIAGNOSIS
 
-**Before any plugin/core update on live, take a fresh backup — files + database, stored off the server.** Use WP Engine backup points **and** UpdraftPlus (to Google Drive). When a change degrades the site, **restore first, diagnose second.** A half-broken store bleeding customers is not a debugging session. On the disposable clone, "restore" can just mean re-clone.
+**Before any plugin/core update on live, take a fresh backup — files + database, stored off the server.** Use WP Engine backup points **and** UpdraftPlus (to Google Drive). When a change degrades the site, **restore first, diagnose second.** A half-broken store bleeding customers is not a debugging session. If a clone is provisioned (none currently — ADR 0001), "restore" there can just mean re-clone.
 
 ## RULE 4 — VALIDATE BEFORE, VERIFY AFTER
 
@@ -97,13 +99,14 @@ Everything below is the **target site's** stack, not this repo's.
 - **Theme:** EngineThemes "The Core" (`eut-` / `Engic Extension`) — old; page-builder + theme are the layout break-zone on updates.
 - **Host:** WP Engine — nginx, **PHP 8.2.31**, MySQL **8.4.7**, memory_limit 512M. WPE runs its own page + object cache on top of WP Rocket (clear **both** when verifying).
 - **Consent:** Termly banner with Google Consent Mode — analytics is gated until consent; accept the banner (or use GA4 DebugView) before trusting Realtime.
-- **Clone/testing:** UpdraftPlus / UpdraftClone, environment matched to live (PHP 8.2 / WP 7.0 / WC 10.7).
+- **Clone/testing:** UpdraftPlus / UpdraftClone — **not currently provisioned** (ADR 0001). When stood up, match to live (PHP 8.2 / WP 7.0 / WC 10.7).
 
 ## Common Commands & Checks
 
 ```bash
 # Fingerprint a set of live/clone pages (server HTML only — no JS). Diff rounds.
 ./harness/fingerprint.sh https://www.impressionoriginale.com baseline
+# clone target below needs a provisioned clone — none currently (ADR 0001)
 ./harness/fingerprint.sh https://<clone>.updraftclone.com  clone-baseline
 diff baseline/SUMMARY.txt clone-baseline/SUMMARY.txt
 
@@ -116,7 +119,7 @@ curl -sL https://www.impressionoriginale.com/ | grep -oiE 'gtag/js\?id=[A-Z0-9-]
 # Infer live WP version (feed generator survives caching)
 curl -s https://www.impressionoriginale.com/feed/ | grep -oiE '<generator>[^<]*</generator>'
 
-# Plugin updates on the CLONE via WP-CLI over SSH (NOT core — keep WP at 7.0 for parity)
+# Plugin updates on the CLONE via WP-CLI over SSH — requires a provisioned clone (none currently — ADR 0001); NOT core, keep WP at 7.0 for parity
 ssh -i clone_key <user>@<host> 'wp plugin list --update=available --fields=name,version,update_version'
 ssh -i clone_key <user>@<host> 'wp plugin update sitepress-multilingual-cms wpml-string-translation \
   wpml-media-translation woocommerce-multilingual wp-seo-multilingual wordpress-seo'
@@ -137,8 +140,8 @@ gh pr create   --base main --head <branch> --title "…" --body "…"
 
 ## Known Gotchas
 
-- **Cloudflare** fronts live and bot-challenges scripted fetches on deeper pages (403 / challenge). Homepage + category pages usually pass; product pages may not. The clone (UpdraftClone infra) is not behind Cloudflare — fetch it freely.
+- **Cloudflare** fronts live and bot-challenges scripted fetches on deeper pages (403 / challenge). Homepage + category pages usually pass; product pages may not. A clone (UpdraftClone infra), when provisioned, is not behind Cloudflare — fetch it freely. (None currently — ADR 0001.)
 - **JS-injected tags are invisible to `curl`.** The GA4 tag fires inside the GTM container at runtime, so an external HTML fetch shows only the static UA tag. Confirm runtime tags in the GTM/GA4 UI, not just the page source. (This is why Issue #3 first looked like "no GA4" — it was hiding in GTM.)
 - **WP Engine + WP Rocket = two caches.** Clear both after a change or the re-check reads a stale copy.
-- **WPML premium updates are domain-locked.** `wp plugin update` for WPML plugins may fail to fetch on a clone (different domain / registration); Yoast (wordpress.org) updates cleanly regardless. (Confirmed on the clone: WPML core/String/Media downloads returned error pages; Yoast + WooCommerce ML updated fine.)
+- **WPML premium updates are domain-locked.** `wp plugin update` for WPML plugins may fail to fetch on a clone (different domain / registration); Yoast (wordpress.org) updates cleanly regardless. (Confirmed on a prior clone run: WPML core/String/Media downloads returned error pages; Yoast + WooCommerce ML updated fine — no clone currently, ADR 0001.)
 - **hreflang lives in the SITEMAP here, not the head.** WPML SEO 2.2.2+ moved hreflang from `<head>` into the XML sitemap by design. An empty head is expected and correct — Google supports sitemap hreflang equally. A prior audit wrongly flagged "hreflang missing" from a head-only check and nearly ran an unnecessary live update. **Lesson (general): before escalating a claimed defect, verify the signal against EVERY location it can legitimately live, and confirm the tool's current behaviour — not an assumed one.** A footgun check before the risky live change is what caught it.
