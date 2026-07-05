@@ -1,0 +1,14 @@
+back-in-stock-notifier-for-woocommerce=7.1.0
+engic=6.4.2
+mailchimp-wp=2.6.2
+pinterest-for-woocommerce=1.4.27
+pixelyoursite=0.2.3
+pixelyoursite=2.1.3
+pixelyoursite=2.3.1
+revslider=6.6.16
+woocommerce=10.7.0
+woocommerce=2.1.4
+woocommerce=2.7.0
+woocommerce-multilingual=5.5.5
+woocommerce-product-bundles=8.5.7
+yith-woocommerce-social-login-premium=1.58.0
