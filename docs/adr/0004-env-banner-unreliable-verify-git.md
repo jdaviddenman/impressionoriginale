@@ -1,4 +1,4 @@
-# ADR 0004 — The session "Is a git repository" banner is unreliable; verify the cwd for `.git`
+# ADR 0004 — The session "Is a git repository" banner is unreliable; verify the cwd with `git rev-parse`
 
 - **Status:** Accepted
 - **Date:** 2026-07-05
@@ -24,9 +24,10 @@ ls -la /home/james/MKO/.git                              -> exists
 `/home/james/MKO` **is** the checkout of `jdaviddenman/impressionoriginale`. The
 banner was wrong (or stale relative to when `.git` came to exist). The failure
 was **inference from provided context instead of a one-command probe** — the
-same class as the infra `feedback_verify_before_claiming_blocked` lesson
-("remember how confident you sound when you are wrong"), which this repo's
-CLAUDE.md — adapted from the infra doctrine — had dropped.
+same class as the infra `feedback_verify_before_claiming_blocked` *memory*
+lesson ("remember how confident you sound when you are wrong"), which lived only
+as an infra memory — never in the infra CLAUDE.md this repo adapted, so MKO
+never carried it.
 
 ## Decision
 
@@ -35,8 +36,13 @@ Before any claim or decision that depends on repository state, verify by probing
 the cwd:
 
 ```
-git -C <cwd> rev-parse --is-inside-work-tree && git -C <cwd> remote -v
+git -C <cwd> rev-parse --git-dir && git -C <cwd> remote -v
 ```
+
+(`--git-dir` exits 0 inside any repo — bare, subdir, or linked worktree; prefer
+it to `--is-inside-work-tree`, which returns `false` in a bare repo, and to a
+literal `.git` check, which is a file in worktrees/submodules and absent from a
+subdir.)
 
 Generalized as CLAUDE.md **RULE 10** — verify the ground state; don't infer it
 from the banner, memory, or assumption. Negative / state claims ("not a repo",
@@ -46,7 +52,7 @@ disproving-read evidence exactly like a "fixed / done" success claim.
 ## Consequences
 
 - A repo-state claim with no probe is **"unverified"** — don't act on it. The
-  banner does not close the question; `.git` on disk does.
+  banner does not close the question; `git rev-parse --git-dir` does.
 - Restores into this workspace the infra verify-before-claiming-blocked
   doctrine (the failure-side twin of RULE 5; the transferable half of infra
   RULE 7 — check the fact at its authoritative source).
