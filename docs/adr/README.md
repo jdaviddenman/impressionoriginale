@@ -14,6 +14,7 @@ Rules:
 |-----|-------|--------|------|
 | [0001](0001-no-clone-test-bench.md) | No clone / test bench exists | Accepted | 2026-07-05 |
 | [0002](0002-risky-changes-on-demand-clone.md) | Risky changes: default-avoid + on-demand clone | Accepted | 2026-07-05 |
+| [0004](0004-env-banner-unreliable-verify-git.md) | Env "is a git repo" banner unreliable — verify cwd for `.git` | Accepted | 2026-07-05 |
 
 ## Format
 

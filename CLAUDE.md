@@ -75,6 +75,16 @@ A green plugin message, a passing dry-run, or "it should work" are not evidence.
 
 **Operator-facing prose is terse and high-signal.** Drop pleasantries, hedging, filler, question-restatement, self-congratulation. Keep all technical substance: exact IDs, URLs, commands, quoted output, and the evidence RULE 5 demands. Fragments are fine. Exception — plain, full sentences for security warnings, irreversible-action confirmations, and multi-step sequences where terseness risks a misread. (Packaged as the `caveman` skill; always on unless told "stop caveman".)
 
+## RULE 10 — VERIFY THE GROUND STATE; DON'T INFER IT FROM THE BANNER, MEMORY, OR ASSUMPTION
+
+**A verifiable fact about the environment is a claim until a command proves it — the ground-state twin of RULE 5.** RULE 5 governs "fixed / done / working" (success claims after a change); this governs the state you reason *from*: "this isn't a git repo", "no clone exists", "I don't have access", "that file is missing", "the tag isn't firing". A model asserts these with the same confidence whether they're true or false — confidence carries zero information about correctness. Injected context — the session `Is a git repository` banner, a recalled memory, a prior assumption — is **not** ground truth; it can be stale or wrong. Probe the system before you assert or act on it.
+
+- **Negative / blocked claims need evidence too.** "It's not X" / "I can't Y" / "there's no Z" earns its standing exactly like "it's fixed": run the read that would disprove it *first*. This is the failure-side twin of RULE 5 (restores the infra `verify_before_claiming_blocked` doctrine dropped in this repo's adaptation).
+- **Search the cwd before any repo-state claim.** The env banner reported `Is a git repository: false` for `/home/james/MKO`; `git -C /home/james/MKO rev-parse --is-inside-work-tree` returned `true` (origin `jdaviddenman/impressionoriginale`). Before claiming anything about repo state, run `git rev-parse --is-inside-work-tree` and `git remote -v` (or check for `.git`) — never trust the banner. See `docs/adr/0004-env-banner-unreliable-verify-git.md`.
+- **Check the fact at its authoritative source, not a convenient proxy** (the transferable half of infra RULE 7), **and re-verify against live state when the operator pushes back** — never double down from the same assumption.
+
+No probe ⇒ report it as "unverified — need to check", not a confident assertion.
+
 ## Operator Commands
 
 **`/fresh` — start from a clean main.** When the operator types `/fresh`, immediately bring the working copy to a fresh, up-to-date `main` before anything else:
