@@ -15,6 +15,7 @@ Rules:
 | [0001](0001-no-clone-test-bench.md) | No clone / test bench exists | Accepted | 2026-07-05 |
 | [0002](0002-risky-changes-on-demand-clone.md) | Risky changes: default-avoid + on-demand clone | Accepted | 2026-07-05 |
 | [0003](0003-i18n-url-strategy-en-default-at-root.md) | i18n URL strategy: EN-default-at-root is by design | Accepted | 2026-07-05 |
+| [0004](0004-env-banner-unreliable-verify-git.md) | Env "is a git repo" banner unreliable — verify cwd with `git rev-parse` | Accepted | 2026-07-05 |
 
 ## Format
 
