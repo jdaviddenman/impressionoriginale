@@ -71,6 +71,20 @@ A green plugin message, a passing dry-run, or "it should work" are not evidence.
 - **Simplicity first.** The minimum change that solves the problem — nothing speculative. No new abstraction/config nobody asked for.
 - **Surgical changes.** Touch only what the request needs. Don't "improve" adjacent content while you're in there. Every changed line traces to the request; mention unrelated dead cruft, don't delete it.
 
+## RULE 11 — KARPATHY PRE-FLIGHT (mandatory before every change proposal)
+
+**Before proposing or starting any implementation, output these three lines:**
+
+```
+Simplest path: [one-line minimum fix]
+Blast radius: [pages/systems touched; can it break checkout/cart?]
+Safer alternative: [lower-risk option, or "none — this is the minimum"]
+```
+
+Hard gate, not advice. No pre-flight → no action. If the simplest path isn't the proposed path, explain why. If the blast radius includes homepage, checkout, or cart, flag it explicitly. If the safer alternative is just as good and lower risk, default to it — don't propose the riskier path without justifying why the safer one is insufficient.
+
+This is the mandatory output-format twin of RULE 8. RULE 8 says what to do; RULE 11 makes it machine-checkable — if the pre-flight block is absent, the proposal is incomplete.
+
 ## RULE 9 — TERSE COMMUNICATION; NO HR-STYLE FILLER
 
 **Operator-facing prose is terse and high-signal.** Drop pleasantries, hedging, filler, question-restatement, self-congratulation. Keep all technical substance: exact IDs, URLs, commands, quoted output, and the evidence RULE 5 demands. Fragments are fine. Exception — plain, full sentences for security warnings, irreversible-action confirmations, and multi-step sequences where terseness risks a misread. (Packaged as the `caveman` skill; always on unless told "stop caveman".)
