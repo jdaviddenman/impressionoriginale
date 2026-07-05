@@ -21,4 +21,4 @@ Record as a standing fact: **there is no clone.** Any instruction that routes a 
 
 ## Open question
 
-If a genuinely risky change becomes necessary, is the plan to stand up a fresh UpdraftClone on demand, or to avoid such changes entirely? Not decided here.
+If a genuinely risky change becomes necessary, is the plan to stand up a fresh UpdraftClone on demand, or to avoid such changes entirely? Not decided here. — **Resolved by [ADR 0002](0002-risky-changes-on-demand-clone.md): default-avoid + ephemeral on-demand clone when forced.**
