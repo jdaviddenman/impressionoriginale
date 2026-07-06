@@ -1,6 +1,7 @@
 # Playwright MCP — wp-admin Setup Runbook
 
 **Date:** 2026-07-05
+**Status:** ✅ operational (2026-07-06) — `mcp-playwright` Editor user logged in, `wp-auth.json` captured, `.playwright-mcp/` gitignored
 **Prerequisite:** `.mcp.json` with Playwright MCP config exists in project root
 **Goal:** Save a persistent wp-admin auth state so Claude can autonomously edit content behind Cloudflare/WPE (which strips `Authorization` headers)
 
@@ -71,6 +72,7 @@ echo "wp-auth.json" >> .gitignore
 | `browser_storage_state` fails | `--caps=storage` not in config | Verify `.mcp.json` has `"--caps=storage"` |
 | Claude sees login form after restart | `wp-auth.json` expired or missing | Re-run Session 1 login flow |
 | Cloudflare challenge page | Bot detection on headless Chrome | Add `--browser=chromium` or try non-headless mode |
+| Chrome fails with missing `.so` errors | Container with stripped libraries (dpkg DB out of sync with filesystem) | `npx playwright install-deps chromium` then `apt-get install --reinstall` all packages from `ldd chrome \| grep "not found"` |
 
 ## MCP config reference
 

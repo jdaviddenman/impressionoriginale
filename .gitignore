@@ -3,3 +3,4 @@ reports/*/raw/
 
 # Playwright MCP auth state — session cookies, never commit.
 wp-auth.json
+.playwright-mcp/
