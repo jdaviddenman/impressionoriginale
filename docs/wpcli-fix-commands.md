@@ -10,9 +10,9 @@ This is a WPML **EN+FR** database. `wp search-replace` hits every language. Seve
 
 | Pattern | EN pages | FR pages | Verdict |
 |---|---|---|---|
-| `gros grain` | 17 | **16** | Fixed EN-only 2026-07-06 (Batch 5): lowercase prose `gros grain`→`grosgrain` (1 row). 16 `Gros Grain` **product names** + `gros-grain` category URLs left intact. |
+| `gros grain` | 17 | **16** | Fixed EN-only 2026-07-06 (Batch 5): lowercase prose `gros grain`→`grosgrain` (1 row). Title-case product names + `gros-grain` category URLs are not typos — not touched. |
 | `personnalise` | 21 | **28** | Fixed EN-only 2026-07-06 (Batch 5): exact phrase `personnalise your`→`personalise your` (20 rows). French `personnaliser` preserved; 28 FR pages untouched. |
-| `quadri-color` | 41 | 2 | Fixed EN-only 2026-07-06 (Batch 5): `quadri-color`→`four-colour` (41 rows). 2 FR pages still want `quadrichromie` — separate FR fix. |
+| `quadri-color` | 41 | 2 | Fixed EN-only 2026-07-06 (Batch 5): `quadri-color`→`four-colour` (41 rows). |
 | `personnalised` | 0 published | — | Not in published content (revisions only) — no-op. |
 | `ornates` | 0 published | — | Not in published content (revisions only) — no-op. |
 | `Description Description` | 0 total | — | Does not exist — audit count wrong. Skip. |
@@ -25,69 +25,10 @@ Rule: before any site-wide replace, check `wp_icl_translations.language_code` fo
 
 `currated→curated` (20), `beautifuly→beautifully` (20), `Recylced→Recycled` (12), `Velvelt→Velvet` (10), `Artic Blue→Arctic Blue` (18). Each re-verified `remaining=0`. Backup: `pre-spellfix-20260706-151354.sql`. See `docs/spelling-fixes-log.md` Batch 4.
 
-## Site-wide spelling fixes (13 patterns) — ORIGINAL LIST (see hazard table above before running)
-
-Dry-run each first, then run without `--dry-run`.
-
-```bash
-# 1. Description Description → Description (66 pages — template bug)
-wp search-replace 'Description Description' 'Description' --dry-run
-
-# 2. quadri-color → four-colour (41 pages — franglais)
-wp search-replace 'quadri-color' 'four-colour' --dry-run
-
-# 3. ornates → adorns (31 pages — franglais)
-wp search-replace 'ornates' 'adorns' --dry-run
-
-# 4. gros → grosgrain (21 pages — truncation, careful: "gros" is a French word)
-# Only replace in product descriptions/specs context
-wp search-replace 'gros grain' 'grosgrain' --dry-run
-
-# 5. personnalised → personalised (20 pages — spelling)
-wp search-replace 'personnalised' 'personalised' --dry-run
-
-# 6. currated → curated (20 pages — spelling)
-wp search-replace 'currated' 'curated' --dry-run
-
-# 7. beautifuly → beautifully (20 pages — spelling)
-wp search-replace 'beautifuly' 'beautifully' --dry-run
-
-# 8. personnalise → personalise (20 pages — spelling)
-wp search-replace 'personnalise' 'personalise' --dry-run
-
-# 9. g raduated → graduated (12 pages — spacing)
-wp search-replace 'g raduated' 'graduated' --dry-run
-
-# 10. Recylced → Recycled (12 pages — spelling)
-wp search-replace 'Recylced' 'Recycled' --dry-run
-
-# 11. Velvelt → Velvet (10 pages — spelling)
-wp search-replace 'Velvelt' 'Velvet' --dry-run
-
-# 12. Artic → Arctic (8 pages — careful: don't match "article")
-wp search-replace 'Artic Blue' 'Arctic Blue' --dry-run
-wp search-replace 'Artic Leather' 'Arctic Leather' --dry-run
-
-# 13. hard working → hard-working (8 pages — grammar)
-wp search-replace 'hard working' 'hard-working' --dry-run
-```
-
 ## After running
 
 ```bash
 # Clear caches
 wp cache flush
-wp rocket clean   # if WP Rocket CLI is available
-```
-
-## Single-page fixes still remaining
-
-These couldn't be done via REST API (custom post types, WPBakery links):
-
-```bash
-# tara-lilly: mid century → mid-century (post 7876, designer CPT)
-wp post update 7876 --post_content="$(wp post get 7876 --field=post_content | sed 's/mid century/mid-century/g')"
-
-# workshop-damien-the-leather-compagnion: needs slug lookup first
-wp post list --post_type=post --name="workshop-damien-the-leather-compagnion"
+wp page-cache flush   # WP Engine page cache
 ```

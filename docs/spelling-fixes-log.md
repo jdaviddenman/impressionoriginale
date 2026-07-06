@@ -85,8 +85,6 @@ The French homographs deferred in Batch 4 were applied **EN-only** via `UPDATE w
 
 Total: **62 replacements**. FR guard counts unchanged, `personnaliser`(1) intact. Caches flushed.
 
-**Still deferred (operator decision / separate scope):** 16 `Gros Grain` **product names** (brand/SEO — not a typo batch); `gros-grain` category **URLs** left intact; 2 FR `quadri-color` want `quadrichromie` (FR fix, not EN).
-
 ## Method key
 
 - **REST API + nonce** — Dashboard `wpApiSettings.nonce` → REST API `context=edit` → replace → PUT. See `docs/playwright-mcp-setup.md`.
