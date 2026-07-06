@@ -2,7 +2,7 @@
 
 Running log of all fixes applied to the live site. Source data: `reports/spelling-grammar-audit.md` (git commit `3601a0f`).
 
-**Total: 37 of 348 confirmed errors fixed** (10.6%) — 21 pages fixed.
+**Total: 42 of 348 confirmed errors fixed** (12.1%) — 23 pages fixed.
 
 | # | Date | Page | Post ID | Typo | Fix | Method | Verified |
 |---|---|---|---|---|---|---|---|
@@ -41,6 +41,11 @@ Running log of all fixes applied to the live site. Source data: `reports/spellin
 | 33 | 2026-07-06 | `/our-designers/sophie-truant/` | 6426 | `Fleurist` | `Florist` | Editor textarea | — |
 | 34 | 2026-07-06 | `/bespoke-services/bespoke/` | 1115 | `spectaular` | `spectacular` | REST API + nonce | REST API |
 | 35 | 2026-07-06 | `/bespoke-services/bespoke/` | 1115 | `mesure` | `measure` | REST API + nonce | REST API |
+| 36 | 2026-07-06 | `/faqs/` | 13090 | `allow you to wrap` | `allows you to wrap` | REST API + nonce | REST API |
+| 37 | 2026-07-06 | `/faqs/` | 13090 | `recommend to iron` | `recommend ironing` | REST API + nonce | REST API |
+| 38 | 2026-07-06 | `/faqs/` | 13090 | `Please login to` | `Please log in to` | REST API + nonce | REST API |
+| 39 | 2026-07-06 | `/faqs/` | 13090 | `discuss about our` | `discuss our` | REST API + nonce | REST API |
+| 40 | 2026-07-06 | `/how-to-a-commission-for-musee-rodin/` | 6084 | `is was next` | `it was next` | REST API + nonce | REST API |
 
 ## Method key
 
