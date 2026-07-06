@@ -4,3 +4,7 @@ reports/*/raw/
 # Playwright MCP auth state — session cookies, never commit.
 wp-auth.json
 .playwright-mcp/
+
+# Process core dumps — crash artifacts, huge, never commit.
+core
+core.*
