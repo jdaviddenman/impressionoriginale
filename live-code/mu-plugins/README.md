@@ -36,13 +36,15 @@ ssh <ssh> "rm $D/mu-plugins/io-perf-dequeue.php"
 
 Strips the obsolete Universal Analytics tag `UA-85910237-1` from front-end output. Tracks GH #3.
 
-**Deployed to:** `wp-content/mu-plugins/io-remove-ua.php` on live (auto-loaded — no activation step). *(Not yet deployed — awaiting SSH deploy step.)*
+**Deployed to:** `wp-content/mu-plugins/io-remove-ua.php` on live (auto-loaded — no activation step). **Deployed + verified 2026-07-06.**
 
-**What it does (v0.1):** `template_redirect` output-buffer that removes two lines from the rendered HTML: the `gtag/js?id=UA-85910237-1` loader (~125 KB) and the `gtag('config','UA-85910237-1')` call. Leaves the `window.dataLayer` / `function gtag()` scaffolding intact (other inline `gtag()` callers may depend on it).
+**What it does (v1.0):** unhooks the UA emitter — `remove_action('wp_head', 'io_analytics', 20)`. The UA block is emitted by `io_analytics()` in the bespoke plugin `wp-content/plugins/impression_originale/impression_originale.php` (`add_action('wp_head','io_analytics',20)`). That function outputs **only** the dead UA gtag loader + config, so removing the action removes exactly the UA tag and nothing else. The unhook is registered on `wp_head` priority 1 (before the plugin's priority 20 fires).
 
-**Why a mu-plugin, not a theme edit:** the UA tag is hardcoded in the theme PHP (0 DB rows — Better Search Replace, 158 tables; not a GTM4WP/PixelYourSite setting). Removing it at source means a live theme-PHP edit, which the owner deferred (#3). The output-buffer strip needs no theme change and rolls back by deleting one file — same pattern as `io-perf-dequeue.php`.
+**Why a mu-plugin, not a plugin-file edit:** editing `impression_originale.php` directly is a live edit to a bespoke plugin with no clone (ADR 0001); the mu-plugin `remove_action` needs no source edit and rolls back by deleting one file — same pattern as `io-perf-dequeue.php`.
 
-**Why it's safe:** GA4 (`G-Y88VQHFDBV`) fires from the GTM container `GTM-MT7G7Z3C` at runtime, **not** from this block, so removing UA does not touch GA4 or GTM. Verified by simulating the strip against the live homepage HTML (2026-07-06): UA `2 → 0`, `GTM-MT7G7Z3C` count unchanged (1), `function gtag()` shim retained. On a WP Rocket cache hit PHP is bypassed, so the buffer runs only on cache (re)generation — near-zero runtime cost.
+**Correction to the prior finding:** #3 / `docs/analytics-ga4-migration.md` said the UA tag was "hardcoded in the **theme** PHP." Wrong — it is in the **custom plugin** `impression_originale`, function `io_analytics`. (Better Search Replace's "0 DB rows" was correct — it is in a PHP file, not the DB — but the *theme* inference was not.)
+
+**Why it's safe:** GA4 (`G-Y88VQHFDBV`) fires from the GTM container `GTM-MT7G7Z3C` at runtime, **not** from `io_analytics()`, so removing UA does not touch GA4 or GTM. Verified live (2026-07-06, external fetch, normal + cache-buster): UA `2 → 0`, `GTM-MT7G7Z3C` unchanged (1), `GT-5TPLSSZ` unchanged (pre-existing, not introduced).
 
 **Deploy / rollback:**
 ```bash
