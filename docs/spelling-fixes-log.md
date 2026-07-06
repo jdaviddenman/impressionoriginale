@@ -2,11 +2,12 @@
 
 Running log of all fixes applied to the live site. Source data: `reports/spelling-grammar-audit.md` (git commit `3601a0f`).
 
-**Total: 1 of 348 confirmed errors fixed** (0.3%)
+**Total: 2 of 348 confirmed errors fixed** (0.6%)
 
 | # | Date | Page | Post ID | Typo | Fix | Method | Verified |
 |---|---|---|---|---|---|---|---|
 | 1 | 2026-07-06 | `/3d-modeling-surgeon-paper/` | 4662 | `poeple` | `people` | REST API via Dashboard nonce | curl |
+| 2 | 2026-07-06 | `/faqs/` | 13090 | `papr` | `paper` | REST API via Dashboard nonce | REST API (frontend cached) |
 
 ## Method key
 
