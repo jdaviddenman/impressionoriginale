@@ -73,6 +73,20 @@ Applied over SSH to WPE install `impressionor` on 2026-07-06. DB backup taken fi
 
 Total: **80 replacements**. Caches flushed (`wp cache flush` + WPE page-cache). External curl blocked by Cloudflare 403 on `/e-shop/` pages (known gotcha) — verified at the stored-content layer instead. Product slugs (e.g. `artic-blue-…`) left unchanged to preserve links/SEO.
 
+## Batch 5 — EN-scoped franglais (WPML language-filtered)
+
+The French homographs deferred in Batch 4 were applied **EN-only** via `UPDATE wp_posts JOIN wp_icl_translations … language_code='en'` with case-sensitive `REPLACE()` on `post_content`. French posts (guard counts `gros grain`=16, `personnalise`=28) confirmed **unchanged** after; embedded French `personnaliser` in EN posts preserved.
+
+| Typo | Fix | Scope | Rows | Verify |
+|---|---|---|---|---|
+| `personnalise your` | `personalise your` | EN, exact phrase (avoids French `personnaliser`) | 20 | EN remaining=0; `personalise your`=20 |
+| `gros grain` (lowercase) | `grosgrain` | EN, prose only | 1 | EN remaining=0 |
+| `quadri-color` | `four-colour` | EN | 41 | EN remaining=0; `four-colour`=41 |
+
+Total: **62 replacements**. FR guard counts unchanged, `personnaliser`(1) intact. Caches flushed.
+
+**Still deferred (operator decision / separate scope):** 16 `Gros Grain` **product names** (brand/SEO — not a typo batch); `gros-grain` category **URLs** left intact; 2 FR `quadri-color` want `quadrichromie` (FR fix, not EN).
+
 ## Method key
 
 - **REST API + nonce** — Dashboard `wpApiSettings.nonce` → REST API `context=edit` → replace → PUT. See `docs/playwright-mcp-setup.md`.
