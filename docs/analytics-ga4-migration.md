@@ -6,11 +6,15 @@ The site still loads the obsolete Universal Analytics tag `UA-85910237-1` (UA re
 
 GA4 fires **inside the GTM container `GTM-MT7G7Z3C`**, injected by GTM's JavaScript at runtime — so it does **not** appear in a static HTML fetch (which is why an external `curl` saw only UA). This is **not** a migration. GA4 works. The task is **cleanup**: stop the dead UA tag, and optionally confirm GA4 ecommerce tracking is complete.
 
-## Status — 2026-07-04 (GA4 healthy; UA removal deferred)
+## Status — 2026-07-06 (UA removed) · 2026-07-04 (GA4 consolidated)
 
-**GA4 consolidated to a single, healthy path — done.** During cleanup the WooCommerce/PixelYourSite/GTM4WP plugin tags were briefly pointed at GA4 (`GT-5TPLSSZ`), which **double-fired**; those were removed. GA4 now fires **only** via the GTM container `GTM-MT7G7Z3C` → `G-Y88VQHFDBV`, and **GA4 Realtime confirms live collection** (active users while browsing). External fetch: `GT-5TPLSSZ` **2 → 0**, so no double-count. The Google-tag "install `GT-5TPLSSZ`" wizard was correctly skipped — it doesn't see GA4-via-GTM, and installing would have re-created the duplicate.
+**UA removal — DONE (2026-07-06).** The obsolete `UA-85910237-1` no longer loads on the front end. Removed via mu-plugin `io-remove-ua.php` (`remove_action('wp_head','io_analytics',20)`), not a source edit — reversible by deleting the file. External fetch (normal + cache-buster): UA **2 → 0**; `GTM-MT7G7Z3C` unchanged (1); `GT-5TPLSSZ` unchanged. See `live-code/mu-plugins/README.md`.
 
-**Deferred:** the obsolete `UA-85910237-1` still renders (2×). Harmless — it fires into a **deleted** property. See "Where the obsolete UA tag lives" below; closing it needs a theme-PHP edit, which the owner opted to defer.
+> **Correction (2026-07-06):** the section below said the UA tag was "hardcoded in the **theme** PHP." **Wrong.** It was emitted by `io_analytics()` in the bespoke plugin `wp-content/plugins/impression_originale/impression_originale.php`, hooked `add_action('wp_head','io_analytics',20)`. Better Search Replace's "0 DB rows" was right (it's in a PHP file, not the DB) — but the *theme* inference was not. Located by grepping live wp-content over SSH.
+
+> **Aside (2026-07-06, not UA):** the 2026-07-04 note below claims `GT-5TPLSSZ` was driven `2 → 0`. As of 2026-07-06 it is back to **2** in the static fetch (pre-existing, unrelated to the UA removal). Whether that is a re-introduced duplicate is a separate GA4 question — not tracked here.
+
+**GA4 consolidated to a single, healthy path — done (2026-07-04).** During cleanup the WooCommerce/PixelYourSite/GTM4WP plugin tags were briefly pointed at GA4 (`GT-5TPLSSZ`), which **double-fired**; those were removed. GA4 now fires via the GTM container `GTM-MT7G7Z3C` → `G-Y88VQHFDBV`, and **GA4 Realtime confirms live collection** (active users while browsing). At the time, external fetch showed `GT-5TPLSSZ` **2 → 0** (but see the 2026-07-06 aside above). The Google-tag "install `GT-5TPLSSZ`" wizard was correctly skipped — it doesn't see GA4-via-GTM, and installing would have re-created the duplicate.
 
 ## Evidence
 
@@ -32,13 +36,18 @@ An earlier Realtime **0** was the **Termly consent banner** (Google Consent Mode
 
 ## Where the obsolete UA tag lives (in WordPress, not Google)
 
-The UA property is deleted, so there's nothing in Google to find. **Confirmed hardcoded in the theme PHP:** a Better Search Replace dry-run for `UA-85910237-1` across 158 tables returned **0 database rows**, yet it still renders — so it is baked into a theme file (the `Impression Originale` child theme by Elax, or its parent), output as the classic `<!-- Global site tag (gtag.js) - Google Analytics -->` block via a `wp_head` hook in `header.php` / `functions.php`. It is **not** a plugin setting — no admin screen or search-replace removes it. (Earlier suspects GTM4WP + PixelYourSite turned out to hold `GT-5TPLSSZ`, not UA, and were cleared during consolidation.)
+The UA property is deleted, so there's nothing in Google to find. A Better Search Replace dry-run for `UA-85910237-1` across 158 tables returned **0 database rows** — correct, because it is emitted from **PHP, not the DB**. **Located 2026-07-06 (SSH grep of live wp-content):** the bespoke plugin `wp-content/plugins/impression_originale/impression_originale.php`, function `io_analytics()` (lines ~535–549), hooked:
 
-To find + remove it — grep the theme over SFTP / clone SSH, delete only the Global-site-tag `<script>` block:
+```php
+add_action('wp_head','io_analytics', 20);
+function io_analytics() { ?>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-85910237-1"></script>
+...
+<?php }
+```
 
-```
-grep -rn "UA-85910237-1" wp-content/themes/ wp-content/mu-plugins/
-```
+`io_analytics()` outputs **only** the dead UA block, so unhooking the whole action removes exactly the UA tag. The earlier "hardcoded in the **theme**" claim was wrong (see the 2026-07-06 correction above). Removed via mu-plugin `io-remove-ua.php` — `remove_action('wp_head','io_analytics',20)` — rather than editing the plugin source.
 
 ## Proposed path
 
@@ -52,7 +61,7 @@ grep -rn "UA-85910237-1" wp-content/themes/ wp-content/mu-plugins/
 
 - [x] GA4 collecting via a **single** path (GTM → `G-Y88VQHFDBV`); no double-count (`GT-5TPLSSZ` 2 → 0). — **done**
 - [x] GA4 Realtime for `G-Y88VQHFDBV` registers hits (active users confirmed while browsing).
-- [ ] Front end no longer loads `gtag/js?id=UA-85910237-1` — **deferred** (hardcoded theme-PHP edit; harmless dead tag).
+- [x] Front end no longer loads `gtag/js?id=UA-85910237-1` — **done 2026-07-06** (mu-plugin `io-remove-ua.php`; external fetch UA 2 → 0).
 
 ## Notes
 

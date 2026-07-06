@@ -34,3 +34,36 @@ ssh <ssh> "php -l $D/_stage.php && mv $D/_stage.php $D/mu-plugins/io-perf-dequeu
 ssh <ssh> "rm $D/mu-plugins/io-perf-dequeue.php"
 # then purge WP Rocket + WPE + Cloudflare
 ```
+
+## `io-remove-ua.php`
+
+Strips the obsolete Universal Analytics tag `UA-85910237-1` from front-end output. Tracks GH #3.
+
+**Deployed to:** `wp-content/mu-plugins/io-remove-ua.php` on live (auto-loaded — no activation step). **Deployed + verified 2026-07-06.**
+
+**What it does (v1.0):** unhooks the UA emitter — `remove_action('wp_head', 'io_analytics', 20)`. The UA block is emitted by `io_analytics()` in the bespoke plugin `wp-content/plugins/impression_originale/impression_originale.php` (`add_action('wp_head','io_analytics',20)`). That function outputs **only** the dead UA gtag loader + config, so removing the action removes exactly the UA tag and nothing else. The unhook is registered on `wp_head` priority 1 (before the plugin's priority 20 fires).
+
+**Why a mu-plugin, not a plugin-file edit:** editing `impression_originale.php` directly is a live edit to a bespoke plugin with no clone (ADR 0001); the mu-plugin `remove_action` needs no source edit and rolls back by deleting one file — same pattern as `io-perf-dequeue.php`.
+
+**Correction to the prior finding:** #3 / `docs/analytics-ga4-migration.md` said the UA tag was "hardcoded in the **theme** PHP." Wrong — it is in the **custom plugin** `impression_originale`, function `io_analytics`. (Better Search Replace's "0 DB rows" was correct — it is in a PHP file, not the DB — but the *theme* inference was not.)
+
+**Why it's safe:** GA4 (`G-Y88VQHFDBV`) fires from the GTM container `GTM-MT7G7Z3C` at runtime, **not** from `io_analytics()`, so removing UA does not touch GA4 or GTM. Verified live (2026-07-06, external fetch, normal + cache-buster): UA `2 → 0`, `GTM-MT7G7Z3C` unchanged (1), `GT-5TPLSSZ` unchanged (pre-existing, not introduced).
+
+**Deploy / rollback:**
+```bash
+# deploy (lint-gated)
+D=/nas/content/live/impressionor/wp-content
+scp io-remove-ua.php <ssh>:$D/_stage.php   # or: ssh <ssh> 'cat > $D/_stage.php' < io-remove-ua.php
+ssh <ssh> "php -l $D/_stage.php && mv $D/_stage.php $D/mu-plugins/io-remove-ua.php"
+# rollback: delete the file
+ssh <ssh> "rm $D/mu-plugins/io-remove-ua.php"
+# then purge WP Rocket + WPE + Cloudflare
+```
+
+**Verify (deterministic, after deploy + cache purge):**
+```bash
+curl -sL https://www.impressionoriginale.com/ | grep -c 'UA-85910237-1'          # expect 0
+curl -sL https://www.impressionoriginale.com/ | grep -oiE 'gtag/js\?id=[A-Z0-9-]+' # UA gone
+curl -sL https://www.impressionoriginale.com/ | grep -c 'GTM-MT7G7Z3C'            # expect >=1 (unchanged)
+# GA4 still collecting: Google Tag Assistant / GA4 Realtime for G-Y88VQHFDBV (accept the Termly banner first)
+```
