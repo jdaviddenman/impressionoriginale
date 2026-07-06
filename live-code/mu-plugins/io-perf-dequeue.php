@@ -2,7 +2,7 @@
 /**
  * Plugin Name: IO Performance — conditional asset dequeue
  * Description: Dequeues front-end assets not used on the current page. See GH jdaviddenman/impressionoriginale #45 (§B) + #56 (icon-font dedup). Reversible: delete this file.
- * Version: 0.6.0
+ * Version: 0.6.1
  */
 
 if (!defined('ABSPATH')) {
@@ -52,10 +52,21 @@ add_action('wp_enqueue_scripts', function () {
      * homepage element resolving to this v4 "FontAwesome" family is the .fa-angle-up
      * back-to-top button; disabling this stylesheet in the DOM falls it back to the
      * theme's "Font Awesome 6 Free" and the glyph still renders (v4-shims maps
-     * .fa-angle-up). No mailchimp-form FA glyph renders. Dequeue removes the 96 KB
-     * duplicate font; theme FA6+shims covers any .fa/.fa-* the plugin uses.
-     * Leaves the plugin's form styling (tooltipster/featherlight/style-new) intact.
+     * .fa-angle-up). No mailchimp-form FA glyph renders; theme FA6+shims covers any
+     * .fa/.fa-* the plugin uses. Leaves the plugin's form styling
+     * (tooltipster/featherlight/style-new) intact.
+     *
+     * NOTE: the plugin enqueues this handle inside its SHORTCODE handler
+     * (eoi-shortcode.php EasyOptInsShortcodes::enqueue_assets, called during content
+     * rendering) — i.e. AFTER wp_enqueue_scripts has fired. So wp_dequeue_style() on
+     * wp_enqueue_scripts is a no-op (the style isn't queued yet). Suppress the printed
+     * <link> instead via style_loader_tag, which fires whenever/wherever the tag is
+     * emitted (header or footer). No CSS -> no @font-face -> the 96 KB woff is never
+     * fetched. Registered here (front-end only) so the wp-admin Optin editor, which
+     * also enqueues this handle, is untouched.
      */
-    wp_dequeue_style('fca-eoi-font-awesome');
+    add_filter('style_loader_tag', function ($tag, $handle) {
+        return $handle === 'fca-eoi-font-awesome' ? '' : $tag;
+    }, 10, 2);
 
 }, PHP_INT_MAX);
