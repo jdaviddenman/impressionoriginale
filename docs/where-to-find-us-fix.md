@@ -1,6 +1,37 @@
 # where-to-find-us: misaligned WPBakery grid + 'Tapei' typo
 
-**Issue:** [#62](https://github.com/jdaviddenman/impressionoriginale/issues/62) · **Page:** https://www.impressionoriginale.com/where-to-find-us/ · **Status:** open, fix pending in wp-admin
+**Issue:** [#62](https://github.com/jdaviddenman/impressionoriginale/issues/62) · **Page:** https://www.impressionoriginale.com/where-to-find-us/ · **Status:** ✅ APPLIED to production (post 3910) + operator-confirmed
+
+## Applied fix (final)
+
+Applied directly to live via WP-CLI over WPE SSH (post ID **3910**), operator-confirmed visually. No clone (content-only, single non-commerce page, reversible — risk-accepted per RULE 1). The final layout differs from the initial 2×3-grid proposal below, after operator feedback on residual whitespace and centering.
+
+**What was applied:**
+- Each country on its own full-width row; heading centered above its stores (FRANCE · UNITED KINGDOM · USA · SWITZERLAND · NEW CALEDONIA · TAIWAN).
+- Store columns sized to fill each row: 1 store → full width, 2 → halves, 3 → thirds. FRANCE's 6 split 3+3.
+  - **Why 3+3, not 6-across:** theme grid is `float:left` (`grid.css` `.eut-column-1-3{float:left}`), no flex. Wrapping >3 unequal-height columns float-drops — the same defect the original 83px spacers were compensating for. Capping each wrapping row at one clean line (3× `1/3` = 100%) avoids it.
+- All four `[vc_empty_space height="83px"]` alignment hacks removed; 40px full-width gaps added *between* countries (FRANCE's internal rows stay tight at 20px).
+- Headings + all card text centered (`text-align:center`).
+- `Tapei` → `Taipei` (Taiwan/Eslite).
+
+**Verification (external, cache-busted fetch, HTTP 200):**
+```
+83px spacers:       0        (was 4)
+inter-country gaps: 40px present
+UK row:             eut-column-1-2 ×2   (fills width)
+single stores:      full-width          (no left-third lean)
+FRANCE:             eut-column-1-3 ×6   (3+3)
+centered h3:        6
+centered card text: 12
+Tapei / Taipei:     0 / 2
+store links:        12       (none lost)
+```
+
+Rollback: exact prior `post_content` retained off-site; `wp post update 3910 -` < backup restores byte-for-byte.
+
+---
+
+*Original proposal (superseded by the applied fix above; kept for provenance):*
 
 ## Problem
 
