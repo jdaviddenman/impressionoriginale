@@ -4,7 +4,28 @@ Run these on a machine with SSH access to the WP Engine server, or directly on t
 
 **⚠️ Backup first:** `wp db export` on the server before running any search-replace.
 
-## Site-wide spelling fixes (13 patterns)
+## ⚠️ WPML homograph hazard — do NOT run these blind
+
+This is a WPML **EN+FR** database. `wp search-replace` hits every language. Several "typos" in the audit are **valid French words** in FR posts — a blind replace corrupts correct French content. Verified language breakdown of published posts (2026-07-06):
+
+| Pattern | EN pages | FR pages | Verdict |
+|---|---|---|---|
+| `gros grain` | 17 | **16** | **UNSAFE blind** — French for grosgrain; FR pages correct as-is. Needs per-language scoping. |
+| `personnalise` | 21 | **28** | **UNSAFE blind** — correct French; majority FR. Scope to EN only. |
+| `quadri-color` | 41 | 2 | Mostly EN; the 2 FR pages want `quadrichromie`, not `four-colour`. Scope. |
+| `personnalised` | 0 published | — | Not in published content (revisions only) — no-op. |
+| `ornates` | 0 published | — | Not in published content (revisions only) — no-op. |
+| `Description Description` | 0 total | — | Does not exist — audit count wrong. Skip. |
+| `g raduated` | 0 total | — | Does not exist. Skip. |
+| `Artic Leather` | 0 total | — | Does not exist. Skip. |
+
+Rule: before any site-wide replace, check `wp_icl_translations.language_code` for the matching posts. Run blind **only** for strings that are non-words in both EN and FR.
+
+## ✅ Applied 2026-07-06 (Batch 4 — English-only non-words, safe site-wide)
+
+`currated→curated` (20), `beautifuly→beautifully` (20), `Recylced→Recycled` (12), `Velvelt→Velvet` (10), `Artic Blue→Arctic Blue` (18). Each re-verified `remaining=0`. Backup: `pre-spellfix-20260706-151354.sql`. See `docs/spelling-fixes-log.md` Batch 4.
+
+## Site-wide spelling fixes (13 patterns) — ORIGINAL LIST (see hazard table above before running)
 
 Dry-run each first, then run without `--dry-run`.
 

@@ -2,7 +2,7 @@
 
 Running log of all fixes applied to the live site. Source data: `reports/spelling-grammar-audit.md` (git commit `3601a0f`).
 
-**Total: 55 of 348 confirmed errors fixed** (15.8%) — 30 pages fixed.
+**Total: 52 of 348 confirmed errors fixed** (14.9%) — 27 pages fixed.
 
 | # | Date | Page | Post ID | Typo | Fix | Method | Verified |
 |---|---|---|---|---|---|---|---|
@@ -58,6 +58,20 @@ Running log of all fixes applied to the live site. Source data: `reports/spellin
 | 50 | 2026-07-06 | `/our-designers/mr-oneteas/` | 10238 | `In in a nut shell` | `In a nutshell` | Editor via location.href | — |
 | 51 | 2026-07-06 | `/our-designers/mr-oneteas/` | 10238 | `Everyday I get inspired` | `Every day I get inspired` | Editor via location.href | — |
 | 52 | 2026-07-06 | `/our-designers/agnes-denat/` | 9960 | `I'm love` | `I love` | Editor via location.href | — |
+
+## Batch 4 — site-wide via WP-CLI (`wp search-replace`)
+
+Applied over SSH to WPE install `impressionor` on 2026-07-06. DB backup taken first: `/home/wpe-user/pre-spellfix-20260706-151354.sql` (148M). Each verified `remaining=0` via re-`--dry-run`. Only **English-only non-words** (no valid EN or FR meaning) were run site-wide — safe across post_content/postmeta/terms/revisions. French homographs were **excluded** (see command doc).
+
+| Typo | Fix | Replacements | Verify |
+|---|---|---|---|
+| `currated` | `curated` | 20 | re-dry-run → 0 remaining |
+| `beautifuly` | `beautifully` | 20 | re-dry-run → 0 remaining |
+| `Recylced` | `Recycled` | 12 | re-dry-run → 0 remaining |
+| `Velvelt` | `Velvet` | 10 | re-dry-run → 0 remaining |
+| `Artic Blue` | `Arctic Blue` | 18 | post 11581 content `Arctic Blue`=1 / `Artic Blue`=0 (title also corrected) |
+
+Total: **80 replacements**. Caches flushed (`wp cache flush` + WPE page-cache). External curl blocked by Cloudflare 403 on `/e-shop/` pages (known gotcha) — verified at the stored-content layer instead. Product slugs (e.g. `artic-blue-…`) left unchanged to preserve links/SEO.
 
 ## Method key
 
