@@ -8,10 +8,10 @@ Conditional front-end asset dequeue for performance. Tracks GH #45 (§B) + #56 (
 
 **Deployed to:** `wp-content/mu-plugins/io-perf-dequeue.php` on live (auto-loaded — no activation step).
 
-**What it does (v0.6):**
+**What it does (v0.6.1):**
 1. **WP Google Maps** — dequeues the plugin's front-end assets (`wpgmp-frontend` style + `wpgmp-frontend` / `wpgmp-google-api` / `wpgmp-google-map-main` scripts + the Google Maps API, ~650 KB) on every page **except** one that embeds the `[put_wpgm]` shortcode.
 2. **Dashicons** — deregisters the WP core admin-bar icon font (~35 KB, render-blocking) when the admin bar isn't showing (i.e. logged-out visitors). Deregistered (not just dequeued) because it is pulled in via a style dependency.
-3. **Mailchimp WP Font Awesome** (`fca-eoi-font-awesome`, ~96 KB) — dequeues the plugin's bundled Font Awesome **v4.1.0** (`fontawesome-webfont.woff`), a third full copy of FA on top of the theme's canonical FA6 (`fa-solid-900` + `fa-brands-400`) + v4-shims. Tracks #56 §1.
+3. **Mailchimp WP Font Awesome** (`fca-eoi-font-awesome`, ~96 KB) — suppresses the plugin's bundled Font Awesome **v4.1.0** (`fontawesome-webfont.woff`), a third full copy of FA on top of the theme's canonical FA6 (`fa-solid-900` + `fa-brands-400`) + v4-shims. Tracks #56 §1. **Suppressed via `style_loader_tag` filter, not `wp_dequeue_style`:** the plugin enqueues this handle inside its shortcode handler (`EasyOptInsShortcodes::enqueue_assets`, run during content rendering — *after* `wp_enqueue_scripts`), so a dequeue on `wp_enqueue_scripts` is a no-op (style not queued yet). That was the **v0.6.0 bug** (deployed, observed still loading); fixed in **v0.6.1** by dropping the printed `<link>` at render time (no CSS → no `@font-face` → woff never fetched). Registered front-end-only, so the wp-admin Optin editor is untouched.
 
 **Why it's safe:** verified 2026-07-06 —
 - Maps: the plugin renders no map anywhere (no `[put_wpgm]` in any post content, widget, or postmeta; `/where-to-find-us/` + homepage render zero `gm-style` maps). The `has_shortcode` guard auto-preserves assets on any future real map page.
@@ -22,7 +22,7 @@ Conditional front-end asset dequeue for performance. Tracks GH #45 (§B) + #56 (
 - Per-page map assets = 0 across `/`, `/fr/`, `/shop/`, `/our-products/`, `/where-to-find-us/`, `/wrap/`; all HTTP 200, 0 PHP errors.
 - `harness/fingerprint.sh` (12 pages): all 200, no errors/warns/shortcode-leak/mojibake, per-page script/file counts reduced. See `reports/perf-after-mapdequeue-2026-07-06/`.
 - Homepage requests 181 → 154 (headless); `maps.google.com` host absent.
-- Icon fonts (#56): after deploy, homepage `.woff2?`/`.ttf` icon-font transfer drops by ~96 KB (`fontawesome-webfont.woff` absent); all icons still render EN + FR (theme `fa-solid-900`/`fa-brands-400`/`Simple-Line-Icons` intact), no missing-glyph boxes. Re-measure via headless `PerformanceResourceTiming`.
+- Icon fonts (#56): **deployed + verified live 2026-07-06 (v0.6.1).** Headless `PerformanceResourceTiming`, EN `/` + FR `/fr/` (cache-buster + full cache purge): `fontawesome-webfont.woff` **absent**, FA `<link>` **gone**, icon-font transfer **407 → 311 KB** (−96 KB). All icons still render: back-to-top `.fa-angle-up` now resolves to theme `"Font Awesome 6 Free"` (was v4 `FontAwesome`); 5 Simple-Line-Icons + all `.fa-*`/`.fab` brand icons (search, facebook, instagram, linkedin, pinterest, youtube) render; 0 console errors both languages.
 
 **Deploy / rollback:**
 ```bash
