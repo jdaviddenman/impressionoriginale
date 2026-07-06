@@ -2,7 +2,7 @@
 
 Running log of all fixes applied to the live site. Source data: `reports/spelling-grammar-audit.md` (git commit `3601a0f`).
 
-**Total: 42 of 348 confirmed errors fixed** (12.1%) — 23 pages fixed.
+**Total: 55 of 348 confirmed errors fixed** (15.8%) — 30 pages fixed.
 
 | # | Date | Page | Post ID | Typo | Fix | Method | Verified |
 |---|---|---|---|---|---|---|---|
@@ -46,6 +46,18 @@ Running log of all fixes applied to the live site. Source data: `reports/spellin
 | 38 | 2026-07-06 | `/faqs/` | 13090 | `Please login to` | `Please log in to` | REST API + nonce | REST API |
 | 39 | 2026-07-06 | `/faqs/` | 13090 | `discuss about our` | `discuss our` | REST API + nonce | REST API |
 | 40 | 2026-07-06 | `/how-to-a-commission-for-musee-rodin/` | 6084 | `is was next` | `it was next` | REST API + nonce | REST API |
+| 41 | 2026-07-06 | `/workshop-cut-fold/` | 9237 | `is enters` | `enters` | REST API + nonce | REST API |
+| 42 | 2026-07-06 | `/workshop-miriam-fitzgerald-juskova/` | 6448 | `there is only hills` | `there are only hills` | REST API + nonce | REST API |
+| 43 | 2026-07-06 | `/workshop-miriam-fitzgerald-juskova/` | 6448 | `it lead me` | `it leads me` | REST API + nonce | REST API |
+| 44 | 2026-07-06 | `/workshop-pippa-dyrlaga/` | 6351 | `well know creative` | `well-known creative` | REST API + nonce | REST API |
+| 45 | 2026-07-06 | `/workshop-pippa-dyrlaga/` | 6351 | `its time to cut` | `it's time to cut` | REST API + nonce | REST API |
+| 46 | 2026-07-06 | `/workshop-sarah-matthews/` | 5695 | `two dimensional` | `two-dimensional` | REST API + nonce | REST API |
+| 47 | 2026-07-06 | `/our-philosophy/` | 3903 | `Every steps count` | `Every step counts` | REST API + nonce | REST API |
+| 48 | 2026-07-06 | `/know-how-the-perfect-gift/tutorials-gift-wraps-do-it-yourself/` | 8898 | `every months` | `every month` | REST API + nonce | REST API |
+| 49 | 2026-07-06 | `/decipher-quadrichromia-printing-process/` | 3656 | `allows to control` | `allows one to control` | REST API + nonce | REST API |
+| 50 | 2026-07-06 | `/our-designers/mr-oneteas/` | 10238 | `In in a nut shell` | `In a nutshell` | Editor via location.href | — |
+| 51 | 2026-07-06 | `/our-designers/mr-oneteas/` | 10238 | `Everyday I get inspired` | `Every day I get inspired` | Editor via location.href | — |
+| 52 | 2026-07-06 | `/our-designers/agnes-denat/` | 9960 | `I'm love` | `I love` | Editor via location.href | — |
 
 ## Method key
 
