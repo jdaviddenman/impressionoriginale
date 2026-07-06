@@ -2,7 +2,7 @@
 
 Running log of all fixes applied to the live site. Source data: `reports/spelling-grammar-audit.md` (git commit `3601a0f`).
 
-**Total: 24 of 348 confirmed errors fixed** (6.9%) — 14 pages fixed.
+**Total: 55 of 348 confirmed errors fixed** (15.8%) — 30 pages fixed.
 
 | # | Date | Page | Post ID | Typo | Fix | Method | Verified |
 |---|---|---|---|---|---|---|---|
@@ -28,9 +28,40 @@ Running log of all fixes applied to the live site. Source data: `reports/spellin
 | 20 | 2026-07-06 | `/meet-an-expert-the-art-of-colours/` | 6271 | `behing` | `behind` | REST API + nonce | REST API |
 | 21 | 2026-07-06 | `/furoshiki-8-ways-to-master-it/` | 12858 | `Do-it-Youself` | `Do-it-Yourself` | REST API + nonce | REST API |
 | 22 | 2026-07-06 | `/talk-with-our-founder-the-wrapping-ceremony/` | 9395 | `do it yourself` | `do-it-yourself` | REST API + nonce | REST API |
+| 23 | 2026-07-06 | `/our-designers/agnes-denat/` | 9960 | `wonderfull` | `wonderful` | Editor textarea | — |
+| 24 | 2026-07-06 | `/our-designers/camille-laugie/` | 8102 | `facinated` | `fascinated` | Editor textarea | — |
+| 25 | 2026-07-06 | `/our-designers/camille-laugie/` | 8102 | `sattle` | `saddle` | Editor textarea | — |
+| 26 | 2026-07-06 | `/our-designers/camille-laugie/` | 8102 | `creativy` | `creativity` | Editor textarea | — |
+| 27 | 2026-07-06 | `/our-designers/camille-laugie/` | 8102 | `Cissors` | `Scissors` | Editor textarea | — |
+| 28 | 2026-07-06 | `/our-designers/camille-laugie/` | 8102 | `Immediatly` | `Immediately` | Editor textarea | — |
+| 29 | 2026-07-06 | `/our-designers/camille-laugie/` | 8102 | `environnent` | `environment` | Editor textarea | — |
+| 30 | 2026-07-06 | `/our-designers/clairecolin/` | 7726 | `attrack` | `attract` | Editor textarea | — |
+| 31 | 2026-07-06 | `/our-designers/francois-ruyer/` | 1154 | `proctologue` | `proctologist` | Editor textarea | — |
+| 32 | 2026-07-06 | `/our-designers/frederic-bonnin-minakani/` | 1035 | `traited` | `treated` | Editor textarea | — |
+| 33 | 2026-07-06 | `/our-designers/sophie-truant/` | 6426 | `Fleurist` | `Florist` | Editor textarea | — |
+| 34 | 2026-07-06 | `/bespoke-services/bespoke/` | 1115 | `spectaular` | `spectacular` | REST API + nonce | REST API |
+| 35 | 2026-07-06 | `/bespoke-services/bespoke/` | 1115 | `mesure` | `measure` | REST API + nonce | REST API |
+| 36 | 2026-07-06 | `/faqs/` | 13090 | `allow you to wrap` | `allows you to wrap` | REST API + nonce | REST API |
+| 37 | 2026-07-06 | `/faqs/` | 13090 | `recommend to iron` | `recommend ironing` | REST API + nonce | REST API |
+| 38 | 2026-07-06 | `/faqs/` | 13090 | `Please login to` | `Please log in to` | REST API + nonce | REST API |
+| 39 | 2026-07-06 | `/faqs/` | 13090 | `discuss about our` | `discuss our` | REST API + nonce | REST API |
+| 40 | 2026-07-06 | `/how-to-a-commission-for-musee-rodin/` | 6084 | `is was next` | `it was next` | REST API + nonce | REST API |
+| 41 | 2026-07-06 | `/workshop-cut-fold/` | 9237 | `is enters` | `enters` | REST API + nonce | REST API |
+| 42 | 2026-07-06 | `/workshop-miriam-fitzgerald-juskova/` | 6448 | `there is only hills` | `there are only hills` | REST API + nonce | REST API |
+| 43 | 2026-07-06 | `/workshop-miriam-fitzgerald-juskova/` | 6448 | `it lead me` | `it leads me` | REST API + nonce | REST API |
+| 44 | 2026-07-06 | `/workshop-pippa-dyrlaga/` | 6351 | `well know creative` | `well-known creative` | REST API + nonce | REST API |
+| 45 | 2026-07-06 | `/workshop-pippa-dyrlaga/` | 6351 | `its time to cut` | `it's time to cut` | REST API + nonce | REST API |
+| 46 | 2026-07-06 | `/workshop-sarah-matthews/` | 5695 | `two dimensional` | `two-dimensional` | REST API + nonce | REST API |
+| 47 | 2026-07-06 | `/our-philosophy/` | 3903 | `Every steps count` | `Every step counts` | REST API + nonce | REST API |
+| 48 | 2026-07-06 | `/know-how-the-perfect-gift/tutorials-gift-wraps-do-it-yourself/` | 8898 | `every months` | `every month` | REST API + nonce | REST API |
+| 49 | 2026-07-06 | `/decipher-quadrichromia-printing-process/` | 3656 | `allows to control` | `allows one to control` | REST API + nonce | REST API |
+| 50 | 2026-07-06 | `/our-designers/mr-oneteas/` | 10238 | `In in a nut shell` | `In a nutshell` | Editor via location.href | — |
+| 51 | 2026-07-06 | `/our-designers/mr-oneteas/` | 10238 | `Everyday I get inspired` | `Every day I get inspired` | Editor via location.href | — |
+| 52 | 2026-07-06 | `/our-designers/agnes-denat/` | 9960 | `I'm love` | `I love` | Editor via location.href | — |
 
 ## Method key
 
 - **REST API + nonce** — Dashboard `wpApiSettings.nonce` → REST API `context=edit` → replace → PUT. See `docs/playwright-mcp-setup.md`.
+- **Editor textarea** — Navigate to edit page → `page.evaluate` to modify `textarea#content` → click `#publish`. For custom post types not in REST API (designer) or editor pages that don't crash.
 - **Search Regex** — operator pastes regex into wp-admin → Search Regex → Replace. See `docs/spelling-fix-runbook.md`.
 - **Manual** — operator edits directly in wp-admin.
