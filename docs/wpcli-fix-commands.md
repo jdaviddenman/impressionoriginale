@@ -10,9 +10,9 @@ This is a WPML **EN+FR** database. `wp search-replace` hits every language. Seve
 
 | Pattern | EN pages | FR pages | Verdict |
 |---|---|---|---|
-| `gros grain` | 17 | **16** | **UNSAFE blind** — French for grosgrain; FR pages correct as-is. Needs per-language scoping. |
-| `personnalise` | 21 | **28** | **UNSAFE blind** — correct French; majority FR. Scope to EN only. |
-| `quadri-color` | 41 | 2 | Mostly EN; the 2 FR pages want `quadrichromie`, not `four-colour`. Scope. |
+| `gros grain` | 17 | **16** | Fixed EN-only 2026-07-06 (Batch 5): lowercase prose `gros grain`→`grosgrain` (1 row). 16 `Gros Grain` **product names** + `gros-grain` category URLs left intact. |
+| `personnalise` | 21 | **28** | Fixed EN-only 2026-07-06 (Batch 5): exact phrase `personnalise your`→`personalise your` (20 rows). French `personnaliser` preserved; 28 FR pages untouched. |
+| `quadri-color` | 41 | 2 | Fixed EN-only 2026-07-06 (Batch 5): `quadri-color`→`four-colour` (41 rows). 2 FR pages still want `quadrichromie` — separate FR fix. |
 | `personnalised` | 0 published | — | Not in published content (revisions only) — no-op. |
 | `ornates` | 0 published | — | Not in published content (revisions only) — no-op. |
 | `Description Description` | 0 total | — | Does not exist — audit count wrong. Skip. |
