@@ -9,3 +9,4 @@
 - [obflink nav obfuscation is intentional](obflink-nav-obfuscation-intentional.md) — "uncrawlable links" = deliberate obflink crawl-budget/PageRank sculpting + noindex, not a defect; don't strip. #48 closed.
 - [WPE SSH slow handshake](wpe-ssh-slow-handshake.md) — WP-CLI prod access WORKS; gateway handshake ~20-30s, short ConnectTimeout false-negatives as "unauthorized". Use ConnectTimeout=30+.
 - [Sandbox kills headless Chrome](sandbox-kills-headless-chrome.md) — Bash sandbox kills node-spawned/bg headless Chrome (exit 144); use Playwright MCP for live perf/render measurement. harness/perf-timing.mjs runs only in a normal shell.
+- [WooCommerce outdated template overrides](woocommerce-outdated-template-overrides.md) — Engic theme has 10 flagged-stale WC template overrides (+ unflagged checkout ones); live WC is >=10.9 (CLAUDE.md 10.7 stale).
