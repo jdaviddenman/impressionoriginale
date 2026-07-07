@@ -1,0 +1,2 @@
+wp-content/plugins/google-site-kit/dist/assets/js/googlesitekit-events-provider-woocommerce-454120fdf8df4537b59f.js
+wp-content/plugins/wp-rocket/assets/js/lazyload/17.8.3/lazyload.min.js
