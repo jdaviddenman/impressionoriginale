@@ -14,7 +14,7 @@ This repo is a **shared SEO audit & remediation workspace** for the WordPress/Wo
 
 ## RULE 1 — RISKY CHANGES GO THROUGH THE CLONE, NOT PROD
 
-**Plugin/core/theme updates and anything with layout or checkout blast radius MUST be trialled on the isolated clone first, validated, then repeated on live.** The clone (UpdraftPlus/UpdraftClone) is matched to live — **PHP 8.2, WordPress 7.0, WooCommerce 10.7** — so "it worked on the clone" transfers. Never bulk-update blind on production.
+**Plugin/core/theme updates and anything with layout or checkout blast radius MUST be trialled on the isolated clone first, validated, then repeated on live.** The clone (UpdraftPlus/UpdraftClone) is matched to live — **PHP 8.2, WordPress 7.0, WooCommerce 10.9.3** — so "it worked on the clone" transfers. Never bulk-update blind on production.
 
 > **Status (ADR 0001): no clone is currently provisioned.** The clone-first gate therefore cannot be satisfied right now — high-blast-radius changes are **deferred until a clone is stood up, or explicitly risk-accepted by the operator per change**, never done silently. Where this section assumes a present clone, `docs/adr/0001-no-clone-test-bench.md` is the source of truth.
 
@@ -208,7 +208,7 @@ Hard gate, not advice. If `--ff-only` fails (local commits on `main`, dirty tree
 
 Everything below is the **target site's** stack, not this repo's.
 
-- **CMS/commerce:** WordPress **7.0**, WooCommerce **10.7.0**, Stripe gateway.
+- **CMS/commerce:** WordPress **7.0**, WooCommerce **10.9.3** (verified 2026-07-07 via `wp plugin get woocommerce --field=version`), Stripe gateway.
 - **Multilingual:** WPML (EN default + FR) — `sitepress-multilingual-cms` + String/Media Translation + WooCommerce Multilingual + **WPML SEO** (the Yoast↔WPML glue).
 - **SEO:** Yoast SEO (`sitemap_index.xml`, head presenters).
 - **Analytics/tags:** GTM4WP + GTM container `GTM-MT7G7Z3C`; GA4 property `Impression Originale - GA4` (`375621420` / Measurement ID `G-Y88VQHFDBV` / Google Tag `GT-5TPLSSZ`); PixelYourSite; an **obsolete `UA-85910237-1`** tag still firing (Issue #3). Pinterest + Meta pixels.
@@ -216,7 +216,7 @@ Everything below is the **target site's** stack, not this repo's.
 - **Theme:** EngineThemes "The Core" (`eut-` / `Engic Extension`) — old; page-builder + theme are the layout break-zone on updates.
 - **Host:** WP Engine — nginx, **PHP 8.2.31**, MySQL **8.4.7**, memory_limit 512M. WPE runs its own page + object cache on top of WP Rocket (clear **both** when verifying).
 - **Consent:** Termly banner with Google Consent Mode — analytics is gated until consent; accept the banner (or use GA4 DebugView) before trusting Realtime.
-- **Clone/testing:** UpdraftPlus / UpdraftClone — **not currently provisioned** (ADR 0001). When stood up, match to live (PHP 8.2 / WP 7.0 / WC 10.7).
+- **Clone/testing:** UpdraftPlus / UpdraftClone — **not currently provisioned** (ADR 0001). When stood up, match to live (PHP 8.2 / WP 7.0 / WC 10.9.3).
 
 ## Common Commands & Checks
 
