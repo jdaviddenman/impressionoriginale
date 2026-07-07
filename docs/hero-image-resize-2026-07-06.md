@@ -56,7 +56,14 @@ visible delta @1920px:  MAE 0.58/255   max_pixel_diff 28   PSNR 45.7 dB
 Side-by-side 100 % crop (left = current 81 MP render, right = 2560 px q82):
 `reports/hero-resize-2026-07-06/AB_crop_wraps_now-vs-2560q82.png` — identical to the eye.
 
-### Inventory is mixed (spot check)
+### Inventory is mixed (spot check) — SUPERSEDED 2026-07-07
+
+> **Update 2026-07-07:** full inventory built from the live homepage —
+> `reports/hero-resize-2026-07-06/inventory-2026-07-07.md`. It is NOT a broad mix: **exactly one
+> file is pathological** (`Wraps_HOME_Web.jpg`, 81.7 MP). All 12 other full-bleed images are already
+> correctly-sized 2.1–4.9 MP derivatives. The RESIZE win is concentrated in that single CSS
+> background. Dims verified via JPEG SOF markers (12/12 named-suffix files matched). Spot-check below
+> kept for history.
 
 ```
 11069×7379  536KB  IMPRESSION-ORIGINALE_Wraps_HOME_Web.jpg        → RESIZE (huge win)
