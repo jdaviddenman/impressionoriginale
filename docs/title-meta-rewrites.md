@@ -337,21 +337,7 @@ The **Focus keyphrase** column is the exact phrase to set in Yoast; the meta mus
 
 ## French — home + top categories (`fabriqué en France` USP)
 
-Enter these on the **French** translation of each page/category (WPML). Type native French — do **not** auto-translate the English.
-
-| Page | URL | New title | New meta description |
-|------|-----|-----------|----------------------|
-| Accueil | `/fr/` | Papier Cadeau de Luxe & Rubans \| Impression Originale | Papier cadeau dessiné à la main, rubans, boîtes et nœuds, créés par des artistes et fabriqués en France. L'emballage cadeau de luxe éco-responsable. |
-| Papier cadeau | `/fr/papier-cadeau/` | Papier Cadeau de Luxe Fabriqué en France \| Impression Originale | Papier cadeau de luxe dessiné par des artistes, imprimé en France sur papier recyclé. Feuilles et coffrets pour toutes vos occasions. À découvrir. |
-| Rubans | `/fr/ruban/` | Ruban Cadeau de Luxe : Satin & Velours \| Impression Originale | Ruban cadeau couture en satin, velours, organza, gros-grain et taffetas. Fabriqué en France pour sublimer chaque emballage. Choisissez couleur et taille. |
-| Nœuds | `/fr/noeud/` | Nœuds Cadeaux Faits Main, Prêts à Poser \| Impression Originale | Nœuds faits main prêts à poser, tailles S, M et L. La touche couture qui sublime chaque cadeau en un geste. Fabriqués en France par Impression Originale. |
-| Boîtes cadeaux | `/fr/pochette-boite/boite-cadeau/` | Boîtes Cadeaux de Luxe Fabriquées en France \| Impression Originale | Boîtes cadeaux élégantes, dessinées par des artistes et fabriquées en France, en plusieurs tailles. L'alternative raffinée à l'emballage. À découvrir. |
-| Pochettes cadeaux | `/fr/pochette-cadeau/` | Pochettes & Sacs Cadeaux de Luxe \| Impression Originale | Pochettes et sacs cadeaux de luxe, finis à la main, pour un emballage élégant et sans effort. Dessinés par des artistes, fabriqués en France. |
-| Étiquettes | `/fr/etiquettes-cadeaux/` | Étiquettes Cadeaux Illustrées & Design \| Impression Originale | Étiquettes cadeaux illustrées pour personnaliser chaque présent. Fabriquées en France sur carton recyclé. Découvrez la collection Impression Originale. |
-| Furoshiki | `/fr/carre-de-tissu-furoshiki/` | Furoshiki : Tissu Cadeau Réutilisable \| Impression Originale | Le furoshiki, tissu d'emballage réutilisable : la façon zéro déchet d'emballer vos cadeaux. Imprimé en France. Découvrez les motifs et les tailles. |
-| Noël | `/fr/occasions-cadeau/noel/` | Papier Cadeau & Rubans de Noël de Luxe \| Impression Originale | Papier cadeau, rubans et nœuds de Noël, dessinés par des artistes et fabriqués en France. Emballez les fêtes dans un luxe éco-responsable. Collection Noël. |
-| Mariage | `/fr/occasions-cadeau/mariage/` | Emballage Cadeau & Rubans de Mariage \| Impression Originale | Papier cadeau, rubans et marque-places de mariage, dessinés par des artistes et fabriqués en France. Sublimez chaque cadeau de célébration. À découvrir. |
-| Anniversaire | `/fr/occasions-cadeau/anniversaire/` | Papier Cadeau & Rubans d'Anniversaire \| Impression Originale | Papier cadeau, rubans et nœuds d'anniversaire, colorés et dessinés par des artistes. Fabriqués en France, éco-responsables. L'emballage festif à découvrir. |
+**→ Moved to [`title-meta-fr.md`](title-meta-fr.md).** The complete FR audit + rewrites (all 16 categories, validated against the live Yoast presenter and 3 external sources) now live there. The earlier draft in this section was superseded: it used the wrong occasion URLs (`/fr/occasions-cadeau/noel|mariage|anniversaire/` — the live FR occasions are at **root**: `/fr/noel/`, `/fr/mariage/`, `/fr/anniversaire/`, plus `/fr/amour/`, `/fr/naissance/`) and predated the current-state audit that surfaced English-on-FR and raw-template leaks.
 
 ---
 
