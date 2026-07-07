@@ -35,8 +35,8 @@ Validated against 3 external sources:
 | `/fr/anniversaire/` | 910 | Papier Cadeau Anniversaire - … Fabrication française | brand mid-title, no `\|` |
 | `/fr/luxe/` | 912 | Papier Cadeau Luxe - … Fabrication française | cannibalizes papier-cadeau's "de luxe" |
 | `/fr/etiquettes-cadeaux/` | 1077 | **Eshop – Gift Tag for luxury gifting** – … | **fully English on FR page** |
-| `/fr/marque-places/` | 1146 | **ready-to-bow Archives** - Impression Originale | **English + raw "Archives" template leak, empty meta** |
-| `/fr/ciseaux-fr/` | 1067 | **NULL** (no Yoast title) | falls to raw template |
+| `/fr/marque-places/` | 1143 | **ready-to-bow Archives** - Impression Originale | **English + raw "Archives" template leak, empty meta** |
+| `/fr/ciseaux-fr/` | 1078 | **NULL** (no Yoast title) | falls to raw template |
 
 **Verdict:** the FR side is a grade worse than pre-fix EN — not just brand-first, but language-leaking. High-value, low-risk fix (title/meta only — no layout/cart blast radius; instantly reversible; direct-to-live allowed per RULE 1).
 
