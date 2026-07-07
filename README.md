@@ -59,7 +59,8 @@ The site is technically well-built (Yoast, caching, product schema, rich product
 ## Docs
 
 - **[hreflang issue & fix](docs/hreflang-fix.md)** — the headline defect (mirrored in [Issue #1](../../issues/1))
-- **[Title & meta rewrites (EN + FR)](docs/title-meta-rewrites.md)** — copy-paste ready
+- **[Title & meta rewrites (EN)](docs/title-meta-rewrites.md)** — copy-paste ready
+- **[Title & meta rewrites (FR `/fr/`)](docs/title-meta-fr.md)** — FR audit + rewrites, validated against the live Yoast presenter + 3 external sources
 - **[Universal Analytics → GA4 migration](docs/analytics-ga4-migration.md)** — dead UA tag (mirrored in [Issue #3](../../issues/3))
 - **[Agentic / AI-search readiness](docs/agentic-search.md)** — `llms.txt` + AI-crawler policy + schema (mirrored in [Issue #15](../../issues/15)); the repo-root [`llms.txt`](llms.txt) is the deployable file
 - **[Plugin maintenance program](docs/plugin-maintenance.md)** — tiered, staging-first update cadence (mirrored in [Issue #22](../../issues/22))
