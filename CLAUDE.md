@@ -175,6 +175,23 @@ This is a case of RULE 4 (verify after) applied to the CDN layer. `wp cache flus
 
 See [[wpe-cdn-purge-after-change]] for the full rationale and the 7-hour stale-cache incident that produced this rule.
 
+## RULE 16 — NEVER ASSUME
+
+**No assertion stands without evidence. Every inferred fact is a hypothesis until verified.** The root cause of the session's worst failures was a single pattern: O assumed something to be true, acted on that assumption, and was wrong.
+
+Evidence is the only antidote. If you haven't checked it, you don't know it. This applies to everything:
+
+| Assume (banned) | Verify instead |
+|---|---|
+| "the SSH hostname follows from the domain" | grep memory for stored connection strings (RULE 14) |
+| "the cache is cleared because `wp cache flush` said Success" | `curl -sI | grep cf-cache-status` must show MISS (RULE 15) |
+| "lazy loading is absent" (grep for `loading="lazy"`) | Check for JS-based lazy loading (WP Rocket `data-lazy-src`) |
+| "the fix is live" | Fetch without `?nocache=` and confirm the output changed |
+| "this tool succeeded because it printed Success" | Read the thing it was supposed to change and confirm |
+| "the pre-flight was already done" (from an earlier diagnosis) | Output the three-line block before each change (RULE 11) |
+
+**Self-check before any action:** "What am I assuming here?" If the answer names a fact not verified this session, stop and verify it first. This is the Lesson-Foundry Habit (C9) applied to assumptions — an assumption paid for twice without becoming a rule is a rule waiting to be written.
+
 ## Operator Commands
 
 **`/fresh` — start from a clean main.** When the operator types `/fresh`, immediately bring the working copy to a fresh, up-to-date `main` before anything else:
