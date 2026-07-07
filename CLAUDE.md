@@ -138,6 +138,60 @@ Self-check before every response: would this fit in 3–5 lines without losing t
 
 No probe ⇒ report it as "unverified — need to check", not a confident assertion.
 
+## RULE 14 — NEVER DERIVE A CONNECTION STRING FROM THE PUBLIC DOMAIN
+
+**Before any SSH, API, or remote connection, grep memory for the stored hostname and username. Never infer connection details from the public domain name.**
+
+Hosting providers (WP Engine, cPanel, Pantheon, etc.) routinely use install identifiers that differ from the public domain. Assuming `impressionoriginale.com` → `impressionoriginale.ssh.wpengine.com` is a guess. The memory file `[[wpe-ssh-slow-handshake]]` holds the correct connection string: `impressionor@impressionor.ssh.wpengine.net`. Probe memory first — a single `grep` before the first SSH attempt replaces five timeouts with one correct connection.
+
+This is a specific case of RULE 10 (verify ground state) applied to external connections. The public domain is a proxy, not the source of truth — the stored credential record is.
+
+**Do:** `grep -r 'ssh.wpengine\|@.*\.ssh\.' /home/james/.claude/projects/-home-james-MKO/memory/` before any SSH attempt.
+**Don't:** derive the SSH hostname from the domain, try it, fail, and only then check memory.
+
+## RULE 15 — FULL CDN PURGE AFTER ANY HTML/CONTENT/CSS/JS CHANGE
+
+**After every code or content change on live, purge the full stack — not just the origin cache.** `wp cache flush` clears WP Engine's Varnish origin cache only. The site sits behind Cloudflare with 28-day edge-cache TTLs. An origin-only purge leaves stale HTML in the CDN — the fix is invisible to visitors.
+
+Required purge sequence after any HTML/content/CSS/JS mutation:
+
+```bash
+ssh impressionor@impressionor.ssh.wpengine.net '
+  wp cache flush
+  wp eval "
+    if (class_exists(\"WpeCommon\")) {
+      WpeCommon::purge_varnish_cache_all();
+      WpeCommon::clear_cdn_cache();
+      WpeCommon::clear_maxcdn_cache();
+      WpeCommon::purge_memcached();
+    }
+  "
+'
+```
+
+**Verify the purge worked:** `curl -sI "https://www.impressionoriginale.com/" | grep -i cf-cache-status` must show `MISS` (or `EXPIRED`) before claiming the fix is live. Never use `?nocache=X` for verification — it bypasses Cloudflare and gives a false positive.
+
+This is a case of RULE 4 (verify after) applied to the CDN layer. `wp cache flush` says "Success" with the same confidence whether or not Cloudflare edge nodes are still serving the old page. The re-read must check the CDN, not the origin.
+
+See [[wpe-cdn-purge-after-change]] for the full rationale and the 7-hour stale-cache incident that produced this rule.
+
+## RULE 16 — NEVER ASSUME
+
+**No assertion stands without evidence. Every inferred fact is a hypothesis until verified.** The root cause of the session's worst failures was a single pattern: O assumed something to be true, acted on that assumption, and was wrong.
+
+Evidence is the only antidote. If you haven't checked it, you don't know it. This applies to everything:
+
+| Assume (banned) | Verify instead |
+|---|---|
+| "the SSH hostname follows from the domain" | grep memory for stored connection strings (RULE 14) |
+| "the cache is cleared because `wp cache flush` said Success" | `curl -sI | grep cf-cache-status` must show MISS (RULE 15) |
+| "lazy loading is absent" (grep for `loading="lazy"`) | Check for JS-based lazy loading (WP Rocket `data-lazy-src`) |
+| "the fix is live" | Fetch without `?nocache=` and confirm the output changed |
+| "this tool succeeded because it printed Success" | Read the thing it was supposed to change and confirm |
+| "the pre-flight was already done" (from an earlier diagnosis) | Output the three-line block before each change (RULE 11) |
+
+**Self-check before any action:** "What am I assuming here?" If the answer names a fact not verified this session, stop and verify it first. This is the Lesson-Foundry Habit (C9) applied to assumptions — an assumption paid for twice without becoming a rule is a rule waiting to be written.
+
 ## Operator Commands
 
 **`/fresh` — start from a clean main.** When the operator types `/fresh`, immediately bring the working copy to a fresh, up-to-date `main` before anything else:
