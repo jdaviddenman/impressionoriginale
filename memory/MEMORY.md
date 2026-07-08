@@ -10,3 +10,4 @@
 - [WPE SSH slow handshake](wpe-ssh-slow-handshake.md) — WP-CLI prod access WORKS; gateway handshake ~20-30s, short ConnectTimeout false-negatives as "unauthorized". Use ConnectTimeout=30+.
 - [Sandbox kills headless Chrome](sandbox-kills-headless-chrome.md) — Bash sandbox kills node-spawned/bg headless Chrome (exit 144); use Playwright MCP for live perf/render measurement. harness/perf-timing.mjs runs only in a normal shell.
 - [WooCommerce outdated template overrides](woocommerce-outdated-template-overrides.md) — Engic theme has 10 flagged-stale WC template overrides (+ unflagged checkout ones); live WC is >=10.9 (CLAUDE.md 10.7 stale).
+- [Yoast title/meta write mechanism](yoast-titlemeta-write-mechanism.md) — render source = indexable not postmeta; naive clear API fatals (delete row instead); empty metadesc = NO tag; templates shared EN+FR. Reference.
