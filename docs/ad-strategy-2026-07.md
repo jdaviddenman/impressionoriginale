@@ -48,7 +48,7 @@ Pinterest is the stronger strategic fit for the niche (visual, planning-oriented
 
 | Issue | Impact on Ads | Fix Effort |
 |---|---|---|
-| **LCP 9.1s** (Google "Poor" bucket: >4.0s) | +33% CPC penalty, ~50% conversion collapse vs 2.5s | 1–2 hours: compress hero images to WebP, add `fetchpriority="high"`, remove autoplay hero video if any |
+| **LCP 9.1s** (Google "Poor" bucket: >4.0s) | +33% CPC penalty, ~50% conversion collapse vs 2.5s | **Partial fix applied 2026-07-14:** hero images compressed -68% (781→248KB). LCP re-measurement pending. See `docs/lcp-hero-image-fix.md`. CSS/JS deferral gated behind LCP measurement. |
 | **No product reviews** (by business design — store does not do reviews) | Cold ad traffic lands on pages with zero social proof; luxury purchase without trust signals = conversion risk. Note: this is an intentional business decision, not a defect — but it still impacts ad conversion rates. | If operator decides to add: install free review plugin, set up post-purchase email at 48h, 1-hour setup |
 | **5-pixel tracking stack** (PixelYourSite + Meta-for-WC + GA-for-WC + Pinterest-for-WC + GTM4WP) — *not re-verified 2026-07-14* | Likely double-counting conversions; GA4 ecommerce events may fire 2–5x per transaction; broken attribution poisons algorithm optimization | Audit + deduplicate: 2–4 hours. Keep GTM4WP as single source of truth, disable redundant pixels |
 | **Stale blog** (last post Aug 2025 — confirmed 2026-07-14) | Zero top-of-funnel content for gift-idea searches; no Google Discover eligibility | Low priority for ad launch; fix after Shopping is live |
@@ -224,9 +224,9 @@ Found in the 2026-07-14 live re-audit. All are low-effort, high-impact for SERP 
 
 ### Landing Page Quality (1–2 hours)
 
-- [ ] Compress all hero/product images to WebP, target < 100KB each
-- [ ] Add `fetchpriority="high"` to above-fold hero image
-- [ ] Remove autoplay hero video/slider if any (common LCP killer on WPBakery sites)
+- [x] Compress all hero/product images to WebP, target < 100KB each — **hero done (118KB+130KB), product images not yet**
+- [x] Add `fetchpriority="high"` to above-fold hero image — **already present (WP Rocket auto-preload)**
+- [x] Remove autoplay hero video/slider if any — **no video found; slider autoplay preserved (11 CTAs, business decision)**
 - [ ] Verify LCP drops below 4s (Google "Needs Improvement" bucket — minimum for paid traffic). Target: < 2.5s ("Good")
 - [ ] Test 3 product pages on mobile (Lighthouse): LCP, CLS, INP all in "Good" or "Needs Improvement" range
 - [ ] Checkout and cart pages: confirm they load and function correctly
