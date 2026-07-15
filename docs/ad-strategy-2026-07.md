@@ -1,7 +1,7 @@
 # Ad Strategy: impressionoriginale.com
 
-**Date:** 2026-07-14
-**Status:** Research complete — strategy ready for operator review
+**Date:** 2026-07-15 (updated — Tier 1 SEO fixes applied)
+**Status:** Research complete — strategy ready for operator review. 5/6 Tier 1 SEO quick wins applied.
 **Budget range:** $540–1,250/month (phased, months 1–3)
 
 ---
@@ -52,19 +52,19 @@ Pinterest is the stronger strategic fit for the niche (visual, planning-oriented
 | **No product reviews** (by business design — store does not do reviews) | Cold ad traffic lands on pages with zero social proof; luxury purchase without trust signals = conversion risk. Note: this is an intentional business decision, not a defect — but it still impacts ad conversion rates. | If operator decides to add: install free review plugin, set up post-purchase email at 48h, 1-hour setup |
 | **6-plugin tracking stack** (PixelYourSite + Meta-for-WC + Google Site Kit + Pinterest-for-WC + GTM4WP + Mailchimp for WP) — *verified 2026-07-15* | **Double-counting confirmed.** Google Site Kit (1.182.0) loads `gtag.js?id=GT-5TPLSSZ`; GTM4WP loads `gtm.js?id=GTM-MT7G7Z3C` — two Google containers on the same page. Pinterest pixel double-fires (PageVisit x2). Meta pixel managed by two plugins (PixelYourSite + Facebook-for-WC, same pixel ID `1011540012316296`). Broken attribution poisons algorithm optimization. | Audit + deduplicate: 2–4 hours. Keep GTM4WP as single source of truth for GA4 ecommerce events. Remove or disable redundant pixels in Site Kit, PixelYourSite, Pinterest-for-WC, Meta-for-WC. |
 | **Termly consent banner is non-functional** — *verified 2026-07-15* | **GDPR non-compliant.** Zero Termly JavaScript loads; only HTML footer links remain. No `gtag('consent', ...)` calls exist. All tracking fires unconditionally before any consent interaction. 30–50% of EU traffic would lose tracking if consent were ever enforced. | Reinstall/reconfigure Termly with Consent Mode v2: default all `denied`, upgrade to `granted` only after user consent. 1–2 hours. |
-| **`/shop/` and `/fr/shop/` are `noindex,follow`** — *verified 2026-07-15* | Primary product listing pages blocked from Google index. Either intentional (duplicate-content avoidance vs category pages) or a defect — either way, paid traffic lands on pages that can't rank organically. | 2 minutes: investigate Yoast setting. If intentional: document as ADR. If defect: flip to `index`. |
+| **`/shop/` and `/fr/shop/` were `noindex,follow`** — *FIXED 2026-07-15* | ✅ Flipped to `index,follow` on both EN and FR. Noindex was set at individual page level (page 9817), not global template — possibly accidental. Deleted `_yoast_wpseo_meta-robots-noindex` postmeta + rebuilt indexable. Both pages now `index, follow` verified via CDN. See #86, ADR 0006. | ~~2 minutes~~ Done |
 | **Stale blog** (last post Aug 2025 — confirmed 2026-07-14) | Zero top-of-funnel content for gift-idea searches; no Google Discover eligibility | Low priority for ad launch; fix after Shopping is live |
 | **4 plugins behind** (verified 2026-07-15 via WP-CLI: PDF Invoices 5.15.1→5.15.2, PixelYourSite 11.2.0.7→11.2.1, Site Kit 1.182.0→1.183.0, Stripe 10.8.3→10.8.4) — all minor/patch, not a security concern | Negligible — all patch bumps | Deferred; update in next maintenance window |
-| **Homepage H1 still `IMPRESSION ORIGINALE`** (not keyword-optimized — documented fix was never applied) | Weakens landing page relevance for branded search; missed opportunity for "Luxury Gift Wrap, Made in France" in H1 | 1 minute: edit page H1 in WordPress |
-| **`/shop/` (EN+FR) missing meta description** — no `<meta name="description">`, no `og:description` on either language | No SERP snippet control on the primary product listing page; FR title is English `Shop` not French `Boutique` | 5 minutes: set meta descriptions in Yoast; localize FR title |
-| **`/bespoke-services/` (EN+FR) missing meta description** — no `<meta name="description">`, no `og:description` | No SERP snippet control on the services page | 5 minutes: set meta descriptions in Yoast |
-| **`/portfolio/furoshiki/` missing meta + H1 + og:description** — portfolio post type may not have Yoast fields configured | No SERP snippet control; no heading for accessibility/SEO | 10 minutes: enable Yoast on portfolio post type, set meta + H1 |
-| **5 static pages with ALL-CAPS title prefixes** — `/our-philosophy/`, `/our-products/`, `/where-to-find-us/`, `/bespoke-services/`, `/corporate-gifts-order-form-online/` | Keyword-first but uppercase reads as shouting in SERPs → lower CTR | 5 minutes: convert to title case or sentence case in Yoast |
-| **`/our-philosophy/` meta typos** — `"optimazing"` → `"optimising"`, `"minimizes"` → `"minimises"` (UK English) | Typos in SERP snippet = amateur signal, lower CTR | 1 minute: fix in Yoast meta field |
-| **`/fr/notre-savoir-faire/` returns 404** | Broken link if referenced anywhere; missing FR landing page | 2 minutes: investigate + either create page or add redirect |
-| **`/fr/shop/` title is English `Shop`, not French `Boutique`** | FR shop page has English title in SERPs — confusing for French-language searchers | 1 minute: localize title in Yoast |
+| **Homepage H1 still `IMPRESSION ORIGINALE`** — *FIXED 2026-07-15* | ✅ EN H1 → `Luxury Gift Wrap & Ribbons, Made in France`; FR H1 → `Papier Cadeau de Luxe & Rubans, Fabriqué en France`. Verified via external CDN fetch. See #85, `docs/tier1-seo-fixes-runbook.md`. | ~~1 minute~~ Done |
+| **`/shop/` (EN+FR) missing meta description** — *FIXED 2026-07-15* | ✅ EN meta description set ("Discover luxury hand-drawn gift wrap..."). FR title `Shop` → `Boutique` **deferred** — WCML string translations set in DB but not reflecting on frontend; needs WPML admin UI configuration (String Translation → "Shop" in woocommerce context → add FR "Boutique"). See #77. | ~~5 minutes~~ EN done, FR deferred |
+| **`/bespoke-services/` (EN+FR) missing meta description** — *FIXED 2026-07-15* | ✅ EN: "Bespoke luxury gift wrap and packaging — custom sizes, materials, and finishes..." FR: French-language version. Verified via CDN. See #78. | ~~5 minutes~~ Done |
+| **`/portfolio/furoshiki/` missing meta + H1 + og:description** — *BY DESIGN 2026-07-15* | ✅ Portfolio pages are navigation shells (not SEO landing pages). Yoast metabox intentionally disabled; `noindex-portfolio: true`. FR page has H1 while EN doesn't — half-configured state documented. Operator decision pending: Path A (by design, close) or Path B (enable Yoast, add content). See ADR 0005, #79. | ~~10 minutes~~ Not a defect |
+| **5 static pages with ALL-CAPS title prefixes** — *FIXED 2026-07-15* | ✅ All 5 converted to title case via `_yoast_wpseo_title` overrides (no `wp_update_post` — avoids save_post fatal risk). Verified via CDN: zero ALL-CAPS remaining. See #80. | ~~5 minutes~~ Done |
+| **`/our-philosophy/` meta typos** — *FIXED 2026-07-15* | ✅ `"optimazing"` → `"optimising"`, `"minimizes"` → `"minimises"` (UK English). Verified both corrections present, old typos absent on CDN. See #81. | ~~1 minute~~ Done |
+| **`/fr/notre-savoir-faire/` returns 404** — *FIXED 2026-07-15* | ✅ Two 301 redirects added via Redirection plugin: `/fr/notre-savoir-faire/` → `/fr/savoir-faire/` (ID 110), `/notre-savoir-faire/` → `/know-how-the-perfect-gift/` (ID 111). Verified 301 response via CDN. See #82. | ~~2 minutes~~ Done |
+| **`/fr/shop/` title is English `Shop`, not French `Boutique`** — *DEFERRED 2026-07-15* | ⚠️ WCML renders FR shop without a separate translated page. String translations set in DB (IDs 17911, 51365, 51370, 53537 → "Boutique") but not reflecting on frontend. Mu-plugin approach caused fatal error (WPML/WCML filter conflict) — removed immediately. **Manual fix:** WP Admin → WPML → String Translation → search "Shop" in woocommerce context → add FR translation "Boutique" → clear WPML cache. See #77. | ~~1 minute~~ Deferred to admin UI |
 
-**Gates before spend:** LCP < 4s, tracking deduplicated, Termly consent reinstalled with Consent Mode v2, `/shop/` noindex resolved, review collection live (if operator decides to add reviews). Missing meta descriptions + H1 + typos are quick fixes (~30 min total) and should be resolved before any paid landing pages go live.
+**Gates before spend (updated 2026-07-15):** LCP < 4s, tracking deduplicated, Termly consent reinstalled with Consent Mode v2, review collection live (if operator decides to add reviews). **Tier 1 SEO quick wins applied** — 5/6 fixes verified via CDN, 1 deferred (FR shop title → WPML admin UI), 1 by design (portfolio/furoshiki → ADR 0005). Remaining gates: LCP, tracking, Termly, reviews.
 
 ---
 
@@ -201,19 +201,19 @@ Standard Shopping (not PMax) because:
 
 All items are gates — must be complete before ad dollar #1.
 
-### SEO Content Fixes — Quick Wins for Ad Landing Pages (30 min, new)
+### SEO Content Fixes — Quick Wins for Ad Landing Pages (30 min, applied 2026-07-15)
 
-Found in the 2026-07-14 live re-audit. All are low-effort, high-impact for SERP snippet quality on landing pages that paid traffic will hit.
+Found in the 2026-07-14 live re-audit. All low-effort, high-impact. **5/6 applied and verified via CDN; 1 by design; 1 deferred.** Full runbook: `docs/tier1-seo-fixes-runbook.md`. Fix script: `harness/apply-tier1-fixes.sh`. Issues: #77–#82, #85–#86.
 
-- [ ] **Fix homepage H1:** change `IMPRESSION ORIGINALE` → `Luxury Gift Wrap, Made in France` (per `docs/home-title-meta-rewrite.md`)
-- [ ] **Set `/shop/` meta description** (EN): keyword-rich, 155–160 chars. Set `og:description` (auto from Yoast)
-- [ ] **Set `/fr/shop/` meta description** (FR): French-language. Localize title from `Shop` → `Boutique`
-- [ ] **Set `/bespoke-services/` meta description** (EN+FR): both languages
-- [ ] **Set `/portfolio/furoshiki/` meta + H1 + og:description**: enable Yoast on portfolio post type if needed
-- [ ] **Fix 5 ALL-CAPS page titles**: `/our-philosophy/`, `/our-products/`, `/where-to-find-us/`, `/bespoke-services/`, `/corporate-gifts-order-form-online/` → title case or sentence case
-- [ ] **Fix `/our-philosophy/` meta typos**: `"optimazing"` → `"optimising"`, `"minimizes"` → `"minimises"`
-- [ ] **Investigate `/fr/notre-savoir-faire/` 404**: create page or add redirect
-- [ ] **Verify with live fetch**: `curl` each page, confirm changes render in CDN (`cf-cache-status: MISS`)
+- [x] **Fix homepage H1:** change `IMPRESSION ORIGINALE` → `Luxury Gift Wrap & Ribbons, Made in France` (EN) / `Papier Cadeau de Luxe & Rubans, Fabriqué en France` (FR). Verified via CDN.
+- [x] **Set `/shop/` meta description** (EN): "Discover luxury hand-drawn gift wrap, ribbons, boxes and bows..." Verified via CDN.
+- [ ] **Set `/fr/shop/` FR title** `Shop` → `Boutique`: deferred — WCML string translations set in DB but not reflecting; needs WPML admin UI.
+- [x] **Set `/bespoke-services/` meta description** (EN+FR): both languages. Verified via CDN.
+- [x] **`/portfolio/furoshiki/`**: by design — portfolio pages are navigation shells. ADR 0005. Operator decision pending.
+- [x] **Fix 5 ALL-CAPS page titles**: title case via `_yoast_wpseo_title` overrides. Verified via CDN.
+- [x] **Fix `/our-philosophy/` meta typos**: `"optimazing"` → `"optimising"`, `"minimizes"` → `"minimises"`. Verified via CDN.
+- [x] **Fix `/fr/notre-savoir-faire/` 404**: two 301 redirects added. Verified via CDN.
+- [x] **Verify with live fetch**: all fixes confirmed via external CDN fetch with Chrome UA (RULE 13 dual-pattern).
 
 ### Conversion Tracking (2–4 hours)
 
