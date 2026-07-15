@@ -25,10 +25,10 @@ Pinterest is the stronger strategic fit for the niche (visual, planning-oriented
 - **USP:** Designed by independent artists, printed on recycled stock, made in France
 - **Languages:** English (default at root) + French (`/fr/`) via WPML
 - **Markets:** Canada primarily, EU (FR audience)
-- **Products:** ~418 distinct products (artisan-designed gift wrap)
+- **Products:** 410 products (artisan-designed gift wrap)
 - **AOV:** $30–100 estimated
 - **Current organic:** ~1.9K users/month, ~€433 revenue (June 2026)
-- **Platform:** WordPress 7.0 + WooCommerce 10.9.3 on WP Engine, Cloudflare CDN
+- **Platform:** WordPress 7.0 + WooCommerce 10.9.4 on WP Engine, Cloudflare CDN
 
 ### Working
 
@@ -39,7 +39,7 @@ Pinterest is the stronger strategic fit for the niche (visual, planning-oriented
 - Google Business Profile exists
 - Stripe payment processing (Merchant Center-compatible)
 - WPML bilingual (EN default at root, FR at `/fr/`)
-- EN+FR category title rewrites applied and verified live — keyword-first with `|` separator (2026-07-14)
+- EN+FR category title rewrites applied — keyword-first with `|` separator on 31/36 categories (86%). 5 stragglers remain: `christmas-capsule` (EN, 20 products — `I` sep), `capsule-noel` (FR, 20 products — `I` sep + English title on FR category), `instinct-animal-fr` (FR, 14 products — `–` sep), `wraps-x3` and `kit-x-3-feuilles` (0 products — `I` sep). 32 template strings still carry hardcoded `I` instead of `%%sep%%` (2026-07-15)
 - Breadcrumbs rendering on product pages (EN+FR) — `BreadcrumbList` with 3 items (2026-07-14)
 - og:image site-wide Yoast default set (verified 2026-07-04)
 - 126 legacy `I`-sep product titles cleared; separator flipped `–` → `|` site-wide (2026-07-08)
@@ -50,9 +50,11 @@ Pinterest is the stronger strategic fit for the niche (visual, planning-oriented
 |---|---|---|
 | **LCP 9.1s** (Google "Poor" bucket: >4.0s) | +33% CPC penalty, ~50% conversion collapse vs 2.5s | **Partial fix applied 2026-07-14:** hero images compressed -68% (781→248KB). LCP re-measurement pending. See `docs/lcp-hero-image-fix.md`. CSS/JS deferral gated behind LCP measurement. |
 | **No product reviews** (by business design — store does not do reviews) | Cold ad traffic lands on pages with zero social proof; luxury purchase without trust signals = conversion risk. Note: this is an intentional business decision, not a defect — but it still impacts ad conversion rates. | If operator decides to add: install free review plugin, set up post-purchase email at 48h, 1-hour setup |
-| **5-pixel tracking stack** (PixelYourSite + Meta-for-WC + GA-for-WC + Pinterest-for-WC + GTM4WP) — *not re-verified 2026-07-14* | Likely double-counting conversions; GA4 ecommerce events may fire 2–5x per transaction; broken attribution poisons algorithm optimization | Audit + deduplicate: 2–4 hours. Keep GTM4WP as single source of truth, disable redundant pixels |
+| **6-plugin tracking stack** (PixelYourSite + Meta-for-WC + Google Site Kit + Pinterest-for-WC + GTM4WP + Mailchimp for WP) — *verified 2026-07-15* | **Double-counting confirmed.** Google Site Kit (1.182.0) loads `gtag.js?id=GT-5TPLSSZ`; GTM4WP loads `gtm.js?id=GTM-MT7G7Z3C` — two Google containers on the same page. Pinterest pixel double-fires (PageVisit x2). Meta pixel managed by two plugins (PixelYourSite + Facebook-for-WC, same pixel ID `1011540012316296`). Broken attribution poisons algorithm optimization. | Audit + deduplicate: 2–4 hours. Keep GTM4WP as single source of truth for GA4 ecommerce events. Remove or disable redundant pixels in Site Kit, PixelYourSite, Pinterest-for-WC, Meta-for-WC. |
+| **Termly consent banner is non-functional** — *verified 2026-07-15* | **GDPR non-compliant.** Zero Termly JavaScript loads; only HTML footer links remain. No `gtag('consent', ...)` calls exist. All tracking fires unconditionally before any consent interaction. 30–50% of EU traffic would lose tracking if consent were ever enforced. | Reinstall/reconfigure Termly with Consent Mode v2: default all `denied`, upgrade to `granted` only after user consent. 1–2 hours. |
+| **`/shop/` and `/fr/shop/` are `noindex,follow`** — *verified 2026-07-15* | Primary product listing pages blocked from Google index. Either intentional (duplicate-content avoidance vs category pages) or a defect — either way, paid traffic lands on pages that can't rank organically. | 2 minutes: investigate Yoast setting. If intentional: document as ADR. If defect: flip to `index`. |
 | **Stale blog** (last post Aug 2025 — confirmed 2026-07-14) | Zero top-of-funnel content for gift-idea searches; no Google Discover eligibility | Low priority for ad launch; fix after Shopping is live |
-| **~30 plugins behind** — *not re-verified 2026-07-14* | Security risk, not ad-blocker | Deferred per existing audit |
+| **4 plugins behind** (verified 2026-07-15 via WP-CLI: PDF Invoices 5.15.1→5.15.2, PixelYourSite 11.2.0.7→11.2.1, Site Kit 1.182.0→1.183.0, Stripe 10.8.3→10.8.4) — all minor/patch, not a security concern | Negligible — all patch bumps | Deferred; update in next maintenance window |
 | **Homepage H1 still `IMPRESSION ORIGINALE`** (not keyword-optimized — documented fix was never applied) | Weakens landing page relevance for branded search; missed opportunity for "Luxury Gift Wrap, Made in France" in H1 | 1 minute: edit page H1 in WordPress |
 | **`/shop/` (EN+FR) missing meta description** — no `<meta name="description">`, no `og:description` on either language | No SERP snippet control on the primary product listing page; FR title is English `Shop` not French `Boutique` | 5 minutes: set meta descriptions in Yoast; localize FR title |
 | **`/bespoke-services/` (EN+FR) missing meta description** — no `<meta name="description">`, no `og:description` | No SERP snippet control on the services page | 5 minutes: set meta descriptions in Yoast |
@@ -62,7 +64,7 @@ Pinterest is the stronger strategic fit for the niche (visual, planning-oriented
 | **`/fr/notre-savoir-faire/` returns 404** | Broken link if referenced anywhere; missing FR landing page | 2 minutes: investigate + either create page or add redirect |
 | **`/fr/shop/` title is English `Shop`, not French `Boutique`** | FR shop page has English title in SERPs — confusing for French-language searchers | 1 minute: localize title in Yoast |
 
-**Gates before spend:** LCP < 4s, tracking deduplicated, review collection live (if operator decides to add reviews). Missing meta descriptions + H1 + typos are quick fixes (~30 min total) and should be resolved before any paid landing pages go live.
+**Gates before spend:** LCP < 4s, tracking deduplicated, Termly consent reinstalled with Consent Mode v2, `/shop/` noindex resolved, review collection live (if operator decides to add reviews). Missing meta descriptions + H1 + typos are quick fixes (~30 min total) and should be resolved before any paid landing pages go live.
 
 ---
 
@@ -245,9 +247,9 @@ Found in the 2026-07-14 live re-audit. All are low-effort, high-impact for SERP 
 - [ ] Submit feed for review. Approval typically 3–5 business days
 - [ ] Fix all diagnostics before launching ads — every warning becomes a suspension risk
 
-### Cookie Consent for Ad Tracking (1 hour)
+### Cookie Consent for Ad Tracking (2–4 hours — Termly is broken, needs reinstallation)
 
-- [ ] Termly banner already on site. Verify it gates tracking tags until consent (Consent Mode v2)
+- [ ] **Termly consent banner is BROKEN.** Zero Termly JavaScript loads; only HTML footer links remain. No `gtag('consent', ...)` calls exist. All tracking fires unconditionally — GDPR non-compliant for EU traffic. Reinstall/reconfigure Termly with Consent Mode v2 (default all `denied`, upgrade to `granted` only after user consent). Verify: clear cookies, reject all → zero ad tags fire; accept all → tags fire.
 - [ ] Google Ads + GA4: confirm tags fire only after consent. If Consent Mode is not implemented, tracking breaks for ~30–50% of EU traffic
 - [ ] Pinterest Tag + Meta pixel: same — must respect consent
 - [ ] Test: clear cookies, visit site, reject all — confirm no ad tags fire. Accept all — confirm tags fire

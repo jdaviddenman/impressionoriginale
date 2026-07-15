@@ -14,7 +14,7 @@ This repo is a **shared SEO audit & remediation workspace** for the WordPress/Wo
 
 ## RULE 1 — RISKY CHANGES GO THROUGH THE CLONE, NOT PROD
 
-**Plugin/core/theme updates and anything with layout or checkout blast radius MUST be trialled on the isolated clone first, validated, then repeated on live.** The clone (UpdraftPlus/UpdraftClone) is matched to live — **PHP 8.2, WordPress 7.0, WooCommerce 10.9.3** — so "it worked on the clone" transfers. Never bulk-update blind on production.
+**Plugin/core/theme updates and anything with layout or checkout blast radius MUST be trialled on the isolated clone first, validated, then repeated on live.** The clone (UpdraftPlus/UpdraftClone) is matched to live — **PHP 8.2, WordPress 7.0, WooCommerce 10.9.4** — so "it worked on the clone" transfers. Never bulk-update blind on production.
 
 > **Status (ADR 0001): no clone is currently provisioned.** The clone-first gate therefore cannot be satisfied right now — high-blast-radius changes are **deferred until a clone is stood up, or explicitly risk-accepted by the operator per change**, never done silently. Where this section assumes a present clone, `docs/adr/0001-no-clone-test-bench.md` is the source of truth.
 
