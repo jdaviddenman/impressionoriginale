@@ -4,11 +4,13 @@
  * Description: Forces first-slide hero content to render immediately by
  *              overriding theme CSS opacity:0 and JS translateX transforms.
  *              Uses CSS !important + JS visibility enforcement for Safari.
- * Version: 0.8.0
+ * Version: 0.9.0
  *
- * v0.8.0: Complete rewrite. CSS targets every animated element in first slide.
- *         Adds inline JS that immediately forces visibility on DOM ready,
- *         working around any CSS cascade or RUCSS issues on WebKit.
+ * v0.9.0: REMOVED JS forceShow() — it set inline styles that caused CLS 0.317
+ *         (Lighthouse identified eut-container with inline opacity/transform/
+ *         visibility as the layout shift culprit). CSS !important alone is
+ *         sufficient now that delay_js=0 and remove_unused_css=0.
+ * v0.8.0: CSS + JS visibility enforcement (JS caused CLS — reverted).
  * v0.7.1: Also target .eut-fade-in-right (parent container).
  * v0.7.0: Add rocket_rucss_inline_content_exclusions filter.
  * v0.6.x: Output buffer (removed — caused regressions).
@@ -73,7 +75,7 @@ add_action('send_headers', function () {
     );
 });
 
-// ── Inline CSS + JS in <head>
+// ── Inline CSS in <head>
 add_action('wp_head', function () {
     if (!is_front_page()) return;
     echo '<link rel="preload" as="image" href="https://www.impressionoriginale.com/wp-content/uploads/2021/03/LOGO-2020-WHITE.png" fetchpriority="high">' . "\n";
@@ -108,29 +110,5 @@ add_action('wp_head', function () {
 #eut-feature-section .eut-title{opacity:1!important}
 #eut-feature-section .eut-description{opacity:1!important}
 </style>
-<script>
-/* IO LCP — immediate visibility enforcement, fires before theme JS */
-(function(){
-var d=document;
-function forceShow(){
-    var s=d.querySelector('#eut-feature-slider .eut-slider-item:first-child');
-    if(!s) return;
-    var els=s.querySelectorAll('.eut-title,.eut-description,.eut-btn,.eut-fade-in-right,.eut-fade-in-up,.eut-fade-in-down,.eut-fade-in-left,.eut-feature-content,.eut-container');
-    for(var i=0;i<els.length;i++){
-        els[i].style.opacity='1';
-        els[i].style.transform='none';
-        els[i].style.webkitTransform='none';
-        els[i].style.visibility='visible';
-    }
-}
-/* Run immediately if DOM ready, otherwise on DOMContentLoaded */
-if(d.readyState!=='loading') forceShow();
-else d.addEventListener('DOMContentLoaded',forceShow);
-/* Also run after a short delay to catch late JS init */
-setTimeout(forceShow,100);
-setTimeout(forceShow,500);
-setTimeout(forceShow,2000);
-})();
-</script>
     <?php
 }, -1);
