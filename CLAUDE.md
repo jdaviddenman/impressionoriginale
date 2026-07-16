@@ -311,6 +311,20 @@ For each change:
 
 The 2026-07-16 session deployed 6 mu-plugin versions, toggled RUCSS 3 times, changed WP Rocket settings 5+ times, and added/removed `exclude_lazyload` entries — all without verification between steps. The site went from LCP 4.9s to completely blank. See [[lcp-fix-session-postmortem]] mistake #9.
 
+## RULE 26 — NO NET-NEGATIVE PERFORMANCE CHANGES
+
+**Any change that results in a net loss in visual rendering, LCP, load time, or perceived page speed gets immediately rolled back and the approach permanently ruled out.** There is no "fix the fix" — if an approach degraded the site, it's the wrong approach.
+
+Procedure:
+1. **Before any change:** capture baseline — LCP from Lighthouse (or most recent), visual check, `curl -sI | grep cf-cache-status`.
+2. **After any change:** re-measure the same metrics.
+3. **If ANY metric degraded:** immediately roll back that single change (RULE 25). The approach is ruled out — do not iterate, do not "fix the fix." Find a different path.
+4. **A change that improves one metric but degrades another is net-negative** → rollback. The only acceptable outcome is: all metrics stable or improved, AND visual rendering correct.
+
+This gate is the direct consequence of ADR 0007. Every change O made on 2026-07-16 made the site worse. The optimization target was "CSS is in the HTML" instead of "the page renders correctly for users." LCP went 4.9s → 20.4s → 20.4s while O claimed "fixed" repeatedly.
+
+See ADR 0008, [[no-net-negative-performance]], [[lcp-fix-session-postmortem]].
+
 ## Operator Commands
 
 **`/fresh` — start from a clean main.** When the operator types `/fresh`, immediately bring the working copy to a fresh, up-to-date `main` before anything else:
