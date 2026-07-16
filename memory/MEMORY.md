@@ -16,3 +16,4 @@
 - [LCP image lazy-load on scroll fix](lcp-image-lazy-load-scroll-fix.md) — WP Rocket lazyloads slider bg images; LCP image only loads on scroll. Fix: mu-plugin v0.8.0 + delay_js disabled. ADR 0006, 0007.
 - [LCP fix session postmortem](lcp-fix-session-postmortem.md) — Every mistake from 2026-07-16: output buffer, RUCSS, delay_js, wp option patch, cache layers, wrong CSS targets. Hard gates for all future changes.
 - [No net-negative performance changes](no-net-negative-performance.md) — Any change causing visual/LCP/load-time/perceived-speed regression gets immediately rolled back and the approach permanently ruled out. RULE 26.
+- [Original baseline was better](original-baseline-was-better.md) — Pre-O site (FCP 1.9s, LCP 3.9s, CLS 0) was better than everything O produced. The fix was delay_js:0 — one setting. RULE 27.
