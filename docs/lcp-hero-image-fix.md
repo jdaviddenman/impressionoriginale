@@ -65,3 +65,9 @@ To rollback: copy each `.backup-*` file over the corresponding `.jpg` on the ser
 2. If still >4s: enable `async_css` in WP Rocket (local, no SaaS dependency)
 3. If still >4s: enable `delay_js` or `defer_all_js`
 4. Remove `fetchpriority="high"` from below-fold thumbnails
+
+## Update 2026-07-16: LCP regressed to 31.3s despite image fix
+
+Lighthouse Jul 16 showed LCP worsened from 9.1s to 31.3s. Investigation revealed the bottleneck was never image bytes — it was the **H1 heading rendered invisible** by CSS `opacity:0` + JS `transform: translateX(200px)`. The image compression (-68%) addressed the wrong bottleneck.
+
+See [[0005-lcp-root-cause-opacity-and-translateX]] for full root cause analysis and the mu-plugin fix (`fix-lcp-opacity.php` v0.2.0) that neutralizes all three hide mechanisms.
