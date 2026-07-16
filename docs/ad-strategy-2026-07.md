@@ -1,7 +1,7 @@
 # Ad Strategy: impressionoriginale.com
 
-**Date:** 2026-07-15 (updated — Tier 1 SEO fixes applied)
-**Status:** Research complete — strategy ready for operator review. 5/6 Tier 1 SEO quick wins applied.
+**Date:** 2026-07-16 (updated — Termly consent banner fixed)
+**Status:** Research complete — strategy ready for operator review. 5/6 Tier 1 SEO quick wins applied, Termly consent banner reinstalled.
 **Budget range:** $540–1,250/month (phased, months 1–3)
 
 ---
@@ -51,7 +51,7 @@ Pinterest is the stronger strategic fit for the niche (visual, planning-oriented
 | **LCP 9.1s** (Google "Poor" bucket: >4.0s) | +33% CPC penalty, ~50% conversion collapse vs 2.5s | **Partial fix applied 2026-07-14:** hero images compressed -68% (781→248KB). LCP re-measurement pending. See `docs/lcp-hero-image-fix.md`. CSS/JS deferral gated behind LCP measurement. |
 | **No product reviews** (by business design — store does not do reviews) | Cold ad traffic lands on pages with zero social proof; luxury purchase without trust signals = conversion risk. Note: this is an intentional business decision, not a defect — but it still impacts ad conversion rates. | If operator decides to add: install free review plugin, set up post-purchase email at 48h, 1-hour setup |
 | **6-plugin tracking stack** (PixelYourSite + Meta-for-WC + Google Site Kit + Pinterest-for-WC + GTM4WP + Mailchimp for WP) — *verified 2026-07-15* | **Double-counting confirmed.** Google Site Kit (1.182.0) loads `gtag.js?id=GT-5TPLSSZ`; GTM4WP loads `gtm.js?id=GTM-MT7G7Z3C` — two Google containers on the same page. Pinterest pixel double-fires (PageVisit x2). Meta pixel managed by two plugins (PixelYourSite + Facebook-for-WC, same pixel ID `1011540012316296`). Broken attribution poisons algorithm optimization. | Audit + deduplicate: 2–4 hours. Keep GTM4WP as single source of truth for GA4 ecommerce events. Remove or disable redundant pixels in Site Kit, PixelYourSite, Pinterest-for-WC, Meta-for-WC. |
-| **Termly consent banner is non-functional** — *verified 2026-07-15* | **GDPR non-compliant.** Zero Termly JavaScript loads; only HTML footer links remain. No `gtag('consent', ...)` calls exist. All tracking fires unconditionally before any consent interaction. 30–50% of EU traffic would lose tracking if consent were ever enforced. | Reinstall/reconfigure Termly with Consent Mode v2: default all `denied`, upgrade to `granted` only after user consent. 1–2 hours. |
+| **Termly consent banner is non-functional** — *FIXED 2026-07-16* | ✅ Plugin `uk-cookie-consent` v3.3.1 installed. Resource blocker loading from `app.termly.io` with `autoBlock=1`. GTM container loads through Termly. Consent Mode v2 defaults set to `denied` via mu-plugin (`/mu-plugins/fix-consent-defaults.php`). Consent preferences link in footer. | Done |
 | **`/shop/` and `/fr/shop/` were `noindex,follow`** — *FIXED 2026-07-15* | ✅ Flipped to `index,follow` on both EN and FR. Noindex was set at individual page level (page 9817), not global template — possibly accidental. Deleted `_yoast_wpseo_meta-robots-noindex` postmeta + rebuilt indexable. Both pages now `index, follow` verified via CDN. See #86, ADR 0006. | ~~2 minutes~~ Done |
 | **Stale blog** (last post Aug 2025 — confirmed 2026-07-14) | Zero top-of-funnel content for gift-idea searches; no Google Discover eligibility | Low priority for ad launch; fix after Shopping is live |
 | **4 plugins behind** (verified 2026-07-15 via WP-CLI: PDF Invoices 5.15.1→5.15.2, PixelYourSite 11.2.0.7→11.2.1, Site Kit 1.182.0→1.183.0, Stripe 10.8.3→10.8.4) — all minor/patch, not a security concern | Negligible — all patch bumps | Deferred; update in next maintenance window |
@@ -64,7 +64,7 @@ Pinterest is the stronger strategic fit for the niche (visual, planning-oriented
 | **`/fr/notre-savoir-faire/` returns 404** — *FIXED 2026-07-15* | ✅ Two 301 redirects added via Redirection plugin: `/fr/notre-savoir-faire/` → `/fr/savoir-faire/` (ID 110), `/notre-savoir-faire/` → `/know-how-the-perfect-gift/` (ID 111). Verified 301 response via CDN. See #82. | ~~2 minutes~~ Done |
 | **`/fr/shop/` title is English `Shop`, not French `Boutique`** — *DEFERRED 2026-07-15* | ⚠️ WCML renders FR shop without a separate translated page. String translations set in DB (IDs 17911, 51365, 51370, 53537 → "Boutique") but not reflecting on frontend. Mu-plugin approach caused fatal error (WPML/WCML filter conflict) — removed immediately. **Manual fix:** WP Admin → WPML → String Translation → search "Shop" in woocommerce context → add FR translation "Boutique" → clear WPML cache. See #77. | ~~1 minute~~ Deferred to admin UI |
 
-**Gates before spend (updated 2026-07-15):** LCP < 4s, tracking deduplicated, Termly consent reinstalled with Consent Mode v2, review collection live (if operator decides to add reviews). **Tier 1 SEO quick wins applied** — 5/6 fixes verified via CDN, 1 deferred (FR shop title → WPML admin UI), 1 by design (portfolio/furoshiki → ADR 0005). Remaining gates: LCP, tracking, Termly, reviews.
+**Gates before spend (updated 2026-07-16):** LCP < 4s, tracking deduplicated, review collection live (if operator decides to add reviews). **Tier 1 SEO quick wins applied** (5/6 verified, 1 deferred, 1 by design). **Termly consent banner fixed** — plugin installed, resource blocker active, Consent Mode v2 defaults `denied`. Remaining gates: LCP, tracking dedup, reviews.
 
 ---
 
@@ -247,12 +247,12 @@ Found in the 2026-07-14 live re-audit. All low-effort, high-impact. **5/6 applie
 - [ ] Submit feed for review. Approval typically 3–5 business days
 - [ ] Fix all diagnostics before launching ads — every warning becomes a suspension risk
 
-### Cookie Consent for Ad Tracking (2–4 hours — Termly is broken, needs reinstallation)
+### Cookie Consent for Ad Tracking (FIXED 2026-07-16)
 
-- [ ] **Termly consent banner is BROKEN.** Zero Termly JavaScript loads; only HTML footer links remain. No `gtag('consent', ...)` calls exist. All tracking fires unconditionally — GDPR non-compliant for EU traffic. Reinstall/reconfigure Termly with Consent Mode v2 (default all `denied`, upgrade to `granted` only after user consent). Verify: clear cookies, reject all → zero ad tags fire; accept all → tags fire.
-- [ ] Google Ads + GA4: confirm tags fire only after consent. If Consent Mode is not implemented, tracking breaks for ~30–50% of EU traffic
-- [ ] Pinterest Tag + Meta pixel: same — must respect consent
-- [ ] Test: clear cookies, visit site, reject all — confirm no ad tags fire. Accept all — confirm tags fire
+- [x] **Termly consent banner reinstalled.** Plugin `uk-cookie-consent` v3.3.1 installed and activated (2026-07-16). Resource blocker loading from `app.termly.io` with `autoBlock=1` — blocks all tracking scripts until consent. Consent Mode v2 defaults set to `denied` via mu-plugin at `/wp-content/mu-plugins/fix-consent-defaults.php` (GTM4WP doesn't support Termly natively; mu-plugin overrides at `wp_head` priority 9999, last call wins). Consent preferences link in footer. Existing Termly account reconnected (UUID `5521f330-...`).
+- [ ] Google Ads + GA4: confirm tags fire only after consent. **Pending browser verification** — resource blocker should prevent GTM/GA4 from loading until user accepts.
+- [ ] Pinterest Tag + Meta pixel: same — must respect consent. Pixelyoursite consent mode disabled; pixels blocked by Termly auto-blocker.
+- [ ] Test: clear cookies, visit site, reject all — confirm no ad tags fire. Accept all — confirm tags fire.
 
 ### Ad Account Setup (2 hours)
 
