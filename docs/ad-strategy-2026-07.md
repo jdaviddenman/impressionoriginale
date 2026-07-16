@@ -8,7 +8,7 @@
 
 ## 1. Executive Summary
 
-**Start with Google Standard Shopping at $15/day ($450/month), free Merchant Center listings, and an immediate review-collection system. Fix hero-image LCP before ad dollar #1. First profitable campaign expected by Day 60–90. Second platform (Pinterest, $500/month) added at Day 90+ if Shopping shows positive unit economics.**
+**Start with Google Standard Shopping at $15/day ($450/month), free Merchant Center listings, and an immediate review-collection system. Fix hero-image LCP (currently 31.3s lab) before ad dollar #1 — at this speed, bounce rate approaches 100% and ad spend is pure loss. First profitable campaign expected by Day 60–90. Second platform (Pinterest, $500/month) added at Day 90+ if Shopping shows positive unit economics.**
 
 Google Shopping captures existing purchase intent — someone already searching for "luxury gift wrap." No creative production needed (product feed only). Standard Shopping (not PMax) gives negative keyword control, critical for a niche store. PMax is contraindicated at this budget: it needs 30–60 conversions/month to optimize, and at $15/day this store will generate ~15–20/month. PMax also front-loads brand/remarketing traffic, producing fake-high month-1 ROAS that collapses when warm audiences exhaust.
 
@@ -48,7 +48,7 @@ Pinterest is the stronger strategic fit for the niche (visual, planning-oriented
 
 | Issue | Impact on Ads | Fix Effort |
 |---|---|---|
-| **LCP 9.1s** (Google "Poor" bucket: >4.0s) | +33% CPC penalty, ~50% conversion collapse vs 2.5s | **Partial fix applied 2026-07-14:** hero images compressed -68% (781→248KB). LCP re-measurement pending. See `docs/lcp-hero-image-fix.md`. CSS/JS deferral gated behind LCP measurement. |
+| **LCP 31.3s** (lab, Lighthouse 12.6, simulated Moto G4, Slow 4G) — Google "Poor" bucket: >4.0s. Performance score: **9/100**. FCP 4.8s, TBT 8,770ms, CLS 0.32, SI 12.1s, payload 6,086 KiB. | **Catastrophic for paid traffic.** +33% CPC penalty from Quality Score, effective CPA ~2x a fast page. At 31s LCP, bounce rate approaches 100% — ad spend would be pure loss. **Partial fix applied 2026-07-14:** hero images compressed -68% (781→248KB) — insufficient alone. Top opportunities from Lighthouse: eliminate render-blocking resources (1,780ms saved), reduce JS execution (13.5s), reduce unused JS (521 KiB), serve next-gen formats (1,414 KiB), reduce third-party code (4,950ms main-thread). See `docs/lcp-hero-image-fix.md`. |
 | **No product reviews** (by business design — store does not do reviews) | Cold ad traffic lands on pages with zero social proof; luxury purchase without trust signals = conversion risk. Note: this is an intentional business decision, not a defect — but it still impacts ad conversion rates. | If operator decides to add: install free review plugin, set up post-purchase email at 48h, 1-hour setup |
 | **8-plugin tracking stack** (PixelYourSite + Facebook-for-WC + Google Site Kit + Pinterest-for-WC + GTM4WP + Mailchimp-wp + WooCommerce-Mailchimp + Facebook-Shop-by-StoreYa) — *audited 2026-07-16* | **Google double-container FIXED (#90).** Site Kit `GT-5TPLSSZ` removed; GTM4WP `GTM-MT7G7Z3C` is single GA4 source. Verified 1 `page_view` per load (was 2). **Consent fragility FIXED (#92).** Mu-plugin priority hardened to `PHP_INT_MAX - 1`. Termly script excluded from WP Rocket defer. **Pinterest "double-fires" — NOT A BUG.** `pintrk('page')` = init, `pintrk('track', 'PageVisit')` = conversion event. Different event classes. **Meta — complementary, not duplicate.** PYS handles browser pixel, Facebook-for-WC handles CAPI signals. CAPI overlap risk (#91) deferred to Month 3+. **Mailchimp — not tracking.** `mailchimp-wp` = forms, `woocommerce-mailchimp` = backend sync. Neither injects pixels. | ~~2–4 hours~~ Done. Remaining: #91 (Meta CAPI, Month 3+ gate). |
 | **Termly consent banner is non-functional** — *FIXED 2026-07-16* | ✅ Plugin `uk-cookie-consent` v3.3.1 installed. Resource blocker loading from `app.termly.io` with `autoBlock=1`. GTM container loads through Termly. Consent Mode v2 defaults set to `denied` via mu-plugin (`/mu-plugins/fix-consent-defaults.php`). Consent preferences link in footer. | Done |
@@ -229,7 +229,7 @@ Found in the 2026-07-14 live re-audit. All low-effort, high-impact. **5/6 applie
 - [x] Compress all hero/product images to WebP, target < 100KB each — **hero done (118KB+130KB), product images not yet**
 - [x] Add `fetchpriority="high"` to above-fold hero image — **already present (WP Rocket auto-preload)**
 - [x] Remove autoplay hero video/slider if any — **no video found; slider autoplay preserved (11 CTAs, business decision)**
-- [ ] Verify LCP drops below 4s (Google "Needs Improvement" bucket — minimum for paid traffic). Target: < 2.5s ("Good")
+- [ ] **LCP 31.3s → < 4s.** Lighthouse 2026-07-16 (Moto G4, Slow 4G): LCP 31.3s, FCP 4.8s, TBT 8,770ms, CLS 0.32, SI 12.1s, perf score 9/100, payload 6,086 KiB. Top opportunities: eliminate render-blocking resources (1,780ms), reduce JS execution (13.5s), reduce unused JS (521 KiB), serve next-gen formats (1,414 KiB), reduce third-party code (4,950ms main-thread). Target: < 2.5s ("Good")
 - [ ] Test 3 product pages on mobile (Lighthouse): LCP, CLS, INP all in "Good" or "Needs Improvement" range
 - [ ] Checkout and cart pages: confirm they load and function correctly
 
@@ -349,9 +349,21 @@ At $15/day, Shopping will generate ~40–60 clicks/day at $0.30–0.50 CPC, ~15�
 
 The 5-pixel stack is the most likely source of silent failure. If GA4 fires 3 purchase events per transaction (one per pixel plugin), Google Ads will see 3x the real conversion volume. The algorithm will optimize toward phantom conversions and ROAS will collapse when fixed. Verify deduplication before launch; do not "fix it later."
 
-### LCP 9.1s Kills Ad ROI
+### LCP 31.3s Kills Ad ROI
 
-Google Quality Score assigns "Below Average" landing page experience to 9s LCP pages. This increases CPC by up to 33%. Combined with conversion collapse (~50% lower CVR vs a 2.5s page), the effective CPA is roughly **2x what it would be on a fast page.** At $15/day, that difference is the gap between break-even and losing money.
+**Measured 2026-07-16 via Lighthouse 12.6** (emulated Moto G4, Slow 4G throttling, Chromium 138): Performance score 9/100, LCP 31.3s, FCP 4.8s, TBT 8,770ms, CLS 0.32, SI 12.1s, payload 6,086 KiB.
+
+Google Quality Score assigns "Below Average" landing page experience to >4s LCP pages. At 31.3s, the page is effectively broken for paid traffic — bounce rate approaches 100%. Even at the previous 9.1s measurement, the effective CPA was ~2x a fast page. At 31.3s, ad spend yields near-zero conversions.
+
+**Key bottlenecks (Lighthouse):**
+- JavaScript execution time: 13.5s
+- Third-party code main-thread blocking: 4,950ms
+- Unused JavaScript: 521 KiB
+- Next-gen image formats: 1,414 KiB savings
+- Render-blocking resources: 1,780ms savings
+- Total payload: 6,086 KiB (enormous)
+
+**Fix priority:** eliminate render-blocking resources + defer non-critical JS → re-measure → if LCP still > 4s, address JS execution + unused JS. Image optimization alone (hero compressed -68%) was insufficient.
 
 ### French-Language Ad Complexity
 
@@ -535,7 +547,7 @@ Descriptive filenames, alt text on every product image, image sitemap submitted 
 | TikTok? | No | 1.41x median ROAS, wrong demographic, creative churn too high |
 | Bing? | Not now. 30-day $5/day test after Shopping is stable | Search volume for "luxury gift wrap" unverified |
 | Reviews needed before ads? | Yes. 50 minimum before scaling spend | Zero reviews + paid cold traffic = conversion suicide. Note: reviews are currently absent by business design — operator must decide whether to add them. |
-| LCP threshold before ads? | < 4s before paid Shopping. Retargeting can launch at current 9.1s | LCP penalty: +33% CPC, ~50% CVR collapse |
+| LCP threshold before ads? | < 4s before paid Shopping. Currently 31.3s (lab, score 9/100) — must fix first | LCP penalty: +33% CPC, ~100% bounce rate at current speed |
 | Fix tracking first? | Yes. Deduplicate 5-pixel stack | Broken tracking = algorithm poisoned from day 1 |
 | Free Shopping? | Immediately. Same setup as paid | Zero cost, 3–8% revenue lift |
 | Break-even ROAS gate? | Calculate actual margins on top 10 products before launch | If margin < 30%, ads are not viable. Pivot to organic. |
