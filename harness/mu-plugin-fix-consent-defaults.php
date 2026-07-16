@@ -25,4 +25,4 @@ add_action('wp_head', function() {
 })();
 </script>
     <?php
-}, 9999); // Very late priority — after GTM4WP
+}, PHP_INT_MAX - 1); // Guaranteed last — overrides GTM4WP regardless of priority
