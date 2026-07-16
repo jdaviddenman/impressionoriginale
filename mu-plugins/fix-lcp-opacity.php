@@ -7,8 +7,11 @@
  *              before external CSS loads. Reserves slider height to prevent
  *              CLS from JS initialization. Preloads LCP image via HTTP header
  *              and link element to eliminate load delay.
- * Version: 0.7.0
+ * Version: 0.7.1
  *
+ * v0.7.1: Also target .eut-fade-in-right (parent container) with
+ *         transform:none!important — JS sets translateX on the container,
+ *         not on .eut-title directly. Without this the H1 is still off-screen.
  * v0.7.0: Add rocket_rucss_inline_content_exclusions filter so WP Rocket RUCSS
  *         does NOT strip our inline CSS (RUCSS removes all inline styles by
  *         default). Re-enable RUCSS after deployment.
@@ -84,10 +87,12 @@ add_action('wp_head', function () {
         // CLS prevention: reserve slider height before JS init
         '#eut-feature-slider{min-height:400px;}' .
         '@media(min-width:768px){#eut-feature-slider{min-height:600px;}}' .
-        // LCP: un-hide first slide content
+        // LCP: un-hide first slide content — target both the H1 and its
+        // animated container (.eut-fade-in-right gets translateX via JS)
         '#eut-feature-slider .eut-slider-item:first-child .eut-title,' .
         '#eut-feature-slider .eut-slider-item:first-child .eut-description,' .
-        '#eut-feature-slider .eut-slider-item:first-child .eut-btn{' .
+        '#eut-feature-slider .eut-slider-item:first-child .eut-btn,' .
+        '#eut-feature-slider .eut-slider-item:first-child .eut-fade-in-right{' .
         'opacity:1!important;transform:none!important;' .
         '}' .
         '#eut-feature-slider .eut-slider-item:first-child .eut-title{' .
