@@ -192,6 +192,125 @@ Evidence is the only antidote. If you haven't checked it, you don't know it. Thi
 
 **Self-check before any action:** "What am I assuming here?" If the answer names a fact not verified this session, stop and verify it first. This is the Lesson-Foundry Habit (C9) applied to assumptions — an assumption paid for twice without becoming a rule is a rule waiting to be written.
 
+## RULE 17 — INVENTORY WP ROCKET SETTINGS BEFORE ANY LIVE CHANGE
+
+**Before any CSS/JS/HTML change on live, read the current WP Rocket settings.** WP Rocket's optimization pipeline transforms the page after WordPress renders it. You cannot predict the final HTML without knowing which features are enabled.
+
+Mandatory pre-change check:
+```bash
+ssh impressionor@impressionor.ssh.wpengine.net 'wp option get wp_rocket_settings --format=json' \
+  | python3 -c "import sys,json; s=json.load(sys.stdin); [print(f'{k}: {s[k]}') for k in ['delay_js','remove_unused_css','lazyload_css_bg_img','minify_css','minify_html','lazyload','exclude_lazyload'] if k in s]"
+```
+
+**Critical settings and their effects:**
+- `delay_js: 1` — NO JavaScript runs until user scrolls/clicks. Content hidden by `no-js` CSS stays hidden. This makes pages appear BLANK.
+- `remove_unused_css: 1` — removes ALL inline `<style>` elements and external CSS files. Replaces with generated "Used CSS" block. Our inline CSS WILL be stripped.
+- `lazyload_css_bg_img: 1` — converts inline `style="background-image: url(...)"` to `data-bg="..."` + class `rocket-lazyload`. JS loads image only on viewport intersection.
+- `minify_css: 1` — combines CSS files; can change selector order and specificity.
+
+No production CSS/JS change without this inventory. Hard gate. See [[lcp-fix-session-postmortem]] mistake #2.
+
+## RULE 18 — `delay_js` IS THE FIRST CHECK FOR "BLANK PAGE"
+
+**When a site appears blank or content is invisible, check `delay_js` FIRST — before investigating CSS, JS errors, or server issues.** WP Rocket's Delay JavaScript Execution (`delay_js: 1`) prevents ALL JavaScript from running until user interaction. Without JS:
+- `woocommerce-no-js` class stays on `<body>`
+- Theme initialization never fires
+- Slider/hero content stays at `opacity: 0` (theme default)
+- Lazy-loaded images never resolve
+
+The fix is `wp option patch update wp_rocket_settings delay_js 0` followed by full cache purge.
+
+This was the root cause of the 2026-07-16 incident — O spent hours debugging CSS while `delay_js: 1` kept the entire page invisible. See [[lcp-fix-session-postmortem]] mistake #7 and ADR 0007.
+
+## RULE 19 — NEVER `wp option patch insert` FOR SERIALIZED ARRAYS
+
+**`wp option patch insert` with `--format=plaintext` (default) corrupts serialized PHP arrays to plain strings.** Example: `wp option patch insert wp_rocket_settings exclude_lazyload "_HOME-"` converted the array `["CadeauCalligraphie_Phedre_triocote-scaled"]` to the string `"_HOME-"`.
+
+Use `wp eval-file` with piped PHP instead:
+```bash
+echo '<?php $s=get_option("wp_rocket_settings"); $s["exclude_lazyload"][]="value"; update_option("wp_rocket_settings",$s);' \
+  | ssh impressionor@impressionor.ssh.wpengine.net 'cat > /tmp/fix.php && wp eval-file /tmp/fix.php'
+```
+
+`wp option patch update` for scalar values (non-arrays) is safe: `wp option patch update wp_rocket_settings delay_js 0`. See [[lcp-fix-session-postmortem]] mistake #5.
+
+## RULE 20 — CORRECT CACHE PURGE ORDER: ROCKET → VARNISH → CDN
+
+**Cache layers stack: WP Rocket (innermost) → WP Engine Varnish → Cloudflare CDN (outermost). Purge inner→outer.** If you purge CDN before Rocket, CDN re-fetches from Varnish, which serves the stale Rocket-cached page.
+
+Required sequence:
+```bash
+# 1. WP Rocket page cache (innermost)
+echo '<?php rocket_clean_home();' | ssh impressionor@impressionor.ssh.wpengine.net 'cat > /tmp/rc.php && wp eval-file /tmp/rc.php'
+# 2. WP Engine Varnish
+ssh impressionor@impressionor.ssh.wpengine.net 'wp cache flush'
+# 3. Cloudflare CDN (outermost)
+echo '<?php WpeCommon::clear_cdn_cache();' | ssh impressionor@impressionor.ssh.wpengine.net 'cat > /tmp/cdn.php && wp eval-file /tmp/cdn.php'
+```
+
+**Verify:** `curl -sI "https://www.impressionoriginale.com/" | grep cf-cache-status` must show `MISS` before claiming the fix is live. RULE 15 already requires CDN verification; this rule adds the ORDER and the WP Rocket layer.
+
+See [[lcp-fix-session-postmortem]] mistake #3. Updates RULE 15 with the correct sequence.
+
+## RULE 21 — NEVER MODIFY WP ROCKET'S HTML OUTPUT WITH OUTPUT BUFFERS
+
+**WP Rocket transforms the page via its own output buffer pipeline. Adding a second output buffer to undo or modify WP Rocket's work creates fragile, order-dependent conflicts.** The buffer that starts last processes first (innermost runs before outer). If your buffer is outer, WP Rocket processes after you, undoing your fix. If your buffer is inner, you process after WP Rocket but other plugins' buffers can shift the order.
+
+Use WP Rocket's documented extension points instead:
+- `exclude_lazyload` setting for excluding images from lazy-load
+- `rocket_rucss_inline_content_exclusions` filter for protecting inline CSS
+- `rocket_buffer` filter for HTML modifications (runs within WP Rocket's pipeline)
+- CSS `!important` for overriding theme styles
+- WP Rocket settings to disable features that conflict with your changes
+
+The v0.6.0 output buffer stripped lazy-load from ALL 10 slider images (3MB+) instead of just the LCP candidate. This caused LCP to regress from 4.9s → 20.4s. See [[lcp-fix-session-postmortem]] mistake #1.
+
+## RULE 22 — DISABLE RUCSS BEFORE MAKING CSS CHANGES
+
+**WP Rocket's "Remove Unused CSS" (`remove_unused_css: 1`) strips ALL inline `<style>` elements and most external CSS.** If you add inline CSS and RUCSS is enabled, your CSS will be removed — the `<style>` tag will remain but its content will be empty.
+
+Before adding or modifying CSS on live:
+1. Disable RUCSS: `wp option patch update wp_rocket_settings remove_unused_css 0`
+2. Deploy CSS changes
+3. Verify the page renders correctly
+4. Only then re-enable RUCSS with safelisted selectors
+
+Never delete the RUCSS database table (`wp_wpr_rucss_used_css`) while RUCSS is enabled — this leaves the page with NO CSS at all (RUCSS removes external CSS files but has no cached used CSS to inline). See [[lcp-fix-session-postmortem]] mistakes #4 and #6.
+
+## RULE 23 — VERIFY CSS SELECTORS AGAINST THE ACTUAL DOM AND JS SOURCE
+
+**Never trust a prior diagnosis (including ADRs and memory) for which elements get styled or animated.** Before writing CSS selectors:
+1. Fetch the page HTML and inspect the target element's full ancestor chain
+2. Check the theme's JS source to find which elements `.style.transform` or `.style.opacity` are set on
+3. Write selectors that target the ACTUAL elements being modified
+
+The 2026-07-16 incident: ADR 0005 said JS sets `translateX` on "the H1" but `EUTHEM.featureAnim.initPos()` actually iterates over `.eut-title`, `.eut-description`, `.eut-btn` elements (found via `$(section).find('.eut-title')`) inside a section identified by class `.eut-fade-in-right`. The transform was set on the section's child elements, not on the container. And the parent container `.eut-fade-in-right` gets no inline style — the items inside get the transform. Multiple failed fixes because O targeted the wrong element. See [[lcp-fix-session-postmortem]] mistake #7.
+
+## RULE 24 — NEVER CLAIM "FIXED" WITHOUT CDN VERIFICATION
+
+**"Fixed" is a claim that requires CDN-level evidence.** The verification sequence:
+1. `curl -sI "https://www.impressionoriginale.com/" | grep cf-cache-status` → must show `MISS`
+2. `curl -s "https://www.impressionoriginale.com/" | grep <expected-change>` → must show the fix
+3. If possible, a browser screenshot
+
+If `cf-cache-status: HIT` → the CDN is serving a stale version. Purge and re-verify.
+If you cannot verify at the CDN level, say "deployed, unverified" — never "fixed."
+
+This extends RULE 5 (evidence for claims) with CDN-specific verification. O claimed "fixed" 4+ times on 2026-07-16 while the CDN was still serving broken cached pages. See [[lcp-fix-session-postmortem]] mistake #8.
+
+## RULE 25 — ONE CHANGE AT A TIME WITH EXPLICIT VERIFICATION
+
+**Deploy one change, verify it, then deploy the next.** Never stack changes — when the site breaks, you cannot determine which change caused it.
+
+For each change:
+1. State: "Change: [what]. Verify: [how]."
+2. Deploy.
+3. Verify.
+4. If verification fails → rollback that single change.
+5. If verification passes → next change.
+
+The 2026-07-16 session deployed 6 mu-plugin versions, toggled RUCSS 3 times, changed WP Rocket settings 5+ times, and added/removed `exclude_lazyload` entries — all without verification between steps. The site went from LCP 4.9s to completely blank. See [[lcp-fix-session-postmortem]] mistake #9.
+
 ## Operator Commands
 
 **`/fresh` — start from a clean main.** When the operator types `/fresh`, immediately bring the working copy to a fresh, up-to-date `main` before anything else:
