@@ -1,0 +1,4 @@
+back-in-stock-notifier-for-woocommerce=7.1.0
+engic=6.4.2
+mailchimp-wp=2.6.2
+pinterest-for-woocommerce=1.4.27
