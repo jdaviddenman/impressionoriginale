@@ -11,3 +11,7 @@
 - [Sandbox kills headless Chrome](sandbox-kills-headless-chrome.md) — Bash sandbox kills node-spawned/bg headless Chrome (exit 144); use Playwright MCP for live perf/render measurement. harness/perf-timing.mjs runs only in a normal shell.
 - [WooCommerce outdated template overrides](woocommerce-outdated-template-overrides.md) — Engic theme has 10 flagged-stale WC template overrides (+ unflagged checkout ones); live WC is >=10.9 (CLAUDE.md 10.7 stale).
 - [Yoast title/meta write mechanism](yoast-titlemeta-write-mechanism.md) — render source = indexable not postmeta; naive clear API fatals (delete row instead); empty metadesc = NO tag; templates shared EN+FR. Reference.
+- [WPE CDN purge after change](wpe-cdn-purge-after-change.md) — full purge sequence: wp cache flush + WpeCommon::clear_cdn_cache() + purge_varnish_cache_all(). RULE 15.
+- [LCP 31.3s root cause — opacity + translateX](lcp-31s-root-cause-opacity-translatex.md) — H1 hidden by CSS opacity:0 + JS translateX(200px), not image bytes. Fix: mu-plugin fix-lcp-opacity.php v0.2.0. ADR 0005.
+- [LCP image lazy-load on scroll fix](lcp-image-lazy-load-scroll-fix.md) — WP Rocket lazyloads slider bg images; LCP image only loads on scroll. Fix: mu-plugin v0.8.0 + delay_js disabled. ADR 0006, 0007.
+- [LCP fix session postmortem](lcp-fix-session-postmortem.md) — Every mistake from 2026-07-16: output buffer, RUCSS, delay_js, wp option patch, cache layers, wrong CSS targets. Hard gates for all future changes.
