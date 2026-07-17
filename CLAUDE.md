@@ -325,6 +325,22 @@ This gate is the direct consequence of ADR 0007. Every change O made on 2026-07-
 
 See ADR 0008, [[no-net-negative-performance]], [[lcp-fix-session-postmortem]].
 
+## RULE 27 — ORIGINAL BASELINE IS THE PERFORMANCE FLOOR
+
+**The pre-intervention state is sacred. O must never make changes that degrade metrics below the original baseline.** The user's site was working before O touched it. The complaint was about one specific behavior — not about overall performance.
+
+Procedure:
+1. **Before first change:** capture Lighthouse metrics (FCP, LCP, CLS, TBT) from the most recent report.
+2. **After each change:** re-measure.
+3. **If ANY metric is worse than the original baseline** → immediate rollback. The change is wrong.
+4. **The original metrics are the floor.** "Better than the last broken state but worse than the original" is not acceptable.
+
+The 2026-07-16 session: original metrics were FCP 1.9s, LCP 3.9s, CLS 0. After O's changes: FCP 5.9s, LCP 13.3s, CLS 0.317. O made everything 3× worse while claiming "fixed." The fix for the original complaint ("image loads on scroll") was `delay_js: 0` — one setting toggle, not six mu-plugin versions.
+
+This rule is the consumer-protection twin of RULE 26. RULE 26 prevents step-by-step regressions. RULE 27 prevents crossing below the original baseline. Together they mean: every change must move metrics in one direction only — up — and never below where we started.
+
+See ADR 0009, [[original-baseline-was-better]].
+
 ## Operator Commands
 
 **`/fresh` — start from a clean main.** When the operator types `/fresh`, immediately bring the working copy to a fresh, up-to-date `main` before anything else:
