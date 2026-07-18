@@ -11,3 +11,11 @@
 - [Sandbox kills headless Chrome](sandbox-kills-headless-chrome.md) — Bash sandbox kills node-spawned/bg headless Chrome (exit 144); use Playwright MCP for live perf/render measurement. harness/perf-timing.mjs runs only in a normal shell.
 - [WooCommerce outdated template overrides](woocommerce-outdated-template-overrides.md) — Engic theme has 10 flagged-stale WC template overrides (+ unflagged checkout ones); live WC is >=10.9 (CLAUDE.md 10.7 stale).
 - [Yoast title/meta write mechanism](yoast-titlemeta-write-mechanism.md) — render source = indexable not postmeta; naive clear API fatals (delete row instead); empty metadesc = NO tag; templates shared EN+FR. Reference.
+- [WPE CDN purge after change](wpe-cdn-purge-after-change.md) — full purge sequence: wp cache flush + WpeCommon::clear_cdn_cache() + purge_varnish_cache_all(). RULE 15.
+- [LCP 31.3s root cause — opacity + translateX](lcp-31s-root-cause-opacity-translatex.md) — H1 hidden by CSS opacity:0 + JS translateX(200px), not image bytes. Fix: mu-plugin fix-lcp-opacity.php v0.2.0. ADR 0005.
+- [LCP image lazy-load on scroll fix](lcp-image-lazy-load-scroll-fix.md) — WP Rocket lazyloads slider bg images; LCP image only loads on scroll. Fix: mu-plugin v0.8.0 + delay_js disabled. ADR 0006, 0007.
+- [LCP fix session postmortem](lcp-fix-session-postmortem.md) — Every mistake from 2026-07-16: output buffer, RUCSS, delay_js, wp option patch, cache layers, wrong CSS targets. Hard gates for all future changes.
+- [No net-negative performance changes](no-net-negative-performance.md) — Any change causing visual/LCP/load-time/perceived-speed regression gets immediately rolled back and the approach permanently ruled out. RULE 26.
+- [Original baseline was better](original-baseline-was-better.md) — Pre-O site (FCP 1.9s, LCP 3.9s, CLS 0) was better than everything O produced. The fix was delay_js:0 — one setting. RULE 27.
+- [CSS fix insufficient — 97% render delay persists](lcp-css-fix-insufficient-97pct-render-delay.md) — Three Lighthouse runs show constant 97% render delay on H1 regardless of CDN cache or CSS delivery. CSS !important fix is necessary but insufficient.
+- [async_css mandatory for this site](async-css-mandatory-for-this-site.md) — Disabling async_css tripled TBT (11s→31s) and nearly doubled LCP (17s→30s). Permanently ruled out by RULE 26.
