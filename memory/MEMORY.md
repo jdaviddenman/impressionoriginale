@@ -17,3 +17,5 @@
 - [LCP fix session postmortem](lcp-fix-session-postmortem.md) — Every mistake from 2026-07-16: output buffer, RUCSS, delay_js, wp option patch, cache layers, wrong CSS targets. Hard gates for all future changes.
 - [No net-negative performance changes](no-net-negative-performance.md) — Any change causing visual/LCP/load-time/perceived-speed regression gets immediately rolled back and the approach permanently ruled out. RULE 26.
 - [Original baseline was better](original-baseline-was-better.md) — Pre-O site (FCP 1.9s, LCP 3.9s, CLS 0) was better than everything O produced. The fix was delay_js:0 — one setting. RULE 27.
+- [CSS fix insufficient — 97% render delay persists](lcp-css-fix-insufficient-97pct-render-delay.md) — Three Lighthouse runs show constant 97% render delay on H1 regardless of CDN cache or CSS delivery. CSS !important fix is necessary but insufficient.
+- [async_css mandatory for this site](async-css-mandatory-for-this-site.md) — Disabling async_css tripled TBT (11s→31s) and nearly doubled LCP (17s→30s). Permanently ruled out by RULE 26.
