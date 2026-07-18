@@ -19,3 +19,4 @@
 - [Original baseline was better](original-baseline-was-better.md) — Pre-O site (FCP 1.9s, LCP 3.9s, CLS 0) was better than everything O produced. The fix was delay_js:0 — one setting. RULE 27.
 - [CSS fix insufficient — 97% render delay persists](lcp-css-fix-insufficient-97pct-render-delay.md) — Three Lighthouse runs show constant 97% render delay on H1 regardless of CDN cache or CSS delivery. CSS !important fix is necessary but insufficient.
 - [async_css mandatory for this site](async-css-mandatory-for-this-site.md) — Disabling async_css tripled TBT (11s→31s) and nearly doubled LCP (17s→30s). Permanently ruled out by RULE 26.
+- [Blog category noindex reversed](blog-category-noindex-reversed.md) — Global noindex-tax-category flipped False; 4 categories indexed with descriptions. Yoast 28.0 ignores per-term wpseo_noindex meta.
