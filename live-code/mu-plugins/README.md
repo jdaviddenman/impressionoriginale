@@ -67,3 +67,36 @@ curl -sL https://www.impressionoriginale.com/ | grep -oiE 'gtag/js\?id=[A-Z0-9-]
 curl -sL https://www.impressionoriginale.com/ | grep -c 'GTM-MT7G7Z3C'            # expect >=1 (unchanged)
 # GA4 still collecting: Google Tag Assistant / GA4 Realtime for G-Y88VQHFDBV (accept the Termly banner first)
 ```
+
+## `io-termly-preconnect-async.php`
+
+Termly cookie consent performance optimization. Tracks GH #106. **Deployed 2026-07-19.**
+
+**Deployed to:** `wp-content/mu-plugins/io-termly-preconnect-async.php` on live (auto-loaded — no activation step).
+
+**What it does (v1.0):**
+1. **Preconnect** — outputs `<link rel="dns-prefetch">` + `<link rel="preconnect">` for `app.termly.io` at `wp_head` priority `PHP_INT_MIN`. mu-plugins load before regular plugins, so this fires before Termly's own `embed_banner` script tag.
+2. **Async attribute** — uses `rocket_buffer` filter (WP Rocket extension point, RULE 21) to add `async` to the Termly resource-blocker `<script>` tag. Eliminates render-blocking without breaking consent: `fix-consent-defaults.php` gates all tracking with Consent Mode v2 `denied` defaults before the async script arrives.
+
+**Why it's safe:** Consent is gated by Consent Mode v2 denied defaults (`wait_for_update: 500`), not solely by the auto-blocker. On slow connections where async Termly arrives after DOMContentLoaded, GTM fires in denied mode — the correct GDPR fallback. See ADR 0012 for detailed race-condition analysis.
+
+**Verification (deterministic):**
+```bash
+# Preconnect links present
+curl -s https://www.impressionoriginale.com/ | grep -E 'dns-prefetch.*termly|preconnect.*termly'
+# async attribute on Termly script
+curl -s https://www.impressionoriginale.com/ | grep 'async.*resource-blocker'
+# Site healthy
+curl -sI https://www.impressionoriginale.com/ | grep 'HTTP/2 200'
+```
+
+**Deploy / rollback:**
+```bash
+# deploy
+cat io-termly-preconnect-async.php | ssh impressionor@impressionor.ssh.wpengine.net \
+  'cat > /sites/impressionor/wp-content/mu-plugins/io-termly-preconnect-async.php'
+# rollback
+ssh impressionor@impressionor.ssh.wpengine.net \
+  'rm /sites/impressionor/wp-content/mu-plugins/io-termly-preconnect-async.php'
+# then purge WP Rocket + Varnish + CDN (RULE 20)
+```
