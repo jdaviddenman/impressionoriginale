@@ -20,3 +20,6 @@
 - [CSS fix insufficient — 97% render delay persists](lcp-css-fix-insufficient-97pct-render-delay.md) — Three Lighthouse runs show constant 97% render delay on H1 regardless of CDN cache or CSS delivery. CSS !important fix is necessary but insufficient.
 - [async_css mandatory for this site](async-css-mandatory-for-this-site.md) — Disabling async_css tripled TBT (11s→31s) and nearly doubled LCP (17s→30s). Permanently ruled out by RULE 26.
 - [Blog category noindex reversed](blog-category-noindex-reversed.md) — Global noindex-tax-category flipped False; 4 categories indexed with descriptions. Yoast 28.0 ignores per-term wpseo_noindex meta.
+- [Font hosting experiment failure](font-hosting-experiment-failure.md) — Hardcoded WP Rocket cache hash → stale → 404 → render-blocking → LCP regressed. Permanently ruled out by RULE 26. 11 code review bugs. Wrong bottleneck: TBT was never the problem.
+- [CLI Lighthouse TBT is misleading](cli-lighthouse-tbt-misleading.md) — CLI Lighthouse reports 7,000-30,000ms TBT (weak emulation hardware). Pagespeed.dev (Google infra) shows 110-160ms. Always cross-validate before optimizing.
+- [RUCSS enabled — CSS async loading works](rucss-enabled-css-async-works.md) — Enabling remove_unused_css:1 with safelist made 30+ CSS files async. LCP dropped 42% (27.6s→15.9s). Safelist from fix-lcp-opacity.php v0.9.0 is load-bearing.
