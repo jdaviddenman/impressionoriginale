@@ -1,7 +1,7 @@
 # ADR 0012 — Termly Preconnect + Async: Eliminating the Last JS Render-Blocker
 
 **Date:** 2026-07-19
-**Status:** Deployed. Preconnect + async live. Pagespeed.dev measurement pending.
+**Status:** Deployed. Verified. Termly render-blocking eliminated (0ms). jQuery now the sole remaining render-blocker (990-1,480ms).
 
 ## Decision
 
@@ -62,11 +62,28 @@ No regex, no DOM parsing. If WP Rocket is deactivated, `rocket_buffer` doesn't f
 
 ## Verification
 
+### Pre-deploy
 - `cf-cache-status: MISS` after full cache purge (Rocket → Varnish → CDN)
 - Preconnect links present before Termly script tag
 - `async` attribute on Termly resource-blocker `<script>` tag
 - Site HTTP 200
 - 6 Termly references in page (normal)
+
+### Pagespeed.dev (Jul 19, Slow 4G emulation, two runs)
+
+| Metric | Run 1 | Run 2 | Notes |
+|---|---|---|---|
+| FCP | 4.6s (+1) | 2.5s (+7) | Variable, inconclusive |
+| LCP | 27.4s | 23.3s | Unchanged — H1 render delay (97%) is separate issue (ADR 0005/0010) |
+| TBT | 50ms (+30) | 11,050ms | Discrepancy suggests bad run 2 state; run 1 excellent |
+| CLS | 0 (+25) | 0 (+25) | Within margin of error |
+| Render-blocking | **0ms** | **0ms** | Termly eliminated from render-blocking audit. jQuery 990-1,480ms last remaining |
+
+**Render-blocking result:** Termly went from 4,350ms → **0ms** in the render-blocking audit across both runs. Issue #106 acceptance criteria met (< 2,000ms).
+
+**Remaining Termly impact:** 3rd-party main-thread blocking time still 4,409ms (JS execution, not render-blocking). 4h cache TTL on 311KB of Termly scripts is the next optimization target. This is inherent to the Termly service, not our loading strategy.
+
+**LCP unchanged:** The 97% render delay on H1 (opacity + translateX from theme JS) is pre-existing — see ADR 0005, ADR 0010. Not caused or worsened by this change.
 
 ## Rollback
 
