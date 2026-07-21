@@ -43,3 +43,9 @@ Now:
 
 ## How to apply
 Do NOT disable RUCSS. The safelist in fix-lcp-opacity.php is load-bearing. If adding new inline CSS, add its classes to `remove_unused_css_safelist` and its marker comment to `rocket_rucss_inline_content_exclusions`. See [[lcp-fix-session-postmortem]], [[lcp-css-fix-insufficient-97pct-render-delay]], [[font-hosting-experiment-failure]].
+
+## Update 2026-07-21: RUCSS SaaS Failure
+
+RUCSS stopped working Jul 20-21. All 1,197 DB entries have `len=0` (empty CSS). The SaaS API returns empty results. The `wpr-usedcss` block is missing from page output — 29 CSS files load sync. Root cause unknown (possible API rate limit, license issue, or SaaS degradation). The RUCSS fix working on Jul 19 proves the approach is correct; the Jul 21 breakage is an external SaaS dependency failure.
+
+See [[rucss-saas-empty-css]], [[async-css-not-working-without-rucss]], [[io-lcp-critical-css-fix-deployed]].

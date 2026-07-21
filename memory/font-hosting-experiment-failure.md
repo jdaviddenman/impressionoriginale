@@ -47,3 +47,7 @@ See full review in session transcript. Key bugs: hardcoded hash 404, dead style_
 **Why:** O optimized for CLI Lighthouse TBT (an artifact of weak emulation hardware) instead of real-world performance. Pagespeed.dev (Google's infrastructure) showed TBT = 110ms. The real bottleneck was and remains: 30+ CSS files loaded with `media='all'` (render-blocking) because `optimize_css_delivery` is inert without RUCSS.
 
 **How to apply:** See [[lcp-fix-session-postmortem]], [[async-css-mandatory-for-this-site]], [[lcp-css-fix-insufficient-97pct-render-delay]]. Before any new fix: cross-validate CLI Lighthouse against Pagespeed.dev. The CLI TBT is misleading for this site.
+
+## Update 2026-07-21: io-lcp Critical CSS Fix Deployed
+
+The font hosting experiment was one of several wrong-bottleneck optimizations. The io-lcp critical CSS fix ([[io-lcp-critical-css-fix-deployed]]) and RUCSS ([[rucss-enabled-css-async-works]]) are the correct approaches. The RUCSS SaaS failure ([[rucss-saas-empty-css]]) on Jul 21 is unrelated to font hosting and does not invalidate the lessons learned here.
