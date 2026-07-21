@@ -31,3 +31,18 @@ The CSS fix overrides the symptom (hidden H1) but doesn't address the cause. The
 3. The CSS genuinely doesn't apply in-practice despite being present in HTML (hypothesis 3, least likely)
 
 **How to apply:** The CSS fix is necessary but not sufficient. Next step must address JS execution time — either defer non-critical JS, reduce third-party scripts, or prevent the slider resize that triggers LCP update. See [[lcp-fix-session-postmortem]], [[async-css-mandatory-for-this-site]], [[original-baseline-was-better]].
+
+
+## Update 2026-07-21: io-lcp Critical CSS Deployment Improved LCP
+
+On Jul 21, the io-lcp-first-slide inline CSS block was restored to full content (1,431 chars — was emptied to just `/*io-lcp*/` by `minify_css: 1` on Jul 19-20). The fix involved disabling minify_css briefly to repopulate the block, then re-enabling it. Results (CLI Lighthouse):
+
+| Metric | Jul 20 (empty block) | Jul 21 (full block) |
+|---|---|---|
+| LCP | 16.5s | 8.2s (-50%) |
+| CLS | 0.32 | 0 (fixed) |
+| Render Delay | 96% (15,850ms) | 91% (7,470ms) |
+
+CLS eliminated — the `min-height: 400px/600px` reservation on `#eut-feature-slider` prevents owl-carousel height jump. LCP render delay dropped 8,380ms.
+
+**Remaining problem:** RUCSS SaaS API broken ([[rucss-saas-empty-css]]), 29 CSS files load sync (24,470ms render-blocking on pagespeed.dev). LCP pagespeed.dev still 17.6s. Full fix requires RUCSS working. See [[io-lcp-critical-css-fix-deployed]], [[async-css-not-working-without-rucss]].
