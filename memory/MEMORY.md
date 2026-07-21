@@ -28,3 +28,4 @@
 - [io-lcp critical CSS fix deployed](io-lcp-critical-css-fix-deployed.md) — 1,431 chars inline block restored. CLS fixed (0). LCP improved 16.5s→8.2s CLI (-50%). H1 styles available before external CSS loads.
 - [async_css not working without RUCSS](async-css-not-working-without-rucss.md) — async_css:1 does not make CSS async when RUCSS disabled. Tested 4 config combos — all show 29 sync CSS. WP Rocket 3.23 may have removed standalone async CSS.
 - [ADR 0012 — RUCSS SaaS failure + io-lcp fix](../docs/adr/0012-rucss-saas-failure-io-lcp-fix.md) — Full incident report. io-lcp fix deployment, RUCSS SaaS failure discovery, async_css standalone test, pending truncate + regeneration.
+- [ADR 0013 — Pixel audit: four false positives](../docs/adr/0013-pixel-audit-refutation.md) — All four "duplicate" pairs (FB, Pinterest, GA4, Termly) are false positives. PYS dead modules already disabled. #101 closed. Meta CAPI → #91.
