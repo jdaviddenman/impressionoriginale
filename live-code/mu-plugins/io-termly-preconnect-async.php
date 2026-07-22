@@ -20,8 +20,7 @@
 // Phase 1: Preconnect before Termly script
 add_action( 'wp_head', function () {
 	?>
-<link rel="dns-prefetch" href="//app.termly.io">
-<link rel="preconnect" href="https://app.termly.io" crossorigin>
+<link rel="preconnect" href="https://app.termly.io">
 	<?php
 }, PHP_INT_MIN );
 
