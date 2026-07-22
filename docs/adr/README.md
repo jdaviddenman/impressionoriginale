@@ -17,6 +17,7 @@ Rules:
 | [0003](0003-i18n-url-strategy-en-default-at-root.md) | i18n URL strategy: EN-default-at-root is by design | Accepted | 2026-07-05 |
 | [0004](0004-env-banner-unreliable-verify-git.md) | Env "is a git repo" banner unreliable — verify cwd with `git rev-parse` | Accepted | 2026-07-05 |
 | [0014](0014-indexnow-setup.md) | IndexNow auto-submit for instant search engine indexing | Accepted | 2026-07-21 |
+| [0016](0016-font-preloads-broke-site.md) | CDN font preloads broke the site, permanently ruled out | Accepted | 2026-07-22 |
 
 ## Format
 
