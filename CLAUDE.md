@@ -357,15 +357,15 @@ Hard gate, not advice. If `--ff-only` fails (local commits on `main`, dirty tree
 
 Everything below is the **target site's** stack, not this repo's.
 
-- **CMS/commerce:** WordPress **7.0**, WooCommerce **10.9.3** (verified 2026-07-07 via `wp plugin get woocommerce --field=version`), Stripe gateway.
+- **CMS/commerce:** WordPress **7.0.2**, WooCommerce **10.9.4** (verified 2026-07-21 via `wp core version` + `wp plugin get woocommerce --field=version`), Stripe gateway.
 - **Multilingual:** WPML (EN default + FR) — `sitepress-multilingual-cms` + String/Media Translation + WooCommerce Multilingual + **WPML SEO** (the Yoast↔WPML glue).
 - **SEO:** Yoast SEO (`sitemap_index.xml`, head presenters).
 - **Analytics/tags:** GTM4WP + GTM container `GTM-MT7G7Z3C`; GA4 property `Impression Originale - GA4` (`375621420` / Measurement ID `G-Y88VQHFDBV` / Google Tag `GT-5TPLSSZ`); PixelYourSite; an **obsolete `UA-85910237-1`** tag still firing (Issue #3). Pinterest + Meta pixels.
 - **Performance/build:** WP Rocket (cache + lazy), WPBakery Page Builder, Slider Revolution, WebP Express.
 - **Theme:** EngineThemes "The Core" (`eut-` / `Engic Extension`) — old; page-builder + theme are the layout break-zone on updates.
 - **Host:** WP Engine — nginx, **PHP 8.2.31**, MySQL **8.4.7**, memory_limit 512M. WPE runs its own page + object cache on top of WP Rocket (clear **both** when verifying).
-- **Consent:** Termly banner with Google Consent Mode — analytics is gated until consent; accept the banner (or use GA4 DebugView) before trusting Realtime.
-- **Clone/testing:** UpdraftPlus / UpdraftClone — **not currently provisioned** (ADR 0001). When stood up, match to live (PHP 8.2 / WP 7.0 / WC 10.9.3).
+- **Consent:** Termly banner with Google Consent Mode — analytics is gated until consent; accept the banner (or use GA4 DebugView) before trusting Realtime. Termly JS preconnected + async-loaded via mu-plugin (`io-termly-preconnect-async.php`). Rendered 4,350ms→0ms render-blocking. Deployed 2026-07-19. See ADR 0011.
+- **Clone/testing:** UpdraftPlus / UpdraftClone — **not currently provisioned** (ADR 0001). When stood up, match to live (PHP 8.2 / WP 7.0.2 / WC 10.9.4).
 
 ## Common Commands & Checks
 

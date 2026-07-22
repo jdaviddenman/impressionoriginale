@@ -29,3 +29,4 @@
 - [async_css not working without RUCSS](async-css-not-working-without-rucss.md) — async_css:1 does not make CSS async when RUCSS disabled. Tested 4 config combos — all show 29 sync CSS. WP Rocket 3.23 may have removed standalone async CSS.
 - [ADR 0012 — RUCSS SaaS failure + io-lcp fix](../docs/adr/0012-rucss-saas-failure-io-lcp-fix.md) — Full incident report. io-lcp fix deployment, RUCSS SaaS failure discovery, async_css standalone test, pending truncate + regeneration.
 - [ADR 0013 — Pixel audit: four false positives](../docs/adr/0013-pixel-audit-refutation.md) — All four "duplicate" pairs (FB, Pinterest, GA4, Termly) are false positives. PYS dead modules already disabled. #101 closed. Meta CAPI → #91.
+- [jQuery deferral permanently ruled out](jquery-deferral-permanently-ruled-out.md) — Adding defer to jQuery changed LCP element from H1 to Termly banner (6.4s→18.8s, +194%). Permanently ruled out. ADR 0015.
